@@ -1,0 +1,100 @@
+
+
+.bg-img {
+    --background: url('/assets/images/book_class.png') no-repeat center/cover fixed;
+    min-height: 100vh;    
+  }
+
+  calendar-booking-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 2vw;
+    margin-top: 6vw;
+    flex-wrap: wrap;
+     --ion-color-primary: #e90012;
+  }
+  
+  .calendar-box, .booking-list {
+    width: 350px;
+    max-width: 95vw;
+    --ion-color-primary: #e90012;
+  }
+  
+  ion-datetime {
+    background: white;
+    border-radius: 16px;
+    padding: 12px;
+    max-width: 350px;
+    width: 95vw;    
+  }
+  
+  booking-list {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+  
+  .booking-card {
+    background: #fff;
+    border-radius: 18px;  
+    width: 100%;
+    padding: 18px 16px 16px 16px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.12);
+    gap: 16px;
+    
+  }
+  
+  .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #000;
+    margin-bottom: 12px;
+  }
+  
+  .spots {
+    font-size: 1rem;
+    font-weight: 400;
+    color: #222;
+  }
+  
+  .book-btn {
+    --background:#bd0a0a;    
+    --color: #fff;
+    --border-radius: 12px;
+    font-weight: 700;
+    font-size: 1.1rem;
+  }
+  
+  .wod-btn {
+    --background: #fff;
+    --color: #000;  
+    --border-radius: 12px;
+    font-weight: 700;
+    font-size: 1.1rem;
+    max-width: 350px;
+    width: 95vw;
+    margin: 32px auto 0 auto;
+    display: block;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.09);
+    border: 1.5px solid #000;
+  }
+  
+  /* Responsivo para desktop */
+  @media (min-width: 500px) {
+    .calendar-box, .booking-card, .wod-btn {
+      max-width: 400px;
+      width: 95%;
+      margin-top: 32px;     
+    }
+
+    .root {
+        
+    }
+
+}
+  
+  

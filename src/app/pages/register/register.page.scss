@@ -1,0 +1,31 @@
+   ion-list {
+     width: 600px;
+     height: 100vh; // occupies 100% of the screen height
+     min-height: 100vh; // does not shrink on small screens    
+     max-width: 500px; // limits the maximum width on large screens
+     min-width: 260px; // prevents it from being too narrow on small screens
+
+   }
+
+   ion-content {
+     --background: url('/assets/images/sign_up2.png') no-repeat center/cover fixed;
+   }
+
+   //button
+   ion-button {
+     --color: white;
+     --border-color: rgb(255, 255, 255);
+     --box-shadow: none;
+     --ripple-color: red;
+     --border-width: 2px;
+
+   }
+
+   //center the button
+   .center-btn {
+     width: 500px;
+     display: flex;
+     justify-content: center;
+     margin-top: 16px;
+
+   }

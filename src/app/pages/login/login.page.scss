@@ -1,10 +1,9 @@
 #container {
-   text-align: center;
-  
+   text-align: center;  
     position: absolute;
     left: 0;
     right: 0;
-    top: 70%;
+    top: 77%;
     transform: translateY(-50%);
   }
 
@@ -15,6 +14,43 @@
 
   ion-content{
     --background: url('/assets/images/background.png') no-repeat center/cover fixed;
-    
+       
   }
+  // email and password box (rgda -> transparent)
+  ion-item {
+    ion-input[fill="outline"] {
+      --background: rgba(0,0,0,0.5);
+      --color: #fff;
+      --border-color: #fff;
+      --highlight-color-focused: #fff;      
+    }
+  }
+
+    //button
+    ion-button[fill="outline"] {
+      --color: white;           
+      --border-color: rgb(255, 255, 255);    
+      --background: transparent;
+      --box-shadow: none;       
+      --ripple-color: red;      
+      --border-width: 2px;       
+    }
+
+    .signup-text {
+      color: white;
+      text-align: center;  
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 90%;
+    transform: translateY(-50%)
+    }
+    
+    
+  
+  
+  
+  
+  
+  
   

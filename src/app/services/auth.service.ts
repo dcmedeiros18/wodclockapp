@@ -9,7 +9,15 @@ export class AuthService {
   
   //login function
   login(email: string, password: string) {
-    if (email === 'dc.medeiros@live.com' && password === '123456') {
+    if (email == 'dc.medeiros@live.com' && password == '123456') {
+      return true;
+    }
+    return false;
+  }
+
+  //password function
+  register(email: string, password: string){
+    if (email == 'dc.medeiros@live.com' && password == '123456' ){
       return true;
     }
     return false;

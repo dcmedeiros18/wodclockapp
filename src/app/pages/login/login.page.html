@@ -4,33 +4,34 @@
   <div id="container">
     
     <!--Email and Password-->
-    <ion-item>
-      <ion-input label="Email:" placeholder="Enter your email." [(ngModel)]="email"></ion-input>
+    <ion-item lines="none" style="--background: transparent;">
+      <ion-input       
+        label="Email"
+        labelPlacement="floating"
+        fill="outline"
+        placeholder="Enter your email"
+        [(ngModel)]="email">        
+      </ion-input>
     </ion-item>
-
-    <ion-item>
-    <ion-input type="password" label="Password" [(ngModel)]="password">
-      <ion-input-password-toggle slot="end"></ion-input-password-toggle>
-    </ion-input>
-    </ion-item>
-    <!--BUTTON-->
-    <div class="wrapper">
-      <ion-button (click)="onLogin()" >LOGIN</ion-button>
-
-      <div class="ion-activatable ripple-parent rectangle">
-        <ion-ripple-effect></ion-ripple-effect>
-      </div>
-
-      <div class="ion-activatable ripple-parent rounded-rectangle">
-        <ion-ripple-effect></ion-ripple-effect>
-      </div>
-
-      <div class="ion-activatable ripple-parent circle">
-        <ion-ripple-effect></ion-ripple-effect>
-      </div>
-    </div>
-
     
+    <br>
+    
+    <ion-item lines="none" style="--background: black transparent;">
+      <ion-input
+        label="Password"
+        labelPlacement="floating"
+        fill="outline"
+        placeholder="Enter your password"
+        [(ngModel)]="password">
+          <ion-input-password-toggle slot="end"></ion-input-password-toggle>
+      </ion-input>
+    </ion-item>
+        
+    <!--BUTTON-->    
+    <ion-button fill="outline" (click)="onLogin()" >LOGIN</ion-button>
   </div>
+
+  <p class="signup-text">Don't have account? Sign Up</p>
  
 </ion-content>
+
