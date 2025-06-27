@@ -25,4 +25,16 @@ export const routes: Routes = [
     path: 'user-membership',
     loadComponent: () => import('./pages/user-membership/user-membership.page').then( m => m.UserMembershipPage)
   },
+  {
+    path: 'wod',
+    loadComponent: () => import('./pages/wod/wod.page').then( m => m.WodPage)
+  },
+  {
+    path: 'frequency',
+    loadComponent: () => import('./pages/frequency/frequency.page').then( m => m.FrequencyPage)
+  },
+  {
+    path: 'cancel',
+    loadComponent: () => import('./pages/cancel/cancel.page').then( m => m.CancelPage)
+  },
 ];

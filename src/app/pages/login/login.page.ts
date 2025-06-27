@@ -27,7 +27,7 @@ export class LoginPage implements OnInit {
     const password = this.password;
     const isLoggedIn = this.authService.login(email, password);
     if (isLoggedIn) {
-      this.router.navigate(['/tabs/tab1']);
+      this.router.navigate(['./user-membership']);
     }
   }
 }

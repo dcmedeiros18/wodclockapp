@@ -1,13 +1,39 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>user-membership</ion-title>
-  </ion-toolbar>
-</ion-header>
-
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">user-membership</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content>
+ 
 </ion-content>
+
+<ion-footer>
+  <ion-toolbar>
+    <div class="footer-buttons">
+      
+      <div class="button-name">
+        <ion-button shape="round" color="primary" (click)="goToBook()">
+          <ion-icon fill="clipboard-outline" slot="icon-only"></ion-icon>
+        </ion-button>
+        <div class="button-label">Book</div>
+      </div>
+
+      <div class="button-name">
+        <ion-button shape="round" color="medium" (click)="goToWod()">
+          <ion-icon name="outline" slot="icon-only"></ion-icon>
+        </ion-button>
+        <div class="button-label">WOD</div>
+      </div>
+
+      <div class="button-name">
+        <ion-button shape="round" color="danger">
+          <ion-icon  slot="icon-only"></ion-icon>
+        </ion-button>
+        <div class="button-label">Cancel</div>
+      </div>
+
+      <div class="button-name">
+        <ion-button shape="round" color="dark">
+          <ion-icon  slot="icon-only"></ion-icon>
+        </ion-button>
+        <div class="button-label">Frequency</div>
+      </div>
+
+    </div>
+  </ion-toolbar>
+</ion-footer>
