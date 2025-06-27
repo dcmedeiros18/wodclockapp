@@ -4,8 +4,15 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule, Router } from '@angular/router';
 import { IonContent, IonHeader, IonTitle, IonToolbar, IonFooter, IonButton, IonIcon, IonLabel} from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
+import { barbellOutline, calendar, calendarNumber, calendarOutline, close, homeOutline } from 'ionicons/icons';
 
 
+addIcons({
+  'barbell-outline': barbellOutline,
+  'close': close, 
+  'calendar': calendar,
+  'calendar-number': calendarNumber
+});
 
 @Component({
   selector: 'app-user-membership',
@@ -29,6 +36,15 @@ export class UserMembershipPage implements OnInit {
   goToWod() {
     this.router.navigateByUrl('/wod'); // caminho certo
   }
+
+  goToCancel() {
+    this.router.navigateByUrl('/cancel'); // caminho certo
+  }
+
+  goToFrequency() {
+    this.router.navigateByUrl('/frequency'); // caminho certo
+  }
+
 
   
 

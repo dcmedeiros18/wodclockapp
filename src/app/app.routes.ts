@@ -18,10 +18,6 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/book/book.page').then( m => m.BookPage)
   },
   {
-    path: 'history',
-    loadComponent: () => import('./pages/history/history.page').then( m => m.HistoryPage)
-  },
-  {
     path: 'user-membership',
     loadComponent: () => import('./pages/user-membership/user-membership.page').then( m => m.UserMembershipPage)
   },

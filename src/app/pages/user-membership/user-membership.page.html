@@ -1,36 +1,32 @@
+<head>
+  <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+  <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+</head>
+
 <ion-content>
- 
+  <!-- background -->
 </ion-content>
 
 <ion-footer>
   <ion-toolbar>
     <div class="footer-buttons">
-      
       <div class="button-name">
-        <ion-button shape="round" color="primary" (click)="goToBook()">
-          <ion-icon fill="clipboard-outline" slot="icon-only"></ion-icon>
-        </ion-button>
+        <ion-icon name="calendar" slot="icon-only" (click)="goToBook()"></ion-icon>
         <div class="button-label">Book</div>
       </div>
 
       <div class="button-name">
-        <ion-button shape="round" color="medium" (click)="goToWod()">
-          <ion-icon name="outline" slot="icon-only"></ion-icon>
-        </ion-button>
+        <ion-icon name="barbell-outline" slot="icon-only" (click)="goToWod()"></ion-icon>
         <div class="button-label">WOD</div>
       </div>
 
       <div class="button-name">
-        <ion-button shape="round" color="danger">
-          <ion-icon  slot="icon-only"></ion-icon>
-        </ion-button>
+        <ion-icon name="close" slot="icon-only" color="danger" (click)="goToCancel()"></ion-icon>
         <div class="button-label">Cancel</div>
       </div>
 
       <div class="button-name">
-        <ion-button shape="round" color="dark">
-          <ion-icon  slot="icon-only"></ion-icon>
-        </ion-button>
+        <ion-icon name='calendar-number' slot="icon-only" (click)="goToFrequency()"></ion-icon>
         <div class="button-label">Frequency</div>
       </div>
 
