@@ -2,22 +2,22 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonContent, IonHeader, IonTitle, IonToolbar, IonDatetime, IonDatetimeButton, IonModal, IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonChip, IonButton } from '@ionic/angular/standalone';
-import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { RouterModule, Router } from '@angular/router';
 
 @Component({
   selector: 'app-book',
   templateUrl: './book.page.html',
   styleUrls: ['./book.page.scss'],
   standalone: true,
-  schemas: [CUSTOM_ELEMENTS_SCHEMA],
-  imports: [IonButton, IonCardHeader, IonCard, IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, IonDatetime, IonDatetimeButton, IonModal, IonCardTitle, IonCardContent, IonChip]
+  imports: [IonButton, IonCardHeader, IonCard, IonContent, IonHeader, IonTitle, IonToolbar,
+    CommonModule, FormsModule, IonDatetime, IonDatetimeButton, IonModal, IonCardTitle, IonCardContent,
+    IonChip, RouterModule]
 })
 export class BookPage implements OnInit {
 
-  constructor() { }
+  constructor(private router: Router) {}
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
   timeSlots = [
     { time: '06:00 am', spots: 5 },
@@ -27,4 +27,11 @@ export class BookPage implements OnInit {
     { time: '06:30 pm', spots: 2 }
   ];
   
+  goToWod() {
+    this.router.navigateByUrl('/wod');
+  }
+
+  goToUserMembership() {   
+    this.router.navigateByUrl('/user-membership');
+  }
 }
