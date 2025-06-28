@@ -1,9 +1,43 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>WOD Page</ion-title>
-  </ion-toolbar>
-</ion-header>
+<script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+<script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
 
-<ion-content [fullscreen]="true">
-  <p>WOD Screen </p>
+<ion-content>
+  <div class="main-container">
+    <div class="datetime-container">
+      <ion-datetime-button datetime="datetime"></ion-datetime-button>
+    </div>
+
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Amrap 12 minutes</ion-card-title>
+      </ion-card-header>
+
+      <ion-card-content>
+        6 Power Clean <br> 12 wall balls <br> 18 Reverse Lunge
+      </ion-card-content>
+
+      <ion-button expand="block" class="custom-button" (click)="goToUserMembership()">
+        User home 
+      </ion-button>
+     </ion-card>
+  </div>
+
+  <ion-modal [keepContentsMounted]="true">
+    <ng-template>
+      <ion-datetime id="datetime" presentation="date" value="2023-11-02" [formatOptions]="{
+        date: {
+          weekday: 'long',
+          month: 'long',
+          day: '2-digit',
+        }
+       }"></ion-datetime>
+    </ng-template>
+  </ion-modal>
 </ion-content>
+
+<div class="wod-container">
+  <ion-icon name="barbell-outline"></ion-icon>
+  <div class="wod-text">
+    WORKOUT<br>OF THE DAY
+  </div>
+</div>

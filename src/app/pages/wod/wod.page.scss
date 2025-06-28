@@ -1,0 +1,55 @@
+ion-content{
+    --background: url('/assets/images/woman_and_kettlebell.png') no-repeat center/cover fixed;       
+  }
+
+.main-container {
+    display: flex;
+    flex-direction: column;
+    padding-left: 10px; /* mantém a distância da esquerda */    
+    padding-top: 55%;    
+}
+
+.datetime-container {
+    position: absolute;
+    top: 10%;
+    padding-left: 10px; /* to move away from the edge */
+  }
+
+  .wod-container {
+    position: absolute;
+    top: 21%;
+    right: 100px;         /* distância da borda direita */
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: row;  /* icone ao lado da palavra */
+    align-items: center;     /* centraliza o conteúdo no eixo horizontal */
+  }
+  
+  .wod-text {
+    text-align: center;        /* centraliza o texto dentro do bloco */
+    font-size: 40px;           /* ajuste o tamanho como desejar */
+    font-weight: bold;         /* opcional, para dar destaque */
+    color: white;
+}
+  
+  ion-icon {
+   font-size: 60px; /* ou o tamanho que você quiser */
+    color: white;
+    margin-right: 10px;
+  }
+
+  ion-card {
+    --background: #000;
+    --color: white;
+  }
+  
+  ion-card-title {
+    --color: red;
+  }
+  
+  .custom-button {
+    --background: white;  /* cor de fundo do botão */
+    --color: black;         /* cor do texto do botão */
+    font-weight: bold;      /*negrito*/
+  }
+  
