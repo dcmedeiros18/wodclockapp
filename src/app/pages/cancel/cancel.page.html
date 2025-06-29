@@ -1,13 +1,15 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>cancel</ion-title>
-  </ion-toolbar>
-</ion-header>
-
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">cancel</ion-title>
-    </ion-toolbar>
-  </ion-header>
-</ion-content>
+
+  <div class="calendar-booking-wrapper">
+    <div class="calendar-box">
+      <ion-datetime [isDateEnabled]="isWeekday"></ion-datetime>
+    </div>
+
+  <div class="cancel-btn" color="red">
+    <ion-button >CANCEL BOOKING</ion-button>
+  <ion-button (click)="goToUserMembership()">User Home</ion-button>
+  </div>
+  
+
+
+

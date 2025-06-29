@@ -1,31 +1,39 @@
-   ion-list {
-     width: 600px;
-     height: 100vh; // occupies 100% of the screen height
-     min-height: 100vh; // does not shrink on small screens    
-     max-width: 500px; // limits the maximum width on large screens
-     min-width: 260px; // prevents it from being too narrow on small screens
+ion-content {
+ --background: url('/assets/images/sign_up.png') no-repeat center / cover fixed; 
+}
 
-   }
+#container {
+  display: flex;
+  justify-content: flex-start;   /* Align card to the left */
+  align-items: flex-start;       /* Align card to the top */
+  padding: 16px;                 /* Inner padding */
+  min-height: 100vh;             /* Full height of the viewport */
+  margin-top: 200px;             /* Push card down */
+}
 
-   ion-content {
-     --background: url('/assets/images/sign_up2.png') no-repeat center/cover fixed;
-   }
+ion-card {
+  width: 100%;
+  max-width: 400px;              /* Maximum width for the card */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); /* Soft shadow */
+  border-radius: 16px;           /* Rounded corners */
 
-   //button
-   ion-button {
-     --color: white;
-     --border-color: rgb(255, 255, 255);
-     --box-shadow: none;
-     --ripple-color: red;
-     --border-width: 2px;
+  /* Make form text bold inside the card */
+  ion-item,
+  ion-label,
+  ion-input {
+    font-weight: bold;
+  }
+}
 
-   }
+.login-text {
+  color: rgb(14, 13, 13);        /* Text color for login message */
+  text-align: center;            /* Center the text */
+  width: 100%;                   /* Full width inside card */
+  margin-top: 16px;              /* Space above the login text */
+  font-weight: bold;             /* Make text bold */
+}
 
-   //center the button
-   .center-btn {
-     width: 500px;
-     display: flex;
-     justify-content: center;
-     margin-top: 16px;
-
-   }
+.login-text a {
+  color: red;                    /* Red color for the link */  
+  text-decoration: underline !important;        /* Remove underline (optional) */
+}

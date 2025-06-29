@@ -1,23 +1,19 @@
 <ion-content [fullscreen]="true">
-  
 
-  <div id="container">
-    
+  <div id="container">    
     <!--Email and Password-->
     <ion-item lines="none" style="--background: transparent;">
-      <ion-input       
+      <ion-input id="email-input"       
         label="Email"
         labelPlacement="floating"
         fill="outline"
         placeholder="Enter your email"
         [(ngModel)]="email">        
       </ion-input>
-    </ion-item>
-    
-    <br>
-    
+    </ion-item><br>
+        
     <ion-item lines="none" style="--background: black transparent;">
-      <ion-input
+      <ion-input id="password-input" 
         label="Password"
         labelPlacement="floating"
         fill="outline"
@@ -31,7 +27,10 @@
     <ion-button fill="outline" (click)="onLogin()" >LOGIN</ion-button>
   </div>
 
-  <p class="signup-text">Don't have account? Sign Up</p>
+  <p class="signup-text">
+    Don't have account? <a (click)="goToRegister()">Sign Up</a>
+  </p>
+  
  
 </ion-content>
 

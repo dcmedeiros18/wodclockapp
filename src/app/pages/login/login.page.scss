@@ -1,56 +1,61 @@
 #container {
-   text-align: center;  
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: 77%;
-    transform: translateY(-50%);
-  }
+  text-align: center;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 77%;
+  transform: translateY(-50%);
+}
 
-  ion-item {
-    width: 300px;
-    margin: 0 auto;
-  }
+ion-content {
+  --background: url('/assets/images/background.png') no-repeat center/cover fixed;
+}
 
-  ion-content{
-    --background: url('/assets/images/background.png') no-repeat center/cover fixed;
-       
-  }
-  // email and password box (rgda -> transparent)
-  ion-item {
-    ion-input[fill="outline"] {
-      --background: rgba(0,0,0,0.5);
-      --color: #fff;
-      --border-color: #fff;
-      --highlight-color-focused: #fff;      
-    }
-  }
+ion-item {
+  width: 300px;
+  margin: 0 auto;
 
-    //button
-    ion-button[fill="outline"] {
-      --color: white;           
-      --border-color: rgb(255, 255, 255);    
-      --background: transparent;
-      --box-shadow: none;       
-      --ripple-color: red;      
-      --border-width: 2px;       
-    }
-
-    .signup-text {
-      color: white;
-      text-align: center;  
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: 90%;
-    transform: translateY(-50%)
-    }
+  // email and password box (rgba -> transparent background with white border)
+  ion-input[fill="outline"] {
+    --background: rgba(0, 0, 0, 0.5);
+    --color: #fff;
+    --border-color: #fff;
+    --highlight-color-focused: #fff;    
+      font-weight: bold;
     
+  }
+}
+
+// button
+ion-button[fill="outline"] {
+  --color: white;
+  --border-color: rgb(255, 255, 255);
+  --background: transparent;
+  --box-shadow: none;
+  --ripple-color: red;
+  --border-width: 2px;
+}
+
+.signup-text {
+  color: white;
+  text-align: center;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 90%;
+  transform: translateY(-50%);
+
+  a {
+    color: inherit !important; // use the same color as the parent (white)
+    text-decoration: underline !important;
+    cursor: pointer;
     
-  
-  
-  
-  
-  
-  
-  
+  }
+}
+
+#email-input,
+#password-input {
+  --highlight-color-focused: white;
+  --border-color: white;
+  top: auto;
+}

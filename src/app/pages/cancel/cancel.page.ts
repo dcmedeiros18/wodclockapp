@@ -1,20 +1,36 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonContent, IonHeader, IonTitle, IonToolbar } from '@ionic/angular/standalone';
+import { IonContent, IonHeader, IonTitle, IonToolbar, IonButton, IonDatetime } from '@ionic/angular/standalone';
+import { Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-cancel',
   templateUrl: './cancel.page.html',
   styleUrls: ['./cancel.page.scss'],
   standalone: true,
-  imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule]
+  imports: [IonButton, IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, IonButton, IonDatetime]
 })
-export class CancelPage implements OnInit {
 
-  constructor() { }
+export class CancelPage implements OnInit {
+  isWeekday = (dateString: string) => {
+    const date = new Date(dateString);
+    const utcDay = date.getUTCDay();
+
+    /**
+     * Date will be enabled if it is not
+     * Sunday or Saturday
+     */
+    return utcDay !== 0 ;
+  };
+
+
+  constructor(private router: Router) {}
 
   ngOnInit() {
   }
 
+  goToUserMembership() {   
+    this.router.navigateByUrl('/user-membership');
+  }
 }

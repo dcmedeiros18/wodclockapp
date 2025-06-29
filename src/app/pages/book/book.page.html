@@ -1,16 +1,19 @@
 <ion-content [fullscreen]="true" class="bg-img">
   <div class="calendar-booking-wrapper">
     <div class="calendar-box">
-      <ion-datetime presentation="date"></ion-datetime>
+      <ion-datetime [isDateEnabled]="isWeekday"></ion-datetime>
     </div>
+
     <div class="booking-list">
       <div class="booking-card" *ngFor="let slot of timeSlots">
         <div class="card-header">
           <span class="hour">{{ slot.time }}</span>
           <span class="spots">• {{ slot.spots }} spots left</span>
         </div>
+
         <ion-button expand="block" class="book-btn">BOOK CLASS</ion-button>
       </div>
+
       <div class="wod-btn-container">
           <ion-button class="wod-btn" (click)="goToWod()">VIEW WOD</ion-button>
           <ion-button class="wod-btn" (click)="goToUserMembership()">User Home</ion-button>

@@ -30,4 +30,8 @@ export class LoginPage implements OnInit {
       this.router.navigate(['./user-membership']);
     }
   }
+  goToRegister() {   
+    this.router.navigateByUrl('/register');
+  }
+  
 }

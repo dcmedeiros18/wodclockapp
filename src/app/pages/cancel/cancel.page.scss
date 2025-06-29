@@ -1,0 +1,24 @@
+.calendar-box,  {
+  width: 350px;
+  max-width: 95vw;
+  --ion-color-primary: #e90012;
+}
+
+calendar-booking-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 2vw;
+    margin-top: 6vw;
+    flex-wrap: wrap;
+    --ion-color-primary: #e90012;
+  }
+
+.button.button {
+    --background: #bd0a0a;
+    --color: #fff;
+    --border-radius: 12px;
+    font-weight: 700;
+    font-size: 1.1rem;
+  }
+  

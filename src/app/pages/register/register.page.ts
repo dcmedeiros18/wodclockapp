@@ -32,6 +32,9 @@ export class RegisterPage implements OnInit {
       this.router.navigate(['/pages/login']);
     }
   }
+  goToLogin() {   
+    this.router.navigateByUrl('/login'); // caminho certo
+  }
 
 }
 
