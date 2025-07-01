@@ -14,19 +14,19 @@ ion-content {
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  margin-bottom: 20px; /* espaço abaixo do WOD container */
+  margin-bottom: 20px; /* espaço abaixo do container */
 }
 
 .wod-text {
   text-align: center;
-  font-size: 40px;
+  font-size: 35px;
   font-weight: bold;
-  color: white;
+  color:red;
 }
 
 ion-icon {
   font-size: 60px;
-  color: white;
+  color: red;
   margin-right: 10px;
 }
 
@@ -45,8 +45,56 @@ ion-card-title {
   --color: red;
 }
 
-.custom-button {
+.book-btn-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 10px;  
+}
+
+ion-button {
   --background: white;
   --color: black;
   font-weight: bold;
+}
+
+
+
+
+/*
+* Custom Material Design Datetime Day Parts and calendar
+* -------------------------------------------
+*/
+
+ion-datetime.md::part(calendar-day active),
+ion-datetime.md::part(calendar-day active):focus {
+  background-color: red; //wheel select color 
+  border-color: white;
+  color: white;
+}
+
+ion-datetime.md::part(calendar-day today) {
+  border-color: red;
+}
+
+ion-datetime {
+  --background: black; //background do calendario 
+  --background-rgb: white;
+  --wheel-highlight-background: red; // seleção do background do mes e ano
+  --wheel-highlight-border-radius: green;
+
+    box-shadow: white;
+    --ion-color-primary: #e90012;
+}
+
+ion-datetime::part(wheel-item) {
+  color: rgb(255, 66, 97);
+}
+
+ion-datetime::part(wheel-item active) {
+  color: white; //color of month and year
+}
+
+ion-datetime::part(calendar-day) {
+  color: white; //day color of calendar
 }

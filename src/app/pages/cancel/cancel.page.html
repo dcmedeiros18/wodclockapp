@@ -1,15 +1,23 @@
 <ion-content [fullscreen]="true">
 
-  <div class="calendar-booking-wrapper">
-    <div class="calendar-box">
-      <ion-datetime [isDateEnabled]="isWeekday"></ion-datetime>
+  <div class="main-container">
+
+    <div class="cancel-container">
+      <ion-icon name="close"></ion-icon>
+      <div class="cancel-text">
+        CANCELLING<br>YOUR BOOKING
+      </div>
     </div>
 
-  <div class="cancel-btn" color="red">
-    <ion-button >CANCEL BOOKING</ion-button>
-  <ion-button (click)="goToUserMembership()">User Home</ion-button>
+    <div class="calendar-box">
+      <ion-datetime [isDateEnabled]="isWeekday" presentation="date"></ion-datetime>
+    </div>
+
+    <div class="cancel-btn">
+      <ion-button expand="block" color="danger">CANCEL BOOKING</ion-button>
+      <ion-button expand="block" class="custom-button" (click)="goToUserMembership()">User Home</ion-button>
+    </div>
+
   </div>
-  
 
-
-
+</ion-content>

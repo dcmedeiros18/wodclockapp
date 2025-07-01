@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonContent, IonHeader, IonTitle, IonToolbar, IonDatetime, IonModal, IonGrid, IonRow, IonCol, IonIcon, IonButton, IonDatetimeButton, IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonCardSubtitle } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { barbellOutline, home } from 'ionicons/icons';
+import { barbellOutline } from 'ionicons/icons';
 import { RouterModule, Router } from '@angular/router';
 
 addIcons({

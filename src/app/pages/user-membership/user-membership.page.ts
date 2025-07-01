@@ -4,14 +4,15 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule, Router } from '@angular/router';
 import { IonContent, IonHeader, IonTitle, IonToolbar, IonFooter, IonButton, IonIcon, IonLabel} from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { barbellOutline, calendar, calendarNumber, calendarOutline, close, homeOutline } from 'ionicons/icons';
+import { barbellOutline, calendar, calendarNumber, calendarOutline, close, clipboardOutline } from 'ionicons/icons';
 
 
 addIcons({
   'barbell-outline': barbellOutline,
   'close': close, 
   'calendar': calendar,
-  'calendar-number': calendarNumber
+  'calendar-number': calendarNumber, 
+  'clipboard': clipboardOutline
 });
 
 @Component({
@@ -34,7 +35,9 @@ export class UserMembershipPage implements OnInit {
   };
 
 
-  constructor(private router: Router) { 
+  constructor(private router: Router) {
+     
+     
   }
 
   ngOnInit() {

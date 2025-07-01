@@ -1,0 +1,146 @@
+ion-content {
+    --background: url('/assets/images/crossfit_crew.png') no-repeat center/cover fixed;
+  }
+  
+  .main-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+  }
+  
+  .history-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+  
+  .history-text {
+    text-align: center;
+    font-size: 35px;
+    font-weight: bold;
+    color: red;
+  }
+  
+  ion-icon {
+    font-size: 60px;
+    color: red;
+    margin-right: 10px;
+  }
+  
+  .date-range {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap; /* ajuda em telas pequenas */
+    margin-bottom: 20px;
+  }
+  
+  .date-range ion-datetime {
+    --background: white;
+    --color: black;
+    border-radius: 8px;
+    padding: 5px;
+    max-width: 150px;
+  }
+  
+  .date-range ion-button {
+    height: 2px; /* altura padrão do ion-datetime para alinhar */
+  }
+  
+  .calendar-box {
+    margin-bottom: 20px;    
+  }
+  
+  .stats-box {
+    text-align: center;
+    color: white;
+    margin-bottom: 20px;
+  }
+  
+  .stats-label {
+    color: red;
+    font-size: 20px;
+    font-weight: bold;
+    
+  }
+  
+  .stats-number {
+    color: red;
+    font-size: 40px;
+    font-weight: bold;
+  }
+  
+  .history-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+    max-width: 350px;
+  }
+
+  ion-button {
+    --background: white;
+    --color: black;
+    font-weight: bold;
+  }
+
+  .ok-button {
+    --background: red;
+    --color: white;
+    font-weight: bold;
+    
+  }
+  
+  .stats-text {
+    color: white;
+    font-size: 20px;
+    font-weight: bold;
+    margin-top: 10px;
+    text-align: center;
+  }
+  
+
+ /*
+* Custom Material Design Datetime Day Parts and calendar
+* -------------------------------------------
+*/
+
+ion-datetime.md::part(calendar-day active),
+ion-datetime.md::part(calendar-day active):focus {
+  background-color: red; //wheel select color 
+  border-color: white;
+  color: white;
+}
+
+ion-datetime.md::part(calendar-day today) {
+  border-color: red;
+}
+
+ion-datetime {
+  --background: black; //background do calendario 
+  --background-rgb: white;
+  --wheel-highlight-background: red; // seleção do background do mes e ano
+  --wheel-highlight-border-radius: green;  
+    box-shadow: white;
+    --ion-color-primary: #e90012;
+}
+
+ion-datetime::part(wheel-item) {
+  color: rgb(255, 66, 97);
+}
+
+ion-datetime::part(wheel-item active) {
+  color: white; //color of month and year
+}
+
+ion-datetime::part(calendar-day) {
+  color: white; //day color of calendar
+}
+
+
+
+  

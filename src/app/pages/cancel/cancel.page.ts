@@ -1,15 +1,21 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonContent, IonHeader, IonTitle, IonToolbar, IonButton, IonDatetime } from '@ionic/angular/standalone';
+import { IonContent, IonHeader, IonTitle, IonToolbar, IonButton, IonDatetime, IonIcon } from '@ionic/angular/standalone';
 import { Router, RouterModule } from '@angular/router';
+import { addIcons } from 'ionicons';
+import { closeOutline, barbellOutline } from 'ionicons/icons';
+
+addIcons({
+  'close': closeOutline, 
+});
 
 @Component({
   selector: 'app-cancel',
   templateUrl: './cancel.page.html',
   styleUrls: ['./cancel.page.scss'],
   standalone: true,
-  imports: [IonButton, IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, IonButton, IonDatetime]
+  imports: [IonIcon, IonButton, IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, IonButton, IonDatetime]
 })
 
 export class CancelPage implements OnInit {
@@ -25,7 +31,9 @@ export class CancelPage implements OnInit {
   };
 
 
-  constructor(private router: Router) {}
+  constructor(private router: Router) {
+      
+  }
 
   ngOnInit() {
   }
@@ -34,3 +42,4 @@ export class CancelPage implements OnInit {
     this.router.navigateByUrl('/user-membership');
   }
 }
+

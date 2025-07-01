@@ -1,24 +1,91 @@
-.calendar-box,  {
-  width: 350px;
-  max-width: 95vw;
-  --ion-color-primary: #e90012;
+ion-content {
+  --background: url('/assets/images/woman_and_kettlebell.png') no-repeat center/cover fixed;
 }
 
-calendar-booking-wrapper {
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    gap: 2vw;
-    margin-top: 6vw;
-    flex-wrap: wrap;
-    --ion-color-primary: #e90012;
-  }
+.main-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+}
 
-.button.button {
-    --background: #bd0a0a;
-    --color: #fff;
-    --border-radius: 12px;
-    font-weight: 700;
-    font-size: 1.1rem;
-  }
+.cancel-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.cancel-text {
+  text-align: center;
+  font-size: 35px;
+  font-weight: bold;
+  color: red;
+}
+
+ion-icon {
+  font-size: 60px;
+  color: red;
+  margin-right: 10px;
+}
+
+.calendar-box {
+  margin-bottom: 20px;
+}
+
+.cancel-btn {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  max-width: 400px;
+}
+
+.custom-button {
+  --background: white;
+  --color: black;
+  font-weight: bold;
+}
+
+/*
+* Custom Material Design Datetime Day Parts and calendar
+* -------------------------------------------
+*/
+
+ion-datetime.md::part(calendar-day active),
+ion-datetime.md::part(calendar-day active):focus {
+  background-color: red; //wheel select color 
+  border-color: white;
+  color: white;
+}
+
+ion-datetime.md::part(calendar-day today) {
+  border-color: red;
+}
+
+ion-datetime {
+  --background: black; //background do calendario 
+  --background-rgb: white;
+  --wheel-highlight-background: red; // seleção do background do mes e ano
+  --wheel-highlight-border-radius: green;
+
+    box-shadow: white;
+    --ion-color-primary: #e90012;
+}
+
+ion-datetime::part(wheel-item) {
+  color: rgb(255, 66, 97);
+}
+
+ion-datetime::part(wheel-item active) {
+  color: white; //color of month and year
+}
+
+ion-datetime::part(calendar-day) {
+  color: white; //day color of calendar
+}
+
+
+
   

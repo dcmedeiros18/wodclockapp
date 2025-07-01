@@ -1,27 +1,38 @@
 <ion-content [fullscreen]="true" class="bg-img">
-  <div class="calendar-booking-wrapper">
-    <div class="calendar-box">
-      <ion-datetime [isDateEnabled]="isWeekday"></ion-datetime>
+  <div class="main-container">
+
+    <div class="book-container">
+      <ion-icon name="clipboard-outline"></ion-icon>
+      <div class="book-text">
+        CLASS BOOKING
+      </div>
     </div>
 
-    <div class="booking-list">
-      <div class="booking-card" *ngFor="let slot of timeSlots">
-        <div class="card-header">
-          <span class="hour">{{ slot.time }}</span>
-          <span class="spots">• {{ slot.spots }} spots left</span>
+    <div class="datetime-container">
+      <ion-datetime presentation="date" [isDateEnabled]="isWeekday"></ion-datetime>
+    </div>
+
+    <ion-card class="booking-card">
+      <ion-card-header>
+        <ion-card-title>Available Classes</ion-card-title>
+      </ion-card-header>
+
+      <ion-card-content>
+        <div *ngFor="let slot of timeSlots" class="booking-slot">
+          <div class="card-header">
+            <span class="hour">{{ slot.time }}</span>
+            <span class="spots">• {{ slot.spots }} spots left</span>
+          </div>
+
+          <ion-button expand="block" class="book-btn">BOOK CLASS</ion-button>
         </div>
 
-        <ion-button expand="block" class="book-btn">BOOK CLASS</ion-button>
-      </div>
-
-      <div class="wod-btn-container">
-          <ion-button class="wod-btn" (click)="goToWod()">VIEW WOD</ion-button>
-          <ion-button class="wod-btn" (click)="goToUserMembership()">User Home</ion-button>
-      </div>
-    </div>
+        <div class="book-btn-container">
+          <ion-button class="bk-btn" (click)="goToWod()">VIEW WOD</ion-button>
+          <ion-button class="bk-btn" (click)="goToUserMembership()">User Home</ion-button>
+        </div>
+      </ion-card-content>
+    </ion-card>
 
   </div>
-
-
-
 </ion-content>
