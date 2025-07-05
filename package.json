@@ -1,7 +1,7 @@
 {
   "name": "wodclockapp",
   "version": "0.0.1",
-  "author": "Ionic Framework",
+  "author": "@daniellem",
   "homepage": "https://ionicframework.com/",
   "scripts": {
     "ng": "ng",

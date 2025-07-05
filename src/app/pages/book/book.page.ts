@@ -23,34 +23,45 @@ export class BookPage implements OnInit {
   isWeekday = (dateString: string) => {
     const date = new Date(dateString);
     const utcDay = date.getUTCDay();
-
-    /**
-     * Date will be enabled if it is not
-     * Sunday or Saturday
-     */
-    return utcDay !== 0 ;
+    return utcDay !== 0; // Habilita todos os dias exceto domingo
   };
 
+  selectedDate: string = '';
+  timeSlots: { time: string, spots: number }[] = [];
 
   constructor(private router: Router) {
-      addIcons({clipboardOutline});
+    addIcons({ clipboardOutline });
   }
 
   ngOnInit() {}
 
-  timeSlots = [
-    { time: '06:00 am', spots: 5 },
-    { time: '07:00 am', spots: 6 },
-    { time: '04:30 pm', spots: 6 },
-    { time: '05:30 pm', spots: 4 },
-    { time: '06:30 pm', spots: 2 }
-  ];
+  onDateSelected(event: any) {
+    this.selectedDate = event.detail.value;
+  
+    // Aqui você pode ligar no service futuramente!
+    this.timeSlots = [
+      { time: '06:00 am', spots: 20 },
+      { time: '07:00 am', spots: 20 },
+      { time: '08:00 am', spots: 20 },
+      { time: '04:00 pm', spots: 20 },
+      { time: '05:00 pm', spots: 20 },
+      { time: '06:00 pm', spots: 20 },
+      { time: '07:00 pm', spots: 20 },
+      { time: '08:00 pm', spots: 20 },
+    ];
+  }
+  
+  bookClass(slotIndex: number) {
+    if (this.timeSlots[slotIndex].spots > 0) {
+      this.timeSlots[slotIndex].spots--;
+    }
+  }
   
   goToWod() {
     this.router.navigateByUrl('/wod');
   }
 
-  goToUserMembership() {   
+  goToUserMembership() {
     this.router.navigateByUrl('/user-membership');
   }
 }

@@ -5,6 +5,7 @@ import { IonContent, IonHeader, IonTitle, IonToolbar, IonButton, IonDatetime, Io
 import { Router, RouterModule } from '@angular/router';
 import { addIcons } from 'ionicons';
 import { closeOutline, barbellOutline } from 'ionicons/icons';
+import { ClassService } from 'src/app/services/class.service';
 
 addIcons({
   'close': closeOutline, 
@@ -31,7 +32,8 @@ export class CancelPage implements OnInit {
   };
 
 
-  constructor(private router: Router) {
+  constructor(private router: Router, private classService: ClassService) {
+     
       
   }
 
@@ -40,6 +42,10 @@ export class CancelPage implements OnInit {
 
   goToUserMembership() {   
     this.router.navigateByUrl('/user-membership');
+  }
+
+  cancelBooking() {
+    this.classService.cancelBooking();
   }
 }
 

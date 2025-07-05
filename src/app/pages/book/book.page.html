@@ -1,6 +1,7 @@
 <ion-content [fullscreen]="true" class="bg-img">
   <div class="main-container">
 
+    <!-- Header do agendamento -->
     <div class="book-container">
       <ion-icon name="clipboard-outline"></ion-icon>
       <div class="book-text">
@@ -8,31 +9,53 @@
       </div>
     </div>
 
+    <!-- Componente do calendário -->
     <div class="datetime-container">
-      <ion-datetime presentation="date" [isDateEnabled]="isWeekday"></ion-datetime>
+      <ion-datetime
+        presentation="date"
+        [isDateEnabled]="isWeekday"
+        (ionChange)="onDateSelected($event)">
+      </ion-datetime>
     </div>
 
-    <ion-card class="booking-card">
+    <!-- Card de horários disponíveis: só aparece se houver data e horários -->
+    <ion-card class="booking-card" *ngIf="selectedDate && timeSlots.length > 0">
       <ion-card-header>
         <ion-card-title>Available Classes</ion-card-title>
       </ion-card-header>
 
       <ion-card-content>
-        <div *ngFor="let slot of timeSlots" class="booking-slot">
+        <!-- Lista de horários -->
+        <div *ngFor="let slot of timeSlots; let i = index" class="booking-slot">
           <div class="card-header">
             <span class="hour">{{ slot.time }}</span>
             <span class="spots">• {{ slot.spots }} spots left</span>
           </div>
 
-          <ion-button expand="block" class="book-btn">BOOK CLASS</ion-button>
+          <!-- Botão para reservar: desabilita quando não há mais spots -->
+           <!-- desativa se não houver mais vagas -->
+           <!-- chama o método que reduz o número de spots -->
+          <ion-button
+            expand="block"
+            class="book-btn"
+            [disabled]="slot.spots === 0"
+            (click)="bookClass(i)">
+            BOOK CLASS
+          </ion-button>
         </div>
 
+        <!-- Botões adicionais -->
         <div class="book-btn-container">
           <ion-button class="bk-btn" (click)="goToWod()">VIEW WOD</ion-button>
           <ion-button class="bk-btn" (click)="goToUserMembership()">User Home</ion-button>
         </div>
       </ion-card-content>
     </ion-card>
+
+    <!-- Mensagem quando não houver horários disponíveis -->
+    <div *ngIf="selectedDate && timeSlots.length === 0" class="no-classes">
+      <p>No classes available for the selected date.</p>
+    </div>
 
   </div>
 </ion-content>
