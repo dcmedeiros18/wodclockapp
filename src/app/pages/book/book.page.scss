@@ -64,19 +64,14 @@ ion-card-title {
   font-weight: bold;
 }
 
-book-btn-container {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  margin-top: 10px;
-}
-
 .book-btn-container {
   display: flex;
   flex-direction: row;     /* botões lado a lado */
   gap: 10px;               /* espaço entre os botões */
   margin-top: 10px;
   width: 100%;
+  max-width: 400px;        /* igual ao datetime-container e booking-card */
+  transform: translateX(20px); /* igual ao datetime-container para alinhamento */
 }
 
 .bk-btn {

@@ -1,6 +1,7 @@
 <ion-content>
   <div class="main-container">
-    
+
+    <!-- Título e ícone do WOD -->
     <div class="wod-container">
       <ion-icon name="barbell-outline"></ion-icon>
       <div class="wod-text">
@@ -8,23 +9,40 @@
       </div>
     </div>
 
+    <!-- Calendário: permite o usuário selecionar uma data -->
+     <!-- Valor atual da data selecionada -->
     <div class="datetime-container">
-      <ion-datetime [isDateEnabled]="isWeekday" presentation="date"></ion-datetime>
+      <ion-datetime
+        presentation="date"
+        [value]="selectedDate"           
+        (ionChange)="onDateSelected($event)"> <!-- Chama o método ao selecionar nova data -->
+      </ion-datetime>
     </div>
 
-    <ion-card>
+    <!-- Card do WOD: só aparece se há WOD para a data selecionada -->
+    <ion-card *ngIf="selectedDate && wodDescription">
       <ion-card-header>
-        <ion-card-title>Amrap 12 minutes</ion-card-title>
+        <ion-card-title>{{ wodTitle }}</ion-card-title> <!-- Exibe o título do WOD -->
       </ion-card-header>
 
       <ion-card-content>
-        6 Power Clean <br> 12 wall balls <br> 18 Reverse Lunge
+        <!-- Exibe a descrição com formatação (quebra de linha, etc) -->
+        <div [innerHTML]="wodDescription"></div>
       </ion-card-content>
 
-      <ion-button expand="block" class="custom-button" (click)="goToUserMembership()">
-        User home 
-      </ion-button>
+      
     </ion-card>
+      
+
+    <!-- Mensagem: caso não haja WOD para o dia selecionado -->
+    <div *ngIf="selectedDate && !wodDescription" class="no-wod">
+      <p>No WOD available for the selected date.</p>
+    </div>
+
+    <!-- Botão para navegar para o user home -->
+    <ion-button expand="block" class="custom-button" (click)="goToUserMembership()">
+      User home 
+    </ion-button>
 
   </div>
 </ion-content>

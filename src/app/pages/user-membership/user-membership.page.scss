@@ -1,8 +1,8 @@
 ion-content {
-  --background: url('/assets/images/user-dashboard.png') no-repeat center/cover fixed;
+  --background: url('/assets/images/user.png') no-repeat center/cover fixed;
 
   @media (min-width: 768px) {    
-    --background: #000000 url('/assets/images/user-dashboard.png') no-repeat center center/contain;
+    --background: #000000 url('/assets/images/user.png') no-repeat center center/contain;
   } 
 }
 

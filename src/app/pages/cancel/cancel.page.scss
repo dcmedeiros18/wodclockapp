@@ -48,6 +48,13 @@ ion-icon {
   font-weight: bold;
 }
 
+ion-card.selected {
+  border: 2px solid red;
+  box-shadow: 0 0 10px red;
+}
+
+
+
 /*
 * Custom Material Design Datetime Day Parts and calendar
 * -------------------------------------------
