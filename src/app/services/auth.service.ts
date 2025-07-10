@@ -13,10 +13,15 @@ export class AuthService {
 
   login(email: string, password: string): Observable<any> {
     return this.http.post(`${this.apiUrl}/login`, { email, password }).pipe(
-      tap((res: any) => {
-        if (res.token && res.user) {
-          localStorage.setItem('token', res.token);
-          localStorage.setItem('currentUser', JSON.stringify(res.user));
+      tap((response: any) => {
+        // Só salva se ambos existirem
+        if (response && response.access_token && response.user) {
+          localStorage.setItem('token', response.access_token);
+          localStorage.setItem('currentUser', JSON.stringify(response.user));
+        } else {
+          // Não salva nada se a resposta não for válida
+          localStorage.removeItem('token');
+          localStorage.removeItem('currentUser');
         }
       })
     );
@@ -24,5 +29,22 @@ export class AuthService {
 
   register(email: string, password: string): Observable<any> {
     return this.http.post(`${this.apiUrl}/register`, { email, password });
+  }
+
+  getCurrentUser(): any {
+    const userStr = localStorage.getItem('currentUser');
+    if (userStr) {
+      try {
+        return JSON.parse(userStr);
+      } catch {
+        return null;
+      }
+    }
+    return null;
+  }
+
+  getUserProfile(): string {
+    const user = this.getCurrentUser();
+    return user?.profile || '';
   }
 }

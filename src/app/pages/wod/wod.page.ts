@@ -6,6 +6,7 @@ import { addIcons } from 'ionicons';
 import { barbellOutline } from 'ionicons/icons';
 import { RouterModule, Router } from '@angular/router';
 import { WodService } from '../../services/wod.service'; // import do seu service
+import { AuthService } from 'src/app/services/auth.service'; // ajuste o caminho conforme seu projeto
 
 addIcons({
   'barbell-outline': barbellOutline, 
@@ -18,37 +19,35 @@ addIcons({
   standalone: true,
   imports: [IonCardSubtitle, IonDatetimeButton, IonIcon, IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, IonDatetime, IonModal, IonGrid, IonRow, IonCol, IonButton, IonCard, IonCardContent, IonCardHeader, IonCardTitle, RouterModule] 
 })
+
 export class WodPage implements OnInit {
 
   isWeekday = (dateString: string) => {
     const date = new Date(dateString);
     const utcDay = date.getUTCDay();
-    return utcDay !== 0; // Desativa domingo
+    return utcDay !== 0;
   };
 
   selectedDate: string = '';
   wodTitle: string = '';
   wodDescription: string = '';
+  wodNotes: string = ''; // para caixa de texto
+  userRole: string = ''; // armaxena o perfil
 
-  constructor(private router: Router, private wodService: WodService) {
+  constructor(private router: Router, private wodService: WodService, private authService: AuthService) 
+  {
     addIcons({ barbellOutline });
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    // this.userRole = this.authService.getUserProfile(); 
+  }
 
-  /**
-   * Quando o usuário seleciona uma data no calendário
-   */
   onDateSelected(event: any) {
     const isoDate = event.detail.value;
-    console.log('Raw date value:', isoDate);
-
-    // Garante o formato YYYY-MM-DD
     const datePart = isoDate.includes('T') ? isoDate.split('T')[0] : isoDate;
     this.selectedDate = datePart;
-    console.log('Selected date:', this.selectedDate);
 
-    // Chama o service (no futuro, ligue ao backend real aqui)
     this.wodService.getWod(this.selectedDate).subscribe((wod: any) => {
       if (wod) {
         this.wodTitle = wod.title;
@@ -60,11 +59,23 @@ export class WodPage implements OnInit {
     });
   }
 
-  /**
-   * Navega para a home do usuário
-   */
-  goToUserMembership() {   
-    this.router.navigateByUrl('/user-membership'); // caminho certo
+  goToUserMembership() {
+    this.router.navigateByUrl('/user-membership');
   }
 
+  logout() {
+    this.router.navigateByUrl('/login');
+  }
+
+  editWod() {
+    console.log('Editar WOD - implementar funcionalidade');
+  }
+
+  deleteWod() {
+    console.log('Deletar WOD - implementar funcionalidade');
+  }
+
+  isAdminOrCoach(): boolean {
+    return this.userRole === 'admin' || this.userRole === 'coach';
+  }
 }

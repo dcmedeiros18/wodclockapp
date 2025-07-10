@@ -2,62 +2,87 @@ ion-content {
   --background: url('/assets/images/woman_and_kettlebell.png') no-repeat center/cover fixed;
 }
 
+/* Container principal */
 .main-container {
   display: flex;
   flex-direction: column;
-  align-items: center; /* centraliza tudo na horizontal */
-  padding: 20px; /* espaçamento geral */
+  align-items: center;
+  padding: 20px;
 }
 
+/* Header do WOD com ícone + texto */
 .wod-container {
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  margin-bottom: 20px; /* espaço abaixo do container */
+  margin-bottom: 20px;
 }
 
 .wod-text {
   text-align: center;
   font-size: 35px;
   font-weight: bold;
-  color:red;
+  color: red;
 }
 
+/* Ícone de haltere */
 ion-icon {
   font-size: 60px;
   color: red;
   margin-right: 10px;
 }
 
+/* Calendário */
 .datetime-container {
-  margin-bottom: 20px; /* espaço abaixo do calendário */
+  margin-bottom: 20px;
 }
 
+/* Estilo dos cards (WOD + notas) */
 ion-card {
   --background: #000;
   --color: white;
   width: 100%;
   max-width: 400px;
+  margin-bottom: 20px;
 }
 
+/* Título em vermelho */
 ion-card-title {
   --color: red;
 }
 
-.book-btn-container {
+/* Caixa de texto de notas */
+ion-textarea {
+  --background: white;
+  --color: black;
+  font-size: 14px;
+  border-radius: 8px;
+  padding: 10px;
+}
+
+/* Grupo de botões Edit / Delete */
+.button-group {
   display: flex;
   flex-direction: column;
   gap: 10px;
-  margin-top: 10px;  
+  margin-top: 12px;
 }
 
+/* Estilo de todos os botões */
 ion-button {
   --background: white;
   --color: black;
   font-weight: bold;
 }
 
+/* Botão logout (diferente visualmente se quiser customizar mais) */
+ion-button[color="medium"] {
+  --background: #ccc;
+  --color: black;
+}
+
+/* Mensagem de WOD ausente */
 .no-wod {
   text-align: center;
   font-size: 18px;
@@ -65,17 +90,10 @@ ion-button {
   margin-top: 20px;
 }
 
-
-
-
-/*
-* Custom Material Design Datetime Day Parts and calendar
-* -------------------------------------------
-*/
-
+/* Customização do calendário */
 ion-datetime.md::part(calendar-day active),
 ion-datetime.md::part(calendar-day active):focus {
-  background-color: red; //wheel select color 
+  background-color: red;
   border-color: white;
   color: white;
 }
@@ -85,13 +103,10 @@ ion-datetime.md::part(calendar-day today) {
 }
 
 ion-datetime {
-  --background: black; //background do calendario 
-  --background-rgb: white;
-  --wheel-highlight-background: red; // seleção do background do mes e ano
-  --wheel-highlight-border-radius: green;
-
-    box-shadow: white;
-    --ion-color-primary: #e90012;
+  --background: black;
+  --wheel-highlight-background: red;
+  --ion-color-primary: #e90012;
+  box-shadow: white;
 }
 
 ion-datetime::part(wheel-item) {
@@ -99,9 +114,36 @@ ion-datetime::part(wheel-item) {
 }
 
 ion-datetime::part(wheel-item active) {
-  color: white; //color of month and year
+  color: white;
 }
 
 ion-datetime::part(calendar-day) {
-  color: white; //day color of calendar
+  color: white;
+}
+
+@media (max-width: 600px) {
+  .main-container {
+    padding: 12px;
+  }
+
+  .wod-text {
+    font-size: 26px;
+  }
+
+  ion-icon {
+    font-size: 42px;
+    margin-right: 6px;
+  }
+
+  ion-card {
+    max-width: 100%;
+  }
+
+  ion-textarea {
+    font-size: 13px;
+  }
+
+  ion-button {
+    font-size: 14px;
+  }
 }

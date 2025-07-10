@@ -4,44 +4,57 @@
     <!-- Título e ícone do WOD -->
     <div class="wod-container">
       <ion-icon name="barbell-outline"></ion-icon>
-      <div class="wod-text">
-        WORKOUT<br>OF THE DAY
-      </div>
+      <div class="wod-text">WORKOUT<br>OF THE DAY</div>
     </div>
 
-    <!-- Calendário: permite o usuário selecionar uma data -->
-     <!-- Valor atual da data selecionada -->
+    <!-- Calendário -->
     <div class="datetime-container">
       <ion-datetime
         presentation="date"
-        [value]="selectedDate"           
-        (ionChange)="onDateSelected($event)"> <!-- Chama o método ao selecionar nova data -->
+        [value]="selectedDate"
+        (ionChange)="onDateSelected($event)">
       </ion-datetime>
     </div>
 
-    <!-- Card do WOD: só aparece se há WOD para a data selecionada -->
+    <!-- Card do WOD -->
     <ion-card *ngIf="selectedDate && wodDescription">
       <ion-card-header>
-        <ion-card-title>{{ wodTitle }}</ion-card-title> <!-- Exibe o título do WOD -->
+        <ion-card-title>{{ wodTitle }}</ion-card-title>
       </ion-card-header>
-
       <ion-card-content>
-        <!-- Exibe a descrição com formatação (quebra de linha, etc) -->
         <div [innerHTML]="wodDescription"></div>
       </ion-card-content>
-
-      
     </ion-card>
-      
 
-    <!-- Mensagem: caso não haja WOD para o dia selecionado -->
+    <!-- Mensagem caso não haja WOD -->
     <div *ngIf="selectedDate && !wodDescription" class="no-wod">
       <p>No WOD available for the selected date.</p>
     </div>
 
-    <!-- Botão para navegar para o user home -->
+    <!-- Card de notas e botões (só para admin/coach) -->
+<ion-card *ngIf="selectedDate && wodDescription && isAdminOrCoach()">
+  <ion-card-header>
+    <ion-card-title>Notes</ion-card-title>
+  </ion-card-header>
+  <ion-card-content>
+    <ion-textarea [(ngModel)]="wodNotes" placeholder="Enter notes or modifications..."></ion-textarea>
+
+    <div class="button-group">
+      <ion-button color="primary" expand="block" (click)="editWod()">Edit</ion-button>
+      <ion-button color="danger" expand="block" (click)="deleteWod()">Delete</ion-button>
+    </div>
+  </ion-card-content>
+</ion-card>
+
+
+    <!-- Botão: voltar para home -->
     <ion-button expand="block" class="custom-button" (click)="goToUserMembership()">
-      User home 
+      User home
+    </ion-button>
+
+    <!-- Botão: logout -->
+    <ion-button expand="block" color="medium" (click)="logout()">
+      Logout
     </ion-button>
 
   </div>

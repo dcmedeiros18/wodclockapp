@@ -15,6 +15,7 @@ import { Router } from '@angular/router';
 export class LoginPage implements OnInit {
   email: string = '';
   password: string = '';
+  errorMessage: string = '';
 
 
   constructor(private authService: AuthService, private router: Router) { }
@@ -23,12 +24,20 @@ export class LoginPage implements OnInit {
   }
 
   onLogin() {
-    const email = this.email;
-    const password = this.password;
-    const isLoggedIn = this.authService.login(email, password);
-    if (isLoggedIn) {
-      this.router.navigate(['./user-membership']);
-    }
+    this.errorMessage = '';
+    this.authService.login(this.email, this.password).subscribe({
+      next: (res) => {
+        // Só redireciona se houver token e user
+        if (res && res.access_token && res.user) {
+          this.router.navigate(['./user-membership']);
+        } else {
+          this.errorMessage = 'Login inválido. Verifique suas credenciais.';
+        }
+      },
+      error: (err) => {
+        this.errorMessage = (err.error && err.error.message) ? err.error.message : 'Erro ao fazer login. Tente novamente.';
+      }
+    });
   }
   goToRegister() {   
     this.router.navigateByUrl('/register');
