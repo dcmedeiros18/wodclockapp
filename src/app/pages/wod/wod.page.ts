@@ -45,6 +45,14 @@ export class WodPage implements OnInit {
 
   ngOnInit() {    
     this.userProfile = this.authService.getUserProfile();
+    console.log('User Profile:', this.userProfile);
+    console.log('Is Admin or Coach:', this.isAdminOrCoach());
+    
+    // Verificar se o usuário está logado
+    const currentUser = this.authService.getCurrentUser();
+    if (!currentUser) {
+      this.router.navigateByUrl('/login');
+    }
   }    
   
 
@@ -73,7 +81,9 @@ export class WodPage implements OnInit {
   }  
 
   isAdminOrCoach(): boolean {
-    return this.userProfile === 'admin' || this.userProfile === 'coach';
+    const isAdmin = this.userProfile === 'admin' || this.userProfile === 'coach';
+    console.log('Checking admin/coach access:', this.userProfile, 'Result:', isAdmin);
+    return isAdmin;
   }
   
 
@@ -126,5 +136,7 @@ export class WodPage implements OnInit {
     });
     await toast.present();
   }
+
+
   
 }

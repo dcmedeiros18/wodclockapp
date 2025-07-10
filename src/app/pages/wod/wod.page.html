@@ -32,21 +32,34 @@
     </div>
 
     <!-- Card de edição (somente admin ou coach) -->
-<ion-card *ngIf="selectedDate && wodDescription && isAdminOrCoach()">
-  <ion-card-header>
-    <ion-card-title>Description of WOD</ion-card-title>
-  </ion-card-header>
+    <ion-card *ngIf="selectedDate && isAdminOrCoach()">
+      <ion-card-header>
+        <ion-card-title>Description of WOD ({{ userProfile }})</ion-card-title>
+      </ion-card-header>
 
-  <ion-card-content>
-    <ion-textarea [(ngModel)]="wodNotes" placeholder="Enter notes or modifications..."></ion-textarea>
+      <ion-card-content>
+        <ion-textarea [(ngModel)]="wodNotes" placeholder="Enter notes or modifications..."></ion-textarea>
 
-    <div class="button-group">
-      <ion-button color="primary" expand="block" (click)="editWod()">Edit</ion-button>
-      <ion-button color="danger" expand="block" (click)="deleteWod()">Delete</ion-button>
-      <ion-button color="success" expand="block" (click)="saveWodNotes()">Save</ion-button>
-    </div>
-  </ion-card-content>
-</ion-card>
+        <div class="button-group">
+          <ion-button color="primary" expand="block" (click)="editWod()">Edit</ion-button>
+          <ion-button color="danger" expand="block" (click)="deleteWod()" [disabled]="!wodDescription">Delete</ion-button>
+          <ion-button color="success" expand="block" (click)="saveWodNotes()">Save</ion-button>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Card de debug para mostrar informações do usuário -->
+    <ion-card *ngIf="selectedDate">
+      <ion-card-header>
+        <ion-card-title>Debug Info</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <p>User Profile: {{ userProfile }}</p>
+        <p>Is Admin/Coach: {{ isAdminOrCoach() }}</p>
+        <p>Selected Date: {{ selectedDate }}</p>
+        <p>Has WOD: {{ wodDescription ? 'Yes' : 'No' }}</p>
+      </ion-card-content>
+    </ion-card>
 
 
 

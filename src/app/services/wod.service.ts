@@ -1,42 +1,80 @@
 import { Injectable } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
+import { environment } from '../../environments/environment';
+
+export interface Wod {
+  id?: number;
+  date: string;
+  title: string;
+  description: string;
+}
 
 @Injectable({
   providedIn: 'root'
 })
 export class WodService {
+  private apiUrl = `${environment.apiUrl}/api/wods`;
 
-  // Dados simulados - depois você vai substituir por chamada ao backend
-  private mockWods: { [date: string]: { title: string, description: string } } = {
-    '2025-07-04': {
-      title: 'AMRAP 12 minutes',
-      description: '6 Power Clean <br> 12 Wall Balls <br> 18 Reverse Lunge'
-    },
-    '2025-07-05': {
-      title: 'For Time',
-      description: '21-15-9 Thrusters and Pull-ups'
-    }
-  };
+  constructor(private http: HttpClient) { }
 
-  constructor() { }
+  private getHeaders(): HttpHeaders {
+    const token = localStorage.getItem('token');
+    return new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    });
+  }
 
   /**
    * Retorna o WOD para a data informada.
-   * 📌 No futuro, substitua pelo HTTP GET ao backend.
-   * Exemplo:
-   * return this.http.get<{title: string, description: string}>(`/api/wods/${date}`);
    */
   getWod(date: string): Observable<{ title: string, description: string } | null> {
-    const wod = this.mockWods[date] || null;
-    return of(wod);  // Simulando um retorno como se viesse do backend
+    return this.http.get<Wod>(`${this.apiUrl}/${date}`, { headers: this.getHeaders() }).pipe(
+      map(wod => ({
+        title: wod.title,
+        description: wod.description
+      })),
+      catchError(() => {
+        // Se não encontrar WOD, retorna null
+        return of(null);
+      })
+    );
   }
 
-  deleteWod(date: string): Observable<boolean> {
-    if (this.mockWods[date]) {
-      delete this.mockWods[date];
-      return of(true); // sucesso
-    }
-    return of(false); // não havia WOD na data
+  /**
+   * Retorna todos os WODs
+   */
+  getAllWods(): Observable<Wod[]> {
+    return this.http.get<Wod[]>(this.apiUrl, { headers: this.getHeaders() }).pipe(
+      catchError(() => {
+        return of([]);
+      })
+    );
   }
-  
+
+  /**
+   * Cria um novo WOD
+   */
+  createWod(wod: Wod): Observable<Wod> {
+    return this.http.post<Wod>(this.apiUrl, wod, { headers: this.getHeaders() });
+  }
+
+  /**
+   * Atualiza um WOD existente
+   */
+  updateWod(date: string, wod: Partial<Wod>): Observable<Wod> {
+    return this.http.put<Wod>(`${this.apiUrl}/${date}`, wod, { headers: this.getHeaders() });
+  }
+
+  /**
+   * Remove um WOD
+   */
+  deleteWod(date: string): Observable<boolean> {
+    return this.http.delete(`${this.apiUrl}/${date}`, { headers: this.getHeaders() }).pipe(
+      map(() => true),
+      catchError(() => of(false))
+    );
+  }
 }
