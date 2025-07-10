@@ -33,6 +33,12 @@ ion-icon {
   margin-right: 10px;
 }
 
+ion-button[color="success"] {
+  --background: #28a745;
+  --color: white;
+}
+
+
 /* Calendário */
 .datetime-container {
   margin-bottom: 20px;

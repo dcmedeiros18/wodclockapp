@@ -31,20 +31,24 @@
       <p>No WOD available for the selected date.</p>
     </div>
 
-    <!-- Card de notas e botões (só para admin/coach) -->
+    <!-- Card de edição (somente admin ou coach) -->
 <ion-card *ngIf="selectedDate && wodDescription && isAdminOrCoach()">
   <ion-card-header>
-    <ion-card-title>Notes</ion-card-title>
+    <ion-card-title>Description of WOD</ion-card-title>
   </ion-card-header>
+
   <ion-card-content>
     <ion-textarea [(ngModel)]="wodNotes" placeholder="Enter notes or modifications..."></ion-textarea>
 
     <div class="button-group">
       <ion-button color="primary" expand="block" (click)="editWod()">Edit</ion-button>
       <ion-button color="danger" expand="block" (click)="deleteWod()">Delete</ion-button>
+      <ion-button color="success" expand="block" (click)="saveWodNotes()">Save</ion-button>
     </div>
   </ion-card-content>
 </ion-card>
+
+
 
 
     <!-- Botão: voltar para home -->

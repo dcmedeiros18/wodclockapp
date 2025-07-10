@@ -43,8 +43,9 @@ export class AuthService {
     return null;
   }
 
-  getUserProfile(): string {
-    const user = this.getCurrentUser();
-    return user?.profile || '';
-  }
+getUserProfile(): string {
+  const user = JSON.parse(localStorage.getItem('user') || '{}');
+  return user?.profile || '';
+}
+
 }

@@ -7,6 +7,8 @@ import { barbellOutline } from 'ionicons/icons';
 import { RouterModule, Router } from '@angular/router';
 import { WodService } from '../../services/wod.service'; // import do seu service
 import { AuthService } from 'src/app/services/auth.service'; // ajuste o caminho conforme seu projeto
+import { AlertController, ToastController } from '@ionic/angular';
+
 
 addIcons({
   'barbell-outline': barbellOutline, 
@@ -32,16 +34,19 @@ export class WodPage implements OnInit {
   wodTitle: string = '';
   wodDescription: string = '';
   wodNotes: string = ''; // para caixa de texto
-  userRole: string = ''; // armaxena o perfil
+  userProfile: string = ''; // guarda o profile: admin, coach, membership etc.
 
-  constructor(private router: Router, private wodService: WodService, private authService: AuthService) 
+
+  constructor(private router: Router, private wodService: WodService, private authService: AuthService, private alertController: AlertController,
+    private toastController: ToastController) 
   {
     addIcons({ barbellOutline });
   }
 
-  ngOnInit() {
-    // this.userRole = this.authService.getUserProfile(); 
-  }
+  ngOnInit() {    
+    this.userProfile = this.authService.getUserProfile();
+  }    
+  
 
   onDateSelected(event: any) {
     const isoDate = event.detail.value;
@@ -65,17 +70,61 @@ export class WodPage implements OnInit {
 
   logout() {
     this.router.navigateByUrl('/login');
-  }
-
-  editWod() {
-    console.log('Editar WOD - implementar funcionalidade');
-  }
-
-  deleteWod() {
-    console.log('Deletar WOD - implementar funcionalidade');
-  }
+  }  
 
   isAdminOrCoach(): boolean {
-    return this.userRole === 'admin' || this.userRole === 'coach';
+    return this.userProfile === 'admin' || this.userProfile === 'coach';
   }
+  
+
+  async deleteWod() {
+    const alert = await this.alertController.create({
+      header: 'Confirm Deletion',
+      message: 'Are you sure you want to delete this WOD?',
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel'
+        },
+        {
+          text: 'OK',
+          handler: () => {
+            this.wodService.deleteWod(this.selectedDate).subscribe((success) => {
+              if (success) {
+                this.wodTitle = '';
+                this.wodDescription = '';
+                this.presentToast('WOD deleted successfully.', 'danger');
+              } else {
+                this.presentToast('No WOD found to delete.', 'warning');
+              }
+            });
+          }
+        }
+      ]
+    });
+  
+    await alert.present();
+  }
+  
+  
+  editWod() {
+    console.log('WOD updated');
+    this.presentToast('WOD updated successfully.', 'primary');
+  }
+  
+  saveWodNotes() {
+    console.log('WOD saved:', this.wodNotes);
+    this.presentToast('WOD notes saved successfully.', 'success');
+  }
+  
+  async presentToast(message: string, color: string = 'medium') {
+    const toast = await this.toastController.create({
+      message,
+      duration: 2000,
+      color,
+      position: 'bottom'
+    });
+    await toast.present();
+  }
+  
 }

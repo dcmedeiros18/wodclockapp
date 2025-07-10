@@ -30,4 +30,13 @@ export class WodService {
     const wod = this.mockWods[date] || null;
     return of(wod);  // Simulando um retorno como se viesse do backend
   }
+
+  deleteWod(date: string): Observable<boolean> {
+    if (this.mockWods[date]) {
+      delete this.mockWods[date];
+      return of(true); // sucesso
+    }
+    return of(false); // não havia WOD na data
+  }
+  
 }
