@@ -34,47 +34,34 @@
     <!-- Card de edição (somente admin ou coach) -->
     <ion-card *ngIf="selectedDate && isAdminOrCoach()">
       <ion-card-header>
-        <ion-card-title>Description of WOD ({{ userProfile }})</ion-card-title>
+        <ion-card-title>Description of WOD</ion-card-title>
       </ion-card-header>
 
       <ion-card-content>
         <ion-textarea 
-          [(ngModel)]="wodNotes" (ionInput)="onNotesChange()" placeholder="Enter notes or modifications...">
+          name="wodNotes"
+          [(ngModel)]="wodNotes" 
+          placeholder="Digite a descrição do WOD...">
         </ion-textarea>
 
-
         <div class="button-group">
-          <ion-button color="primary" expand="block" (click)="editWod()" [disabled]="!selectedDate">
-            Edit
+          <ion-button 
+            color="danger" 
+            expand="block" 
+            (click)="deleteWod()" 
+            [disabled]="!wodDescription">
+            Deletar
           </ion-button>
-        
-          <ion-button color="danger" expand="block" (click)="deleteWod()">
-            Delete
-          </ion-button>
-        
-          <ion-button color="success" expand="block" (click)="saveWodNotes()" [disabled]="!isNoteChanged">
-            Save
+          <ion-button 
+            color="success" 
+            expand="block" 
+            (click)="saveWodNotes()" 
+            [disabled]="!wodNotes || !wodNotes.trim()">
+            Salvar
           </ion-button>
         </div>
-        
       </ion-card-content>
     </ion-card>
-
-    <!-- Card de debug para mostrar informações do usuário -->
-    <ion-card *ngIf="selectedDate">
-      <ion-card-header>
-        <ion-card-title>Debug Info</ion-card-title>
-      </ion-card-header>
-      <ion-card-content>
-        <p>User Profile: {{ userProfile }}</p>
-        <p>Is Admin/Coach: {{ isAdminOrCoach() }}</p>
-        <p>Selected Date: {{ selectedDate }}</p>
-        <p>Has WOD: {{ wodDescription ? 'Yes' : 'No' }}</p>
-      </ion-card-content>
-    </ion-card>
-
-
-
 
     <!-- Botão: voltar para home -->
     <ion-button expand="block" class="custom-button" (click)="goToUserMembership()">

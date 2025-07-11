@@ -132,20 +132,44 @@ export class WodPage implements OnInit {
   
   
   saveWodNotes() {
-    if (this.wodNotes.trim()) {
-      this.wodService.updateWod(this.selectedDate, {
-        description: this.wodNotes
-      }).subscribe(success => {
-        if (success) {
-          this.wodDescription = this.wodNotes;
-          this.presentToast('WOD notes saved successfully.', 'success');
-          this.isNoteChanged = false;
+    if (!this.wodNotes.trim()) return;
+  
+    const wodData = {
+      date: this.selectedDate,
+      title: 'Workout of the Day',
+      description: this.wodNotes
+    };
+  
+    this.wodService.updateWod(this.selectedDate, { description: this.wodNotes }).subscribe({
+      next: () => {
+        this.wodDescription = this.wodNotes;
+        this.wodTitle = 'Workout of the Day';
+        this.wodNotes = ''; //clean the text box
+        this.isNoteChanged = false;
+        this.presentToast('WOD updated successfully.', 'success');
+      },
+      error: (err) => {
+        if (err.status === 404) {
+          // Se não encontrou para atualizar, então cria
+          this.wodService.createWod(wodData).subscribe({
+            next: (created) => {
+              this.wodTitle = created.title;
+              this.wodDescription = created.description;
+              this.wodNotes = ''; //clean the text box
+              this.isNoteChanged = false;
+              this.presentToast('WOD created successfully.', 'success');
+            },
+            error: () => {
+              this.presentToast('Failed to create WOD.', 'danger');
+            }
+          });
         } else {
-          this.presentToast('Failed to save. No WOD found for this date.', 'warning');
+          this.presentToast('Unexpected error saving WOD.', 'danger');
         }
-      });
-    }
+      }
+    });
   }
+  
   
   
   onNotesChange() {

@@ -59,20 +59,27 @@ export class WodService {
     return this.http.post<Wod>(this.apiUrl, wod, { headers: this.getHeaders() });
   }
 
+
   /**
    * Atualiza um WOD existente
    */
   updateWod(date: string, wod: Partial<Wod>): Observable<Wod> {
-    return this.http.put<Wod>(`${this.apiUrl}/${date}`, wod, { headers: this.getHeaders() });
+    return this.http.put<Wod>(`${this.apiUrl}/${date}`, wod, {
+      headers: this.getHeaders()
+    });
   }
+  
 
   /**
    * Remove um WOD
    */
   deleteWod(date: string): Observable<boolean> {
-    return this.http.delete(`${this.apiUrl}/${date}`, { headers: this.getHeaders() }).pipe(
+    return this.http.delete(`${this.apiUrl}?date=${date}`, {
+      headers: this.getHeaders()
+    }).pipe(
       map(() => true),
       catchError(() => of(false))
     );
   }
+  
 }
