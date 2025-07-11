@@ -31,17 +31,15 @@ export class WodService {
    * Retorna o WOD para a data informada.
    */
   getWod(date: string): Observable<{ title: string, description: string } | null> {
-    return this.http.get<Wod>(`${this.apiUrl}/${date}`, { headers: this.getHeaders() }).pipe(
+    return this.http.get<Wod>(`${this.apiUrl}?date=${date}`, { headers: this.getHeaders() }).pipe(
       map(wod => ({
         title: wod.title,
         description: wod.description
       })),
-      catchError(() => {
-        // Se não encontrar WOD, retorna null
-        return of(null);
-      })
+      catchError(() => of(null))
     );
   }
+  
 
   /**
    * Retorna todos os WODs

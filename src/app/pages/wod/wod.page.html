@@ -38,13 +38,25 @@
       </ion-card-header>
 
       <ion-card-content>
-        <ion-textarea [(ngModel)]="wodNotes" placeholder="Enter notes or modifications..."></ion-textarea>
+        <ion-textarea 
+          [(ngModel)]="wodNotes" (ionInput)="onNotesChange()" placeholder="Enter notes or modifications...">
+        </ion-textarea>
+
 
         <div class="button-group">
-          <ion-button color="primary" expand="block" (click)="editWod()">Edit</ion-button>
-          <ion-button color="danger" expand="block" (click)="deleteWod()" [disabled]="!wodDescription">Delete</ion-button>
-          <ion-button color="success" expand="block" (click)="saveWodNotes()">Save</ion-button>
+          <ion-button color="primary" expand="block" (click)="editWod()" [disabled]="!selectedDate">
+            Edit
+          </ion-button>
+        
+          <ion-button color="danger" expand="block" (click)="deleteWod()">
+            Delete
+          </ion-button>
+        
+          <ion-button color="success" expand="block" (click)="saveWodNotes()" [disabled]="!isNoteChanged">
+            Save
+          </ion-button>
         </div>
+        
       </ion-card-content>
     </ion-card>
 

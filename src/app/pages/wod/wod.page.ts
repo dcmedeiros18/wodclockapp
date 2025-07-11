@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonContent, IonHeader, IonTitle, IonToolbar, IonDatetime, IonModal, IonGrid, IonRow, IonCol, IonIcon, IonButton, IonDatetimeButton, IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonCardSubtitle } from '@ionic/angular/standalone';
+import { IonContent, IonTextarea, IonHeader, IonTitle, IonToolbar, IonDatetime, IonModal, IonGrid, IonRow, IonCol, IonIcon, IonButton, IonDatetimeButton, IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonCardSubtitle } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { barbellOutline } from 'ionicons/icons';
 import { RouterModule, Router } from '@angular/router';
@@ -19,7 +19,7 @@ addIcons({
   templateUrl: './wod.page.html',
   styleUrls: ['./wod.page.scss'],
   standalone: true,
-  imports: [IonCardSubtitle, IonDatetimeButton, IonIcon, IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, IonDatetime, IonModal, IonGrid, IonRow, IonCol, IonButton, IonCard, IonCardContent, IonCardHeader, IonCardTitle, RouterModule] 
+  imports: [IonCardSubtitle, IonTextarea, IonDatetimeButton, IonIcon, IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, IonDatetime, IonModal, IonGrid, IonRow, IonCol, IonButton, IonCard, IonCardContent, IonCardHeader, IonCardTitle, RouterModule] 
 })
 
 export class WodPage implements OnInit {
@@ -33,7 +33,8 @@ export class WodPage implements OnInit {
   selectedDate: string = '';
   wodTitle: string = '';
   wodDescription: string = '';
-  wodNotes: string = ''; // para caixa de texto
+  wodNotes: string = '';           // texto do textarea
+  isNoteChanged: boolean = false;  // controla se algo foi digitado
   userProfile: string = ''; // guarda o profile: admin, coach, membership etc.
 
 
@@ -60,7 +61,7 @@ export class WodPage implements OnInit {
     const isoDate = event.detail.value;
     const datePart = isoDate.includes('T') ? isoDate.split('T')[0] : isoDate;
     this.selectedDate = datePart;
-
+  
     this.wodService.getWod(this.selectedDate).subscribe((wod: any) => {
       if (wod) {
         this.wodTitle = wod.title;
@@ -69,9 +70,13 @@ export class WodPage implements OnInit {
         this.wodTitle = '';
         this.wodDescription = '';
       }
+  
+      // Ao selecionar uma nova data, limpa o campo de edição
+      this.wodNotes = '';
+      this.isNoteChanged = false;
     });
   }
-
+  
   goToUserMembership() {
     this.router.navigateByUrl('/user-membership');
   }
@@ -118,14 +123,35 @@ export class WodPage implements OnInit {
   
   
   editWod() {
-    console.log('WOD updated');
-    this.presentToast('WOD updated successfully.', 'primary');
+    if (this.wodDescription) {
+      this.wodNotes = this.wodDescription;
+      this.presentToast('Ready to edit.', 'primary');
+      this.isNoteChanged = false; // resetar o estado
+    }
   }
   
+  
   saveWodNotes() {
-    console.log('WOD saved:', this.wodNotes);
-    this.presentToast('WOD notes saved successfully.', 'success');
+    if (this.wodNotes.trim()) {
+      this.wodService.updateWod(this.selectedDate, {
+        description: this.wodNotes
+      }).subscribe(success => {
+        if (success) {
+          this.wodDescription = this.wodNotes;
+          this.presentToast('WOD notes saved successfully.', 'success');
+          this.isNoteChanged = false;
+        } else {
+          this.presentToast('Failed to save. No WOD found for this date.', 'warning');
+        }
+      });
+    }
   }
+  
+  
+  onNotesChange() {
+    this.isNoteChanged = !!this.wodNotes.trim();
+  }
+  
   
   async presentToast(message: string, color: string = 'medium') {
     const toast = await this.toastController.create({
