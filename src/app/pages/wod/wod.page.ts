@@ -125,10 +125,11 @@ export class WodPage implements OnInit {
   editWod() {
     if (this.wodDescription) {
       this.wodNotes = this.wodDescription;
-      this.presentToast('Ready to edit.', 'primary');
-      this.isNoteChanged = false; // resetar o estado
+      this.isNoteChanged = true; // ativa botão de salvar
+      this.presentToast('You can now edit this WOD.', 'primary');
     }
   }
+  
   
   
   saveWodNotes() {

@@ -50,14 +50,18 @@
             expand="block" 
             (click)="deleteWod()" 
             [disabled]="!wodDescription">
-            Deletar
+            Delete
           </ion-button>
+          <ion-button color="primary" (click)="editWod()" *ngIf="wodDescription && isAdminOrCoach()">
+            Edit
+          </ion-button>
+          
           <ion-button 
             color="success" 
             expand="block" 
             (click)="saveWodNotes()" 
             [disabled]="!wodNotes || !wodNotes.trim()">
-            Salvar
+            Save
           </ion-button>
         </div>
       </ion-card-content>
