@@ -76,8 +76,22 @@ export class RegisterPage implements OnInit {
       return;
     }
 
+    // Validação de email
+    const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,}$/;
+    if (!emailRegex.test(this.email)) {
+      await this.presentToast('Enter a valid email address.', 'warning');
+      return;
+    }
+
     if (this.email !== this.confirmEmail) {
       await this.presentToast('Emails do not match.', 'warning');
+      return;
+    }
+
+    // Validação de senha forte
+    const passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]).{6,}$/;
+    if (!passwordRegex.test(this.password)) {
+      await this.presentToast('Password must have at least 6 characters, 1 uppercase letter, 1 number and 1 special character.', 'warning');
       return;
     }
 
