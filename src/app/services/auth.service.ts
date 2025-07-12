@@ -28,8 +28,8 @@ export class AuthService {
     );
   }
 
-  register(email: string, password: string): Observable<any> {
-    return this.http.post(`${this.apiUrl}/register`, { email, password });
+  register(user: any): Observable<any> {
+    return this.http.post(`${this.apiUrl}/register`, user);
   }
 
   getCurrentUser(): any {
