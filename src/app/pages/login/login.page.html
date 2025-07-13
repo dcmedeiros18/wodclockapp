@@ -25,6 +25,10 @@
         
     <!--BUTTON-->    
     <ion-button fill="outline" (click)="onLogin()" >LOGIN</ion-button>
+
+    <div *ngIf="errorMessage" class="error-message" style="color: #ff3333; margin-top: 12px; font-weight: bold; text-align: center;">
+      {{ errorMessage }}
+    </div>
   </div>
 
   <p class="signup-text">

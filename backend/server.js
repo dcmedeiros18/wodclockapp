@@ -169,19 +169,19 @@ app.post('/auth/login', async (req, res) => {
     const { email, password } = req.body;
 
     if (!email || !password) {
-      return res.status(400).json({ message: 'Email e senha são obrigatórios' });
+      return res.status(400).json({ message: 'Email and password are required.' });
     }
 
     // Buscar usuário
     const user = users.find(u => u.email === email);
     if (!user) {
-      return res.status(401).json({ message: 'Credenciais inválidas' });
+      return res.status(401).json({ message: 'User not found.' });
     }
 
     // Verificar senha
     const validPassword = await bcrypt.compare(password, user.password);
     if (!validPassword) {
-      return res.status(401).json({ message: 'Credenciais inválidas' });
+      return res.status(401).json({ message: 'Incorrect password.' });
     }
 
     // Gerar token
@@ -197,7 +197,7 @@ app.post('/auth/login', async (req, res) => {
       }
     });
   } catch (error) {
-    res.status(500).json({ message: 'Erro interno do servidor' });
+    res.status(500).json({ message: 'Internal server error' });
   }
 });
 
