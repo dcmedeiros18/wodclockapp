@@ -104,8 +104,13 @@ export class BookPage implements OnInit {
         this.successMessage = res.message || 'Class successfully booked.';
         this.errorMessage = '';
         console.log('Successfully booked:', res);
-        // Atualizar slots após agendar
-        this.onDateSelected({ detail: { value: this.selectedDate } });
+        // Marcar o slot agendado como alreadyBooked
+        const bookedSlot = this.timeSlots.find(slot => slot.id === classId);
+        if (bookedSlot) {
+          bookedSlot.alreadyBooked = true;
+        }
+        // Atualizar slots após agendar (opcional, pode ser removido se não quiser recarregar)
+        // this.onDateSelected({ detail: { value: this.selectedDate } });
       },
       error: (err) => {
         this.errorMessage = err.message || 'Error booking class.';
