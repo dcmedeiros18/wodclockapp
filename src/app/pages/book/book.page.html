@@ -18,6 +18,16 @@
       </ion-datetime>
     </div>
 
+    <!-- Mensagem de sucesso ao agendar -->
+    <div *ngIf="successMessage" class="success-message" style="color: green; text-align: center; margin: 16px 0; font-weight: bold;">
+      {{ successMessage }}
+    </div>
+
+    <!-- Mensagem de erro -->
+    <div *ngIf="errorMessage" class="error-message">
+      {{ errorMessage }}
+    </div>
+
     <!-- Card de horários disponíveis: só aparece se houver data e horários -->
     <ion-card class="booking-card" *ngIf="selectedDate && timeSlots.length > 0">
       <ion-card-header>
@@ -39,7 +49,7 @@
             expand="block"
             class="book-btn"
             [disabled]="slot.spots === 0"
-            (click)="bookClass(i)">
+            (click)="bookClass(slot.id)">
             BOOK CLASS
           </ion-button>
         </div>
@@ -57,5 +67,5 @@
       <p>No classes available for the selected date.</p>
     </div>
 
-  </div>
+      </div>
 </ion-content>

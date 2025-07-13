@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonContent, IonHeader, IonTitle, IonToolbar, IonIcon, IonDatetime, IonButton, IonDatetimeButton, IonModal } from '@ionic/angular/standalone';
+import { IonContent, IonIcon, IonDatetime, IonButton, IonDatetimeButton, IonModal } from '@ionic/angular/standalone';
 import { Router } from '@angular/router';
 import { calendarNumber } from 'ionicons/icons';
 import { addIcons } from 'ionicons';
@@ -16,7 +16,7 @@ addIcons({
   templateUrl: './frequency.page.html',
   styleUrls: ['./frequency.page.scss'],
   standalone: true,
-  imports: [ IonModal, IonDatetimeButton, IonButton, IonDatetime, IonIcon, IonContent, IonHeader, IonTitle, IonToolbar, 
+  imports: [ IonModal, IonDatetimeButton, IonButton, IonDatetime, IonIcon, IonContent, 
     CommonModule, FormsModule]
 })
 export class FrequencyPage implements OnInit {

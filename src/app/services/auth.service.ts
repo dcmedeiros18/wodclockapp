@@ -15,11 +15,15 @@ export class AuthService {
   login(email: string, password: string): Observable<any> {
     return this.http.post(`${this.apiUrl}/login`, { email, password }).pipe(
       tap((response: any) => {
+        console.log('Resposta do login:', response);
         // Só salva se ambos existirem
         if (response && response.access_token && response.user) {
+          console.log('Salvando token:', response.access_token);
+          console.log('Salvando usuário:', response.user);
           localStorage.setItem('token', response.access_token);
           localStorage.setItem('currentUser', JSON.stringify(response.user));
         } else {
+          console.log('Resposta inválida, não salvando dados');
           // Não salva nada se a resposta não for válida
           localStorage.removeItem('token');
           localStorage.removeItem('currentUser');
@@ -47,6 +51,11 @@ export class AuthService {
 getUserProfile(): string {
   const user = this.getCurrentUser();
   return user?.profile || '';
+}
+
+getCurrentUserId(): number | null {
+  const user = this.getCurrentUser();
+  return user?.id ?? null;
 }
 
 }

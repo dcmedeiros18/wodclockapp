@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonContent, IonHeader, IonTitle, IonToolbar, IonButton, IonDatetime, IonIcon } from '@ionic/angular/standalone';
+import { IonContent, IonButton, IonDatetime, IonIcon } from '@ionic/angular/standalone';
 import { Router, RouterModule } from '@angular/router';
 import { addIcons } from 'ionicons';
 import { closeOutline, barbellOutline } from 'ionicons/icons';
@@ -16,7 +16,7 @@ addIcons({
   templateUrl: './cancel.page.html',
   styleUrls: ['./cancel.page.scss'],
   standalone: true,
-  imports: [IonIcon, IonButton, IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, IonButton, IonDatetime]
+  imports: [IonIcon, IonButton, IonContent, CommonModule, FormsModule, IonDatetime]
 })
 
 export class CancelPage implements OnInit {
@@ -44,7 +44,7 @@ export class CancelPage implements OnInit {
     this.router.navigateByUrl('/user-membership');
   }
 
-  cancelBooking() {
-    this.classService.cancelBooking();
+  cancelBooking(bookingId: number = 1) {
+    this.classService.cancelBooking(bookingId);
   }
 }

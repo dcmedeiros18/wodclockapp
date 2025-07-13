@@ -3,15 +3,11 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import {
   IonContent,
-  IonHeader,
-  IonTitle,
-  IonToolbar,
   IonInput,
   IonItem,
   IonList,
   IonInputPasswordToggle,
   IonButton,
-  IonRippleEffect,
   ToastController,
   AlertController
 } from '@ionic/angular/standalone';
@@ -26,12 +22,8 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
   standalone: true,
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   imports: [
-    IonRippleEffect,
     IonButton,
     IonContent,
-    IonHeader,
-    IonTitle,
-    IonToolbar,
     CommonModule,
     FormsModule,
     IonInput,

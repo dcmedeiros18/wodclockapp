@@ -43,22 +43,80 @@ let wods = [
   }
 ];
 
+// Dados mock para classes e agendamentos
+let classes = [
+  {
+    id: 1,
+    date: '2025-01-04',
+    time: '06:00 am',
+    maxSpots: 10,
+    bookedSpots: 5
+  },
+  {
+    id: 2,
+    date: '2025-01-04',
+    time: '07:00 am',
+    maxSpots: 10,
+    bookedSpots: 4
+  },
+  {
+    id: 3,
+    date: '2025-01-04',
+    time: '04:30 pm',
+    maxSpots: 10,
+    bookedSpots: 6
+  },
+  {
+    id: 4,
+    date: '2025-01-05',
+    time: '07:00 am',
+    maxSpots: 10,
+    bookedSpots: 6
+  },
+  {
+    id: 5,
+    date: '2025-01-05',
+    time: '05:00 pm',
+    maxSpots: 10,
+    bookedSpots: 8
+  }
+];
+
+let bookings = [
+  {
+    id: 1,
+    userId: 1,
+    classId: 1,
+    date: '2025-01-04',
+    time: '06:00 am',
+    createdAt: new Date().toISOString()
+  }
+];
+
 // Middleware para verificar token JWT
 const authenticateToken = (req, res, next) => {
+  console.log('=== AUTENTICAÇÃO ===');
+  console.log('Headers:', req.headers);
+  
   const authHeader = req.headers['authorization'];
   const token = authHeader && authHeader.split(' ')[1];
 
+  console.log('Token recebido:', token ? 'SIM' : 'NÃO');
+
   if (!token) {
+    console.log('Token não fornecido');
     return res.status(401).json({ message: 'Token não fornecido' });
   }
 
-  jwt.verify(token, JWT_SECRET, (err, user) => {
-    if (err) {
-      return res.status(403).json({ message: 'Token inválido' });
-    }
-    req.user = user;
+  try {
+    const decoded = jwt.verify(token, JWT_SECRET);
+    console.log('Token decodificado:', decoded);
+    req.user = decoded;
     next();
-  });
+  } catch (err) {
+    console.log('Erro na verificação do token:', err.message);
+    return res.status(403).json({ message: 'Token inválido' });
+  }
 };
 
 // Rotas de autenticação
@@ -213,6 +271,143 @@ app.delete('/api/wods/:date', authenticateToken, (req, res) => {
   res.json({ message: 'WOD removido com sucesso' });
 });
 
+// Rotas para Classes e Agendamentos
+app.get('/api/classes/:date', authenticateToken, (req, res) => {
+  console.log('=== ROTA CLASSES ===');
+  console.log('Requisição para classes recebida:', req.params.date);
+  console.log('Usuário autenticado:', req.user);
+  
+  try {
+    const { date } = req.params;
+    const userId = req.user.userId;
+    
+    console.log('Data solicitada:', date);
+    console.log('ID do usuário:', userId);
+    
+    // Validar formato da data (YYYY-MM-DD)
+    const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
+    if (!dateRegex.test(date)) {
+      console.log('Formato de data inválido:', date);
+      return res.status(400).json({ message: 'Formato de data inválido. Use YYYY-MM-DD' });
+    }
+    
+    // Validar se a data é válida
+    const dateObj = new Date(date);
+    if (isNaN(dateObj.getTime())) {
+      console.log('Data inválida:', date);
+      return res.status(400).json({ message: 'Data inválida' });
+    }
+    
+    // Verificar se o usuário existe
+    const user = users.find(u => u.id === userId);
+    if (!user) {
+      console.log('Usuário não encontrado no banco');
+      return res.status(404).json({ message: 'Usuário não encontrado' });
+    }
+    
+    console.log('Usuário encontrado:', user.email);
+    
+    const availableClasses = classes
+      .filter(c => c.date === date)
+      .map(c => ({
+        id: c.id,
+        time: c.time,
+        spots: c.maxSpots - c.bookedSpots,
+        maxSpots: c.maxSpots // <-- adicionado para o frontend
+      }));
+    
+    console.log('Classes encontradas:', availableClasses);
+    res.json(availableClasses);
+  } catch (error) {
+    console.error('Erro na rota de classes:', error);
+    res.status(500).json({ message: 'Erro interno do servidor' });
+  }
+});
+
+app.post('/api/bookings', authenticateToken, (req, res) => {
+  const { classId } = req.body;
+  const userId = req.user.userId;
+
+  if (!classId) {
+    return res.status(400).json({ message: 'ID da classe é obrigatório' });
+  }
+
+  // Buscar a classe
+  const classToBook = classes.find(c => c.id === classId);
+  if (!classToBook) {
+    return res.status(404).json({ message: 'Classe não encontrada' });
+  }
+
+  // Verificar se há vagas disponíveis
+  if (classToBook.bookedSpots >= classToBook.maxSpots) {
+    return res.status(400).json({ message: 'Não há vagas disponíveis para esta classe' });
+  }
+
+  // Verificar se o usuário já tem agendamento para esta classe
+  const existingBooking = bookings.find(b => b.userId === userId && b.classId === classId);
+  if (existingBooking) {
+    return res.status(400).json({ message: 'Você já tem um agendamento para esta classe' });
+  }
+
+  // Criar o agendamento
+  const newBooking = {
+    id: bookings.length + 1,
+    userId,
+    classId,
+    date: classToBook.date,
+    time: classToBook.time,
+    createdAt: new Date().toISOString()
+  };
+
+  bookings.push(newBooking);
+
+  // Atualizar o número de vagas ocupadas
+  classToBook.bookedSpots++;
+
+  res.status(201).json({
+    message: 'Aula agendada com sucesso',
+    booking: newBooking
+  });
+});
+
+app.get('/api/bookings/user', authenticateToken, (req, res) => {
+  const userId = req.user.userId;
+  const userBookings = bookings
+    .filter(b => b.userId === userId)
+    .map(b => ({
+      id: b.id,
+      date: b.date,
+      time: b.time,
+      createdAt: b.createdAt
+    }));
+  
+  res.json(userBookings);
+});
+
+app.delete('/api/bookings/:bookingId', authenticateToken, (req, res) => {
+  const { bookingId } = req.params;
+  const userId = req.user.userId;
+
+  const bookingIndex = bookings.findIndex(b => b.id === parseInt(bookingId) && b.userId === userId);
+  
+  if (bookingIndex === -1) {
+    return res.status(404).json({ message: 'Agendamento não encontrado' });
+  }
+
+  const booking = bookings[bookingIndex];
+  
+  // Atualizar o número de vagas ocupadas na classe
+  const classToUpdate = classes.find(c => c.id === booking.classId);
+  if (classToUpdate) {
+    classToUpdate.bookedSpots--;
+  }
+
+  // Remover o agendamento
+  bookings.splice(bookingIndex, 1);
+
+  res.json({ message: 'Agendamento cancelado com sucesso' });
+});
+
 // Rota de teste
 app.get('/', (req, res) => {
   res.json({ message: 'WOD Clock Backend API está funcionando!' });
@@ -223,4 +418,6 @@ app.listen(PORT, () => {
   console.log(`📡 API disponível em http://localhost:${PORT}`);
   console.log(`🔐 Endpoints de autenticação: /auth/login, /auth/register`);
   console.log(`💪 Endpoints de WOD: /api/wods`);
+  console.log(`📅 Endpoints de Classes: /api/classes/:date`);
+  console.log(`📋 Endpoints de Agendamentos: /api/bookings`);
 }); 

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule, Router } from '@angular/router';
-import { IonContent, IonHeader, IonTitle, IonToolbar, IonFooter, IonButton, IonIcon, IonLabel} from '@ionic/angular/standalone';
+import { IonContent, IonFooter, IonIcon, IonToolbar} from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { barbellOutline, calendar, calendarNumber, calendarOutline, close, clipboardOutline } from 'ionicons/icons';
 
@@ -20,7 +20,7 @@ addIcons({
   templateUrl: './user-membership.page.html',
   styleUrls: ['./user-membership.page.scss'],
   standalone: true,
-  imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, IonFooter, IonButton, IonIcon, IonLabel, RouterModule]
+  imports: [IonContent, CommonModule, FormsModule, IonFooter, IonIcon, IonToolbar, RouterModule]
 })
 export class UserMembershipPage implements OnInit {
   isWeekday = (dateString: string) => {
