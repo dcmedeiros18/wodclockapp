@@ -34,7 +34,6 @@ export class CancelPage implements OnInit {
 
   constructor(private router: Router, private classService: ClassService) {
      
-      
   }
 
   ngOnInit() {
@@ -42,6 +41,11 @@ export class CancelPage implements OnInit {
 
   goToUserMembership() {   
     this.router.navigateByUrl('/user-membership');
+  }
+
+  logout() {
+    localStorage.removeItem('token');
+    this.router.navigateByUrl('/login');
   }
 
   cancelBooking(bookingId: number = 1) {

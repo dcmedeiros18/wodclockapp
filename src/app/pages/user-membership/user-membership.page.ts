@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule, Router } from '@angular/router';
 import { IonContent, IonFooter, IonIcon, IonToolbar} from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { barbellOutline, calendar, calendarNumber, calendarOutline, close, clipboardOutline } from 'ionicons/icons';
+import { barbellOutline, calendar, calendarNumber, calendarOutline, close, clipboardOutline, logOutOutline } from 'ionicons/icons';
 
 
 addIcons({
@@ -12,7 +12,7 @@ addIcons({
   'close': close, 
   'calendar': calendar,
   'calendar-number': calendarNumber, 
-  'clipboard': clipboardOutline
+  'clipboard-outline': clipboardOutline
 });
 
 @Component({
@@ -36,6 +36,7 @@ export class UserMembershipPage implements OnInit {
 
 
   constructor(private router: Router) {
+      addIcons({clipboardOutline,barbellOutline,close,calendarNumber,logOutOutline});
      
      
   }
@@ -57,6 +58,11 @@ export class UserMembershipPage implements OnInit {
 
   goToFrequency() {
     this.router.navigateByUrl('/frequency'); // caminho certo
+  }
+
+  logout() {
+    localStorage.removeItem('token');
+    this.router.navigateByUrl('/login');
   }
 
 

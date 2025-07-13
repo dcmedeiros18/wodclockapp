@@ -129,4 +129,9 @@ export class BookPage implements OnInit {
   goToUserMembership() {
     this.router.navigateByUrl('/user-membership');
   }
+
+  logout() {
+    localStorage.removeItem('token');
+    this.router.navigateByUrl('/login');
+  }
 }
