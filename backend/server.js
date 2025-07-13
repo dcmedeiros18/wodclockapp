@@ -329,24 +329,29 @@ app.post('/api/bookings', authenticateToken, (req, res) => {
   const userId = req.user.userId;
 
   if (!classId) {
-    return res.status(400).json({ message: 'ID da classe é obrigatório' });
+    return res.status(400).json({ message: 'Class ID is required.' });
   }
 
   // Buscar a classe
   const classToBook = classes.find(c => c.id === classId);
   if (!classToBook) {
-    return res.status(404).json({ message: 'Classe não encontrada' });
+    return res.status(404).json({ message: 'Class not found.' });
   }
 
   // Verificar se há vagas disponíveis
   if (classToBook.bookedSpots >= classToBook.maxSpots) {
-    return res.status(400).json({ message: 'Não há vagas disponíveis para esta classe' });
+    return res.status(400).json({ message: 'No spots available for this class.' });
   }
 
-  // Verificar se o usuário já tem agendamento para esta classe
-  const existingBooking = bookings.find(b => b.userId === userId && b.classId === classId);
-  if (existingBooking) {
-    return res.status(400).json({ message: 'Você já tem um agendamento para esta classe' });
+  // Verificar se o usuário já tem agendamento para este horário
+  const conflictingBooking = bookings.find(
+    b =>
+      b.userId === userId &&
+      normalize(b.date) === normalize(classToBook.date) &&
+      normalize(b.time) === normalize(classToBook.time)
+  );
+  if (conflictingBooking) {
+    return res.status(400).json({ message: `You have already booked a class on ${classToBook.date} at ${classToBook.time}.` });
   }
 
   // Criar o agendamento
@@ -365,7 +370,7 @@ app.post('/api/bookings', authenticateToken, (req, res) => {
   classToBook.bookedSpots++;
 
   res.status(201).json({
-    message: 'Aula agendada com sucesso',
+    message: `Class successfully booked for ${classToBook.date} at ${classToBook.time}.`,
     booking: newBooking
   });
 });
@@ -391,7 +396,7 @@ app.delete('/api/bookings/:bookingId', authenticateToken, (req, res) => {
   const bookingIndex = bookings.findIndex(b => b.id === parseInt(bookingId) && b.userId === userId);
   
   if (bookingIndex === -1) {
-    return res.status(404).json({ message: 'Agendamento não encontrado' });
+    return res.status(404).json({ message: 'Booking not found.' });
   }
 
   const booking = bookings[bookingIndex];
@@ -405,7 +410,7 @@ app.delete('/api/bookings/:bookingId', authenticateToken, (req, res) => {
   // Remover o agendamento
   bookings.splice(bookingIndex, 1);
 
-  res.json({ message: 'Agendamento cancelado com sucesso' });
+  res.json({ message: 'Booking successfully cancelled.' });
 });
 
 // Rota de teste

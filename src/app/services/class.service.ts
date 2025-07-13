@@ -8,6 +8,7 @@ export interface ClassSlot {
   id: number;
   time: string;
   spots: number;
+  alreadyBooked?: boolean;
 }
 
 export interface BookingResponse {

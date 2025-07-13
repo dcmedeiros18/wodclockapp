@@ -48,9 +48,9 @@
           <ion-button
             expand="block"
             class="book-btn"
-            [disabled]="slot.spots === 0"
+            [disabled]="slot.spots === 0 || slot.alreadyBooked"
             (click)="bookClass(slot.id)">
-            BOOK CLASS
+            {{ slot.alreadyBooked ? 'ALREADY BOOKED' : 'BOOK CLASS' }}
           </ion-button>
         </div>
 

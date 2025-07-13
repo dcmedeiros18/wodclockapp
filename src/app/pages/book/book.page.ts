@@ -74,17 +74,17 @@ export class BookPage implements OnInit {
       this.router.navigateByUrl('/login');
       return;
     }
-  
+
+    // Buscar apenas as classes disponíveis normalmente
     this.classService.getAvailableClasses(this.selectedDate).subscribe({
       next: (slots) => {
         this.timeSlots = slots;
+        console.log('Available slots:', this.timeSlots);
       },
       error: (error) => {
         console.error('Erro detalhado:', error);
         this.errorMessage = error.message;
         this.timeSlots = [];
-        
-        // Se for erro de autenticação, redirecionar para login
         if (error.status === 401 || error.status === 403) {
           this.router.navigateByUrl('/login');
         }
@@ -101,9 +101,11 @@ export class BookPage implements OnInit {
   
     this.classService.bookClass(classId).subscribe({
       next: (res) => {
-        this.successMessage = 'Class booked successfully!';
+        this.successMessage = res.message || 'Class successfully booked.';
         this.errorMessage = '';
         console.log('Successfully booked:', res);
+        // Atualizar slots após agendar
+        this.onDateSelected({ detail: { value: this.selectedDate } });
       },
       error: (err) => {
         this.errorMessage = err.message || 'Error booking class.';
