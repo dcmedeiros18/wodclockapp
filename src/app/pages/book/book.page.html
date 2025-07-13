@@ -39,7 +39,7 @@
         <div *ngFor="let slot of timeSlots; let i = index" class="booking-slot">
           <div class="card-header">
             <span class="hour">{{ slot.time }}</span>
-            <span class="spots">• {{ slot.spots }} spots left</span>
+            <span>• {{ slot.spotsLeft }} spots left</span>
           </div>
 
           <!-- Botão para reservar: desabilita quando não há mais spots -->

@@ -7,7 +7,8 @@ import { environment } from '../../environments/environment';
 export interface ClassSlot {
   id: number;
   time: string;
-  spots: number;
+  spots?: number;
+  spotsLeft?: number;
   alreadyBooked?: boolean;
 }
 
