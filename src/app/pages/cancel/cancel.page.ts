@@ -38,9 +38,9 @@ export class CancelPage implements OnInit {
 
   selectedDate: string = '';
   userBookings: any[] = [];
-  bookingForDate: any = null;
   message: string = '';
   loading: boolean = false;
+  bookingsForDate: any[] = [];
 
   constructor(
     private router: Router,
@@ -55,47 +55,59 @@ export class CancelPage implements OnInit {
 
   async onDateSelected(event: any) {
     this.selectedDate = event.detail.value?.split('T')[0] || '';
-    this.bookingForDate = null;
     this.message = '';
+    this.bookingsForDate = [];
     if (!this.selectedDate) return;
     this.loading = true;
+  
     try {
       const bookings = await this.classService.getUserBookings().toPromise() || [];
       console.log('BOOKINGS RECEBIDAS:', bookings); 
       this.userBookings = bookings;
-      // Procurar reserva para a data selecionada
-      this.bookingForDate = bookings.find((b: any) => b.class?.date?.startsWith(this.selectedDate));
-      if (!this.bookingForDate) {
+  
+      // Filtra e ordena em ordem crescente por horário
+      this.bookingsForDate = bookings
+        .filter((b: any) => b.class?.date?.startsWith(this.selectedDate))
+        .sort((a: any, b: any) => {
+          const timeA = new Date(`${a.class.date}T${a.class.time}`);
+          const timeB = new Date(`${b.class.date}T${b.class.time}`);
+          return timeA.getTime() - timeB.getTime(); // ordem crescente
+        });
+  
+      if (this.bookingsForDate.length === 0) {
         this.message = 'You have no bookings for the selected date.';
       }
     } catch (err) {
       this.message = 'Erro ao buscar reservas.';
     }
+  
     this.loading = false;
   }
+  
 
-  async cancelBooking() {
-    if (!this.bookingForDate) {
-      this.presentToast('You have no bookings for the selected date.', 'warning');
-      return;
-    }
-    // Verificar diferença de tempo
+  async cancelBooking(booking: any) {
     const now = new Date();
-    const classDateTime = new Date(`${this.bookingForDate.date}T${this.bookingForDate.time}`);
+    const classDateTime = new Date(`${booking.class.date}T${booking.class.time}`);
     const diffMinutes = (classDateTime.getTime() - now.getTime()) / 60000;
+  
     if (diffMinutes < 120) {
       this.presentToast('Bookings can only be cancelled at least 2 hours before the scheduled time.', 'danger');
       return;
     }
+  
     try {
-      await this.classService.cancelBooking(this.bookingForDate.id).toPromise();
-      this.presentToast(`Booking successfully cancelled for ${this.selectedDate} at ${this.bookingForDate.time}.`, 'success');
-      this.bookingForDate = null;
-      this.message = 'You have no bookings for the selected date.';
+      await this.classService.cancelBooking(booking.id).toPromise();
+      this.presentToast(`Booking cancelled for ${booking.class.date} at ${booking.class.time}.`, 'success');
+      this.bookingsForDate = this.bookingsForDate.filter(b => b.id !== booking.id);
+  
+      if (this.bookingsForDate.length === 0) {
+        this.message = 'You have no bookings for the selected date.';
+      }
     } catch (err) {
       this.presentToast('Erro ao cancelar reserva.', 'danger');
     }
   }
+  
 
   async presentToast(message: string, color: 'success' | 'warning' | 'danger' | 'primary') {
     const toast = await this.toastController.create({
