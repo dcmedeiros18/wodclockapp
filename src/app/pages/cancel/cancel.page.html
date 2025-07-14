@@ -13,11 +13,26 @@
     </div>
 
     <div class="calendar-box">
-      <ion-datetime [isDateEnabled]="isWeekday" presentation="date"></ion-datetime>
+      <ion-datetime [isDateEnabled]="isWeekday" presentation="date" (ionChange)="onDateSelected($event)"></ion-datetime>
     </div>
 
+    <div *ngIf="loading" style="text-align:center; color:gray; margin: 10px 0;">Carregando...</div>
+    <div *ngIf="message && !bookingForDate" class="info-message" style="color: #ff3333; text-align: center; margin: 16px 0; font-weight: bold;">
+      {{ message }}
+    </div>
+    <div *ngIf="bookingForDate" class="booking-card" style="margin: 16px 0;">
+      <ion-card>
+        <ion-card-header>
+          <ion-card-title>Aula agendada</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <div>Horário: <b>{{ bookingForDate.class?.time }}
+        </b></div>
+          <ion-button expand="block" color="danger" (click)="cancelBooking()">Cancel Booking</ion-button>
+        </ion-card-content>
+      </ion-card>
+    </div>
     <div class="cancel-btn">
-      <ion-button expand="block" color="danger" (click)="cancelBooking()">CANCEL BOOKING</ion-button>
       <ion-button expand="block" class="custom-button" (click)="goToUserMembership()">User Home</ion-button>
     </div>
 

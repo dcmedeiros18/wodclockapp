@@ -78,6 +78,7 @@ export class ClassService {
 
   getUserBookings(): Observable<any[]> {
     const headers = this.getAuthHeaders();
+    console.log('TOKEN NOS HEADERS:', headers.get('Authorization'));
     return this.http.get<any[]>(`${this.apiUrl}/api/bookings/user`, { headers }).pipe(
       catchError((error) => {
         console.error('Erro ao buscar agendamentos:', error);
@@ -95,4 +96,6 @@ export class ClassService {
       })
     );
   }
+
+ 
 }
