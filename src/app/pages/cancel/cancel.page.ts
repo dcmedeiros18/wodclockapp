@@ -41,6 +41,12 @@ export class CancelPage implements OnInit {
   message: string = '';
   loading: boolean = false;
   bookingsForDate: any[] = [];
+  adminClassesForDate: any[] = [];
+  selectedClassIds: number[] = [];
+  isAdminOrCoach(): boolean {
+    const profile = this.authService.getUserProfile();
+    return profile === 'admin' || profile === 'coach';
+  }
 
   constructor(
     private router: Router,
@@ -57,9 +63,29 @@ export class CancelPage implements OnInit {
     this.selectedDate = event.detail.value?.split('T')[0] || '';
     this.message = '';
     this.bookingsForDate = [];
+    this.adminClassesForDate = [];
+    this.selectedClassIds = [];
     if (!this.selectedDate) return;
     this.loading = true;
-  
+
+    if (this.isAdminOrCoach()) {
+      try {
+        const classes = await this.classService.getAvailableClasses(this.selectedDate).toPromise() || [];
+        const now = new Date();
+        // Filtra apenas as aulas que ainda não começaram
+        this.adminClassesForDate = classes.filter((c: any) => {
+          const classTime = new Date(`${this.selectedDate}T${c.time}`);
+          return classTime > now;
+        });
+        if (this.adminClassesForDate.length === 0) {
+          this.message = 'No classes available for the selected date.';
+        }
+      } catch (err) {
+        this.message = 'Erro ao buscar aulas.';
+      }
+      this.loading = false;
+      return;
+    }
     try {
       const bookings = await this.classService.getUserBookings().toPromise() || [];
       console.log('BOOKINGS RECEBIDAS:', bookings); 
@@ -126,5 +152,41 @@ export class CancelPage implements OnInit {
   logout() {
     localStorage.removeItem('token');
     this.router.navigateByUrl('/login');
+  }
+
+  toggleSelectClass(classId: number) {
+    if (this.selectedClassIds.includes(classId)) {
+      this.selectedClassIds = this.selectedClassIds.filter(id => id !== classId);
+    } else {
+      this.selectedClassIds.push(classId);
+    }
+  }
+
+  async confirmCancelSelected() {
+    const selectedClasses = this.adminClassesForDate.filter(c => this.selectedClassIds.includes(c.id));
+    const message = 'Do you really want to cancel the following classes?<br>' +
+      selectedClasses.map(c => `${c.time} - ${this.selectedDate}`).join('<br>');
+    const alert = await this.alertController.create({
+      header: 'Confirm',
+      message,
+      buttons: [
+        { text: 'No', role: 'cancel' },
+        { text: 'Yes', handler: () => this.cancelSelectedClasses() }
+      ]
+    });
+    await alert.present();
+  }
+
+  async cancelSelectedClasses() {
+    for (const classId of this.selectedClassIds) {
+      try {
+        await this.classService.cancelBooking(classId).toPromise();
+        this.adminClassesForDate = this.adminClassesForDate.filter(c => c.id !== classId);
+      } catch (err) {
+        this.presentToast('Erro ao cancelar aula.', 'danger');
+      }
+    }
+    this.selectedClassIds = [];
+    this.presentToast('Classes cancelled successfully.', 'success');
   }
 }

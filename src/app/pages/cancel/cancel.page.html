@@ -32,6 +32,20 @@
       </ion-card>
     </div>
     
+    <!-- ADMIN/COACH: Lista de aulas do dia -->
+    <div *ngIf="isAdminOrCoach() && adminClassesForDate.length > 0" class="booking-card">
+      <ion-card *ngFor="let aula of adminClassesForDate">
+        <ion-card-header>
+          <ion-card-title>{{ aula.time }} - {{ selectedDate }}</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <ion-checkbox slot="start" [checked]="selectedClassIds.includes(aula.id)" (ionChange)="toggleSelectClass(aula.id)"></ion-checkbox>
+          <span style="margin-left: 8px;">Select to Cancel</span>
+        </ion-card-content>
+      </ion-card>
+      <ion-button expand="block" color="danger" [disabled]="selectedClassIds.length === 0" (click)="confirmCancelSelected()">Cancel Selected</ion-button>
+    </div>
+
     <div class="cancel-btn">
       <ion-button expand="block" class="custom-button" (click)="goToUserMembership()">User Home</ion-button>
     </div>
