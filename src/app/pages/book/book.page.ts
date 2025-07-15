@@ -171,8 +171,13 @@ export class BookPage implements OnInit {
   }
 
   bookClass(classId: number) {
+    const slot = this.timeSlots.find(s => s.id === classId);
     if (!classId || isNaN(classId)) {
       this.errorMessage = 'Invalid class ID!';
+      return;
+    }
+    if (slot && this.isPastClass(slot)) {
+      this.errorMessage = 'It is not possible to book a class that has already been held.';
       return;
     }
     this.classService.bookClass(classId).subscribe({

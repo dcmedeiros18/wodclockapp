@@ -43,7 +43,7 @@
           <div class="card-header">
             <span class="hour">{{ slot.time }}</span>
             <span>• {{ slot.spotsLeft }} spots left</span>
-            <span *ngIf="slot.cancelled" style="color: red; font-weight: bold;">• AULA CANCELADA</span>
+            <span *ngIf="slot.cancelled" style="color: red; font-weight: bold;">• CLASS CANCELLED</span>
           </div>
 
           <!-- Checkbox para admin/coach -->
@@ -60,7 +60,7 @@
               [disabled]="isPastClass(slot) || !canCancelClass(slot) || slot.cancelled"
               (ionChange)="toggleSelectClass(slot.id)">
             </ion-checkbox>
-            <span style="margin-left: 8px; color: red; font-weight: bold;" *ngIf="slot.cancelled">AULA CANCELADA</span>
+            <span style="margin-left: 8px; color: red; font-weight: bold;" *ngIf="slot.cancelled">CLASS CANCELLED</span>
             <span style="margin-left: 8px;" *ngIf="!slot.cancelled">
               {{ isPastClass(slot) ? 'Aula já realizada' : 
                  !canCancelClass(slot) ? 'Menos de 2h para cancelar' : 
@@ -70,7 +70,7 @@
 
           <!-- Mensagem para usuário comum se aula cancelada -->
           <div *ngIf="!isAdminOrCoach() && slot.cancelled" style="color: red; font-weight: bold; margin-bottom: 8px;">
-            AULA CANCELADA
+            CLASS CANCELLED
           </div>
 
           <!-- Botão para reservar -->
@@ -78,10 +78,13 @@
             expand="block"
             class="book-btn"
             *ngIf="!isAdminOrCoach() && !slot.cancelled"
-            [disabled]="slot.spots === 0 || slot.alreadyBooked"
+            [disabled]="slot.spots === 0 || slot.alreadyBooked || isPastClass(slot)"
             (click)="bookClass(slot.id)">
             {{ slot.alreadyBooked ? 'ALREADY BOOKED' : 'BOOK CLASS' }}
           </ion-button>
+          <div *ngIf="!isAdminOrCoach() && isPastClass(slot) && !slot.cancelled" style="color: orange; font-weight: bold; margin-bottom: 8px;">
+            CLASS ALREADY HELD
+          </div>
         </div>
 
         <!-- Botão de cancelamento múltiplo -->
@@ -94,14 +97,14 @@
             Cancel Selected ({{ selectedClassIds.length }})
           </ion-button>
         </div>
-
-        <!-- Botões adicionais -->
-        <div class="book-btn-container">
-          <ion-button class="bk-btn" (click)="goToWod()">VIEW WOD</ion-button>
-          <ion-button class="bk-btn" (click)="goToUserMembership()">User Home</ion-button>
-        </div>
       </ion-card-content>
     </ion-card>
+
+    <!-- Botões adicionais fora do card -->
+    <div class="book-btn-container">
+      <ion-button class="bk-btn" (click)="goToWod()">VIEW WOD</ion-button>
+      <ion-button class="bk-btn" (click)="goToUserMembership()">User Home</ion-button>
+    </div>
 
     <!-- Mensagem quando não houver horários -->
     <div *ngIf="selectedDate && timeSlots.length === 0" class="no-classes">
