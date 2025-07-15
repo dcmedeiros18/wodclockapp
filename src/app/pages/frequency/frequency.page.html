@@ -15,11 +15,8 @@
       <ion-datetime-button datetime="startDate"></ion-datetime-button>
       <ion-modal [keepContentsMounted]="true">
         <ng-template>
-          <ion-datetime 
-            id="startDate" 
-            presentation="date"
-            [(ngModel)]="startDateValue"
-            [isDateEnabled]="isWeekday"> <!--method to block day of the week -->
+          <ion-datetime id="startDate" presentation="date" [(ngModel)]="startDateValue" [isDateEnabled]="isWeekday"
+            (ngModelChange)="onDateChange()"> <!--method to block day of the week -->
           </ion-datetime>
         </ng-template>
       </ion-modal>
@@ -27,29 +24,32 @@
       <ion-datetime-button datetime="endDate"></ion-datetime-button>
       <ion-modal [keepContentsMounted]="true">
         <ng-template>
-          <ion-datetime 
-            id="endDate" 
-            presentation="date"
-            [(ngModel)]="endDateValue"
-            [isDateEnabled]="isWeekday"> <!--method to block day of the week -->
+          <ion-datetime id="endDate" presentation="date" [(ngModel)]="endDateValue" [isDateEnabled]="isWeekday"
+            (ngModelChange)="onDateChange()"> <!--method to block day of the week -->
           </ion-datetime>
         </ng-template>
       </ion-modal>
 
-      <ion-button  class="ok-button" (click)="calculateHistory()">OK</ion-button>
+      <div>
+      </div>
+      <ion-button class="ok-button" (click)="calculateHistory()" [disabled]="!!errorMessage">OK</ion-button>
     </div>
 
-    <div class="calendar-box">
-      <ion-datetime 
-        presentation="date"
-        [highlightedDates]="highlightedDates"
-         [isDateEnabled]="isWeekday"> <!--method to block day of the week -->
+    <!-- Exibe o calendário apenas após clicar em OK e datas selecionadas -->
+    <div class="calendar-box" *ngIf="showCalendar">
+      <ion-datetime presentation="date" [highlightedDates]="highlightedDates" [isDateEnabled]="isWeekday">
+        <!--method to block day of the week -->
       </ion-datetime>
-    </div>   
-    
+    </div>
+
     <div class="stats-box" *ngIf="totalClasses !== null">
       <div class="stats-label">TOTAL OF CLASSES BOOKED:</div>
       <div class="stats-number">{{ totalClasses }}</div>
+    </div>
+
+    <div *ngIf="errorMessage" class="error-message"
+      style="color: #ff3333; text-align: center; margin: 16px 0; font-weight: bold;">
+      {{ errorMessage }}
     </div>
 
     <div class="history-buttons">

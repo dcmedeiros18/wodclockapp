@@ -5,6 +5,8 @@ import { IonContent, IonIcon, IonDatetime, IonButton, IonDatetimeButton, IonModa
 import { Router } from '@angular/router';
 import { calendarNumber } from 'ionicons/icons';
 import { addIcons } from 'ionicons';
+import { ClassService } from 'src/app/services/class.service';
+import { AuthService } from 'src/app/services/auth.service';
 
 // ADD ICONS
 addIcons({
@@ -26,8 +28,10 @@ export class FrequencyPage implements OnInit {
   endDateValue: string | null = null;
   totalClasses: number | null = null;
   highlightedDates: any[] = [];
+  showCalendar = false;
+  errorMessage: string | null = null;
 
-  constructor(private router: Router) {
+  constructor(private router: Router, private classService: ClassService, private authService: AuthService) {
       addIcons({calendarNumber});}
 
   ngOnInit() {}
@@ -39,20 +43,51 @@ export class FrequencyPage implements OnInit {
     return utcDay !== 0;  // excludes Sundays
   };
 
+  onDateChange() {
+    this.errorMessage = null;
+    if (!this.startDateValue || !this.endDateValue) {
+      this.errorMessage = 'Select both start and end dates.';
+      return;
+    }
+    const today = new Date();
+    today.setHours(0,0,0,0);
+    const start = new Date(this.startDateValue);
+    start.setHours(0,0,0,0);
+    const end = new Date(this.endDateValue);
+    end.setHours(0,0,0,0);
+    if (end > today) {
+      this.errorMessage = 'End date cannot be greater than today.';
+      return;
+    }
+    if (start > end) {
+      this.errorMessage = 'Start date cannot be greater than end date.';
+      return;
+    }
+  }
+
   // FUNCTION TO CALCULATE CLASSES HISTORY
-  calculateHistory(): void {
-    if (this.startDateValue && this.endDateValue) {
-      const start = new Date(this.startDateValue);
-      const end = new Date(this.endDateValue);
-
-      let count = 0;
+  async calculateHistory(): Promise<void> {
+    this.showCalendar = false;
+    this.errorMessage = null;
+    this.onDateChange();
+    if (this.errorMessage) {
+      this.totalClasses = null;
+      this.highlightedDates = [];
+      return;
+    }
+    const startDate = this.startDateValue as string;
+    const endDate = this.endDateValue as string;
+    try {
+      const bookingsRaw = await this.classService.getUserBookingsByPeriod(startDate, endDate).toPromise();
+      const bookings = Array.isArray(bookingsRaw) ? bookingsRaw : [];
+      // Considera apenas reservas ativas
+      const activeBookings = bookings.filter((b: any) => b.status !== 'cancelled');
+      this.totalClasses = activeBookings.length;
+      // Destaca todas as datas entre início e fim
       const highlights: any[] = [];
-
+      const start = new Date(startDate);
+      const end = new Date(endDate);
       for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
-        if (d.getDay() !== 0) { // ignore sundays
-          count++;
-        }
-
         highlights.push({
           date: d.toISOString().split('T')[0],
           textColor: 'white',
@@ -60,12 +95,12 @@ export class FrequencyPage implements OnInit {
           borderColor: 'red'
         });
       }
-
-      this.totalClasses = count;
       this.highlightedDates = highlights;
-    } else {
-      this.totalClasses = null;
+      this.showCalendar = true;
+    } catch (err) {
+      this.totalClasses = 0;
       this.highlightedDates = [];
+      this.showCalendar = true;
     }
   }
 

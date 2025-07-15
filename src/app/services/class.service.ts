@@ -89,6 +89,16 @@ export class ClassService {
     );
   }
 
+  getUserBookingsByPeriod(startDate: string, endDate: string): Observable<any[]> {
+    const headers = this.getAuthHeaders();
+    return this.http.get<any[]>(`${this.apiUrl}/api/bookings/user?start=${startDate}&end=${endDate}`, { headers }).pipe(
+      catchError((error) => {
+        console.error('Erro ao buscar agendamentos por período:', error);
+        return throwError(() => new Error('Erro ao carregar seus agendamentos do período'));
+      })
+    );
+  }
+
   cancelBooking(bookingId: number): Observable<any> {
     const headers = this.getAuthHeaders();
     return this.http.delete(`${this.apiUrl}/api/bookings/${bookingId}`, { headers }).pipe(
