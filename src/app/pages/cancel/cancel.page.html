@@ -16,24 +16,27 @@
     </div>
 
     <div *ngIf="loading" style="text-align:center; color:gray; margin: 10px 0;">Carregando...</div>
+
     <div *ngIf="message && bookingsForDate.length === 0" class="info-message" style="color: #ff3333; text-align: center; margin: 16px 0; font-weight: bold;">
       {{ message }}
     </div>
 
-    <div *ngIf="(bookingsForDate ?? []).length > 0" class="booking-card">
-      <ion-card *ngFor="let booking of bookingsForDate">
-        <ion-card-header>
-          <ion-card-title>Aula agendada</ion-card-title>
-        </ion-card-header>
-        <ion-card-content>
-          <div>Horário: <b>{{ booking.class?.time }}</b></div>
-          <ion-button expand="block" color="danger" (click)="cancelBooking(booking)">Cancel Booking</ion-button>
-        </ion-card-content>
-      </ion-card>
-    </div>
+    <ion-card *ngFor="let booking of bookingsForDate">
+      <ion-card-header>
+        <ion-card-title>{{ booking.class.time }}</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <p>Status: {{ booking.status }}</p>
+        <ion-button expand="block" color="danger" (click)="cancelBooking(booking)">
+          Cancel Booking
+        </ion-button>
+      </ion-card-content>
+    </ion-card>
 
-    <div class="cancel-btn">
-      <ion-button expand="block" class="custom-button" (click)="goToUserMembership()">User Home</ion-button>
+    <div style="margin-top: 20px;">
+      <ion-button expand="block" class="custom-button" (click)="goToUserMembership()">
+        User Home
+      </ion-button>
     </div>
   </div>
 </ion-content>

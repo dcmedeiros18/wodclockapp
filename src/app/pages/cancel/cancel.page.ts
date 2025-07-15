@@ -42,7 +42,8 @@ export class CancelPage implements OnInit {
     private authService: AuthService,
     private toastController: ToastController
   ) {
-      addIcons({closeOutline});}
+    addIcons({'close': closeOutline});
+  }
 
   ngOnInit() {}
 
@@ -55,15 +56,18 @@ export class CancelPage implements OnInit {
 
     try {
       const bookings = await this.classService.getUserBookings().toPromise() || [];
-      console.log('BOOKINGS RECEBIDAS:', bookings); 
       this.userBookings = bookings;
 
+      // Oculta aulas canceladas
       this.bookingsForDate = bookings
-        .filter((b: any) => b.class?.date?.startsWith(this.selectedDate))
+        .filter((b: any) =>
+          b.class?.date?.startsWith(this.selectedDate) &&
+          b.class?.status !== 'cancelled'
+        )
         .sort((a: any, b: any) => {
           const timeA = new Date(`${a.class.date}T${a.class.time}`);
           const timeB = new Date(`${b.class.date}T${b.class.time}`);
-          return timeA.getTime() - timeB.getTime(); // ordem crescente
+          return timeA.getTime() - timeB.getTime();
         });
 
       if (this.bookingsForDate.length === 0) {
