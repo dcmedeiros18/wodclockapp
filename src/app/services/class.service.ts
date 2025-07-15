@@ -10,6 +10,8 @@ export interface ClassSlot {
   spots?: number;
   spotsLeft?: number;
   alreadyBooked?: boolean;
+  cancelled?: boolean;
+  status?: string;
 }
 
 export interface BookingResponse {
@@ -95,6 +97,11 @@ export class ClassService {
         return throwError(() => new Error('Erro ao cancelar agendamento'));
       })
     );
+  }
+
+  cancelClass(classId: number) {
+    const headers = this.getAuthHeaders();
+    return this.http.patch(`${this.apiUrl}/api/classes/${classId}/cancel`, {}, { headers });
   }
 
  
