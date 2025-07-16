@@ -19,6 +19,7 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
+  font-weight: bold;
 
   @media (max-width: 768px) {
     max-width: 100%;
@@ -106,6 +107,7 @@
 ion-item {
   width: 100%;
   margin-bottom: 12px;
+  font-weight: bold;
 
   ion-input[fill="outline"] {
     --background: white;
@@ -150,11 +152,12 @@ ion-item {
 // Custom styling for outline login button
 ion-button[fill="outline"] {
   --color: white;
-  --border-color: red;
-  --background: red ;
+  --border-color:  #e53935;
+  --background:  #e53935;
   --box-shadow: none;
-  --border-width: 2px;
+  --border-width: 10px;
   --ripple-color: white;
+  font-weight: bold;
 
   width: 100%;
   margin-top: 10px;

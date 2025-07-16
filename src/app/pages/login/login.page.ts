@@ -20,9 +20,7 @@ export class LoginPage implements OnInit {
 
   constructor(private authService: AuthService, private router: Router) {}
 
-  ngOnInit() {
-    // Lifecycle hook for initialization
-  }
+  ngOnInit() {}
 
   // Handles login logic using AuthService
   onLogin() {

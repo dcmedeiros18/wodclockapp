@@ -1,117 +1,66 @@
-<ion-content [fullscreen]="true" class="bg-imag">
-  <div id="container">
-    <ion-card>
-      <ion-card-content>
-        <ion-list>
-          <ion-item>
-            <ion-input
-              label="First Name"
-              labelPlacement="floating"
-              placeholder="First Name"
-              [(ngModel)]="firstName">
-            </ion-input>
-          </ion-item>
+<ion-content [fullscreen]="true" class="signup-bg">
+  <div class="signup-wrapper">
+    <!-- LEFT SIDE -->
+    <div class="signup-form">
+      <!-- Logo + Title side-by-side -->
+      <div class="form-header-row">
+        <div class="logo-small"></div>
+        <h2 class="form-title">Create an account</h2>
+      </div>
 
-          <ion-item>
-            <ion-input
-              label="Surname Name"
-              labelPlacement="floating"
-              placeholder="Enter your surname name"
-              [(ngModel)]="surname">
-            </ion-input>
-          </ion-item>
+      <!-- FORM INPUTS -->
+      <ion-list>
+        <ion-item >
+          <ion-input label="First Name" labelPlacement="floating" [(ngModel)]="firstName"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-input label="Surname" labelPlacement="floating" [(ngModel)]="surname"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-input label="Date of Birth" type="date" labelPlacement="floating" [(ngModel)]="dateOfBirth"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-input label="Phone Number" type="tel" maxlength="15" inputmode="numeric" [(ngModel)]="phoneNumber"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-input label="Emergency Contact Name" labelPlacement="floating" [(ngModel)]="emergencyContactName"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-input label="Emergency Contact Phone" labelPlacement="floating" type="tel" maxlength="15" inputmode="numeric" [(ngModel)]="emergencyContactPhone"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-input label="Email" labelPlacement="floating" [(ngModel)]="email"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-input label="Confirm Email" labelPlacement="floating" [(ngModel)]="confirmEmail"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-input label="Password" type="password" labelPlacement="floating" [(ngModel)]="password">
+            <ion-input-password-toggle slot="end"></ion-input-password-toggle>
+          </ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-input label="Confirm Password" type="password" labelPlacement="floating" [(ngModel)]="confirmPassword">
+            <ion-input-password-toggle slot="end"></ion-input-password-toggle>
+          </ion-input>
+        </ion-item>
+      </ion-list>
 
-          <ion-item>
-            <ion-input
-              label="Date of Birth"
-              labelPlacement="floating"
-              type="date"
-              [(ngModel)]="dateOfBirth">
-            </ion-input>
-          </ion-item>
-          
-          <ion-item>
-            <ion-input
-              label="Phone Number"
-              labelPlacement="floating"
-              type="tel"
-              maxlength="15"
-              pattern="[0-9]*"
-              inputmode="numeric"
-              placeholder="8888888888"
-              [(ngModel)]="phoneNumber">
-            </ion-input>
-          </ion-item>
+      <!-- Button -->
+      <div class="center-btn">
+        <ion-button color="danger" expand="block" (click)="onRegister()">SIGN UP</ion-button>
+      </div>
 
-          <ion-item>
-            <ion-input
-              label="Emergency Contact Name"
-              labelPlacement="floating"
-              placeholder="Name of Emergency contact"
-              [(ngModel)]="emergencyContactName">
-            </ion-input>
-          </ion-item>
+      <!-- Login link -->
+      <div class="login-text">
+        Already have an account? <a (click)="goToLogin()">Log in</a>
+      </div>
+      
+    </div>
 
-          <ion-item>
-            <ion-input
-              label="Emergency Contact Phone"
-              labelPlacement="floating"
-              type="tel"
-              maxlength="15"
-              pattern="[0-9]*"
-              inputmode="numeric"
-              placeholder="8888888888"
-              [(ngModel)]="emergencyContactPhone">
-            </ion-input>
-          </ion-item>
-
-          <ion-item>
-            <ion-input
-              label="Email"
-              labelPlacement="floating"
-              placeholder="email@domain.com"
-              [(ngModel)]="email">
-            </ion-input>
-          </ion-item>
-
-          <ion-item>
-            <ion-input
-              label="Confirm your email"
-              labelPlacement="floating"
-              placeholder="email@domain.com"
-              [(ngModel)]="confirmEmail">
-            </ion-input>
-          </ion-item>
-
-          <ion-item>
-            <ion-input
-              label="Password"
-              type="password"
-              labelPlacement="floating"
-              [(ngModel)]="password">
-              <ion-input-password-toggle slot="end"></ion-input-password-toggle>
-            </ion-input>
-          </ion-item>
-
-          <ion-item>
-            <ion-input
-              label="Confirm your password"
-              type="password"
-              labelPlacement="floating"
-              [(ngModel)]="confirmPassword">
-              <ion-input-password-toggle slot="end"></ion-input-password-toggle>
-            </ion-input>
-          </ion-item>
-        </ion-list>
-
-        <div class="center-btn">
-          <ion-button color="danger" expand="block" (click)="onRegister()">Sign Up</ion-button>
-        </div>
-
-        <div class="login-text">
-          Already have an account? <a href="/login">Login</a>
-        </div>
-      </ion-card-content>
-    </ion-card>
+    <!-- RIGHT SIDE -->
+    <div class="signup-visual">
+      <div class="logo-bg"></div>
+    </div>
   </div>
 </ion-content>

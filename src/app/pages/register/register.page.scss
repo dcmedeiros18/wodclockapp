@@ -1,44 +1,117 @@
-ion-content {
- --background: url('/assets/images/sign_up.png') no-repeat center / cover fixed; 
-}
-
-#container {
+ion-content.signup-bg {
+  --background: none;
   display: flex;
-  justify-content: flex-start;   /* Align card to the left */
-  align-items: flex-start;       /* Align card to the top */
-  padding: 16px;                 /* Inner padding */
-  min-height: 100vh;             /* Full height of the viewport */
-  margin-top: 200px;             /* Push card down */
-
-  /*media query for desktop*/
-  @media (min-width: 768px) {
-    margin-top: 100px;
-  } 
+  height: 100vh;
+  overflow: hidden;
 }
 
-ion-card {
+.signup-wrapper {
+  display: flex;
   width: 100%;
-  max-width: 400px;              /* Maximum width for the card */
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); /* Soft shadow */
-  border-radius: 16px;           /* Rounded corners */
+  height: 100%;
 
-  /* Make form text bold inside the card */
-  ion-item,
-  ion-label,
+  @media (max-width: 768px) {
+    flex-direction: column;
+  }
+}
+
+/* LEFT SIDE */
+.signup-form {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 32px 32px;
+  background: #ffffff;
+  overflow-y: auto;
+}
+
+/* Row with logo and title side by side */
+.form-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 16px;
+  width: 100%;
+  max-width: 500px;
+  margin-bottom: 24px;
+}
+
+.logo-small {
+  width: 150px;
+  height: 150px;
+  background: url('/assets/images/temp-logo.png') no-repeat center center / contain;
+}
+
+.form-title {
+  font-size: 26px;
+  font-weight: bold;
+  color: #1a1a1a;
+  margin: 0;
+}
+
+/* Inputs: increase font size */
+ion-item {
+  max-width: 500px;
+  width: 100%;
+  --padding-start: 0;
+  --inner-padding-end: 0;
+  --min-height: 56px;
+  --border-color: #ccc; 
+  --highlight-height: 2px;
+  --highlight-color-focused: #e53935; 
+
+  ion-label {
+    font-size: 20px;
+    font-weight: bold;
+  }
+
   ion-input {
+    font-size: 20px;
+    font-weight: bold;
+    text-align: start; 
+  }
+}
+
+
+/* Button full width and taller */
+.center-btn {
+  margin-top: 24px;
+  width: 100%;
+  max-width: 500px;
+
+  ion-button {
+    height: 48px;
+    font-size: 16px;
     font-weight: bold;
   }
 }
 
+/* Login text aligned left below button */
 .login-text {
-  color: rgb(14, 13, 13);        /* Text color for login message */
-  text-align: center;            /* Center the text */
-  width: 100%;                   /* Full width inside card */
-  margin-top: 16px;              /* Space above the login text */
-  font-weight: bold;             /* Make text bold */
+  margin-top: 16px;
+  text-align: center;
+  font-weight: bold;
+  max-width: 500px;
+  font-size: 20px;
+
+  a {
+    color: red;
+    text-decoration: underline;
+  }
 }
 
-.login-text a {
-  color: red;                    /* Red color for the link */  
-  text-decoration: underline !important;        /* Remove underline (optional) */
+/* RIGHT SIDE */
+.signup-visual {
+  flex: 1;
+  background: url('/assets/images/login-page.png') no-repeat center center / cover;
+  position: relative;
+
+  @media (max-width: 768px) {
+    min-height: 240px;
+  }
+
+  .logo-bg {
+    display: none;
+  }
 }

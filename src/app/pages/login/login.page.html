@@ -11,27 +11,17 @@
       <h2 class="page-title">Log in to continue</h2>
 
       <!-- EMAIL FIELD -->
-      <div class="label-row">
-        <label for="email-input" class="field-label">Email Address</label>
-        <span class="required-label">(required)</span>
-      </div>
-      <ion-item lines="none">
-        <!-- Two-way binding with ngModel for email -->
-        <ion-input id="email-input" type="email" fill="outline" [(ngModel)]="email" required></ion-input>
+      <ion-item>
+        <ion-input 
+          id="email-input" label="Email" labelPlacement="floating" type="email" [(ngModel)]="email"required>
+        </ion-input>
       </ion-item>
 
       <!-- PASSWORD FIELD -->
-      <div class="label-row">
-        <label for="password-input" class="field-label">Password</label>
-        <span class="required-label">(required)</span>
-      </div>
-      <ion-item lines="none">
-        <!-- Toggling password visibility with showPassword flag -->
-        <ion-input id="password-input" 
-                   [type]="showPassword ? 'text' : 'password'" 
-                   fill="outline" 
-                   [(ngModel)]="password"
-                   required>
+      <ion-item>
+        <ion-input 
+          id="password-input" label="Password" labelPlacement="floating" [type]="showPassword ? 'text' : 'password'" [(ngModel)]="password" required>
+          <ion-input-password-toggle slot="end"></ion-input-password-toggle>
         </ion-input>
       </ion-item>
 
