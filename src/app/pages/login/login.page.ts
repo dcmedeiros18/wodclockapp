@@ -16,6 +16,7 @@ export class LoginPage implements OnInit {
   email: string = '';
   password: string = '';
   errorMessage: string = '';
+  showPassword: boolean = false;
 
 
   constructor(private authService: AuthService, private router: Router) { }
@@ -41,6 +42,17 @@ export class LoginPage implements OnInit {
   }
   goToRegister() {   
     this.router.navigateByUrl('/register');
+  }
+  togglePassword() {
+    this.showPassword = !this.showPassword;
+  }
+
+  goToForgotPassword() {
+    // Exemplo: navega para página específica
+    this.router.navigate(['/forgot-password']);
+  
+    // ou abre um modal no futuro
+    // this.modalController.create({ component: ForgotPasswordComponent })
   }
   
 }

@@ -29,4 +29,8 @@ export const routes: Routes = [
     path: 'cancel',
     loadComponent: () => import('./pages/cancel/cancel.page').then( m => m.CancelPage)
   },
+  {
+    path: 'forgot-password',
+    loadComponent: () => import('./forgot-password/forgot-password.page').then( m => m.ForgotPasswordPage)
+  },
 ];

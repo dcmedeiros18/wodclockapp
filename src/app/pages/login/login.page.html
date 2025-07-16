@@ -1,40 +1,59 @@
 <ion-content [fullscreen]="true">
+  <div class="login-wrapper">
 
-  <div id="container">    
-    <!--Email and Password-->
-    <ion-item lines="none" style="--background: transparent;">
-      <ion-input id="email-input"       
-        label="Email"
-        labelPlacement="floating"
-        fill="outline"
-        placeholder="Enter your email"
-        [(ngModel)]="email">        
-      </ion-input>
-    </ion-item><br>
-        
-    <ion-item lines="none" style="--background: black transparent;">
-      <ion-input id="password-input" 
-        label="Password"
-        labelPlacement="floating"
-        fill="outline"
-        placeholder="Enter your password"
-        [(ngModel)]="password">
-          <ion-input-password-toggle slot="end"></ion-input-password-toggle>
-      </ion-input>
-    </ion-item>
-        
-    <!--BUTTON-->    
-    <ion-button fill="outline" (click)="onLogin()" >LOGIN</ion-button>
+    <!-- COLUNA ESQUERDA: LOGIN -->
+    <div class="login-left">
 
-    <div *ngIf="errorMessage" class="error-message" style="color: #ff3333; margin-top: 12px; font-weight: bold; text-align: center;">
-      {{ errorMessage }}
+      <div class="logo-box"></div>
+      <h2 class="page-title">Log in to continue</h2>
+
+      <!-- EMAIL -->
+      <div class="label-row">
+        <label for="email-input" class="field-label">Email Address</label>
+        <span class="required-label">(required)</span>
+      </div>
+      <ion-item lines="none">
+        <ion-input id="email-input" type="email" fill="outline" [(ngModel)]="email" required>
+        </ion-input>
+      </ion-item>
+
+      <!-- PASSWORD -->
+      <div class="label-row">
+        <label for="password-input" class="field-label">Password</label>
+        <span class="required-label">(required)</span>
+      </div>
+      <ion-item lines="none">
+        <ion-input id="password-input" [type]="showPassword ? 'text' : 'password'" fill="outline" [(ngModel)]="password"
+          required>
+        </ion-input>
+      </ion-item>
+
+      <div class="show-toggle">
+        <a (click)="togglePassword()">
+          {{ showPassword ? 'Hide' : 'Show' }}
+        </a>
+      </div>
+
+      <div class="forgot-password">
+        <a (click)="goToForgotPassword()">Forgot your password?</a>
+      </div>     
+
+      <ion-button expand="block" fill="outline" (click)="onLogin()">Login</ion-button>
+
+      <div *ngIf="errorMessage" class="error-message">
+        {{ errorMessage }}
+      </div>
+
+      <p class="signup-text">
+        New here? <a (click)="goToRegister()">Sign up today!</a>
+      </p>
     </div>
+
+    <!-- COLUNA DIREITA: IMAGEM + TEXTO -->
+    <div class="login-right">
+      <div class="hero-text">YOUR TIME. YOUR WOD</div>
+    </div>
+
+
   </div>
-
-  <p class="signup-text">
-    Don't have account? <a (click)="goToRegister()">Sign Up</a>
-  </p>
-  
- 
 </ion-content>
-
