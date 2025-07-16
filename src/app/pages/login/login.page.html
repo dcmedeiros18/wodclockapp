@@ -1,59 +1,70 @@
 <ion-content [fullscreen]="true">
   <div class="login-wrapper">
-
-    <!-- COLUNA ESQUERDA: LOGIN -->
+  
+    <!-- LEFT COLUMN: LOGIN FORM -->
     <div class="login-left">
-
+    
+      <!-- Logo placeholder -->
       <div class="logo-box"></div>
+
+      <!-- Page title -->
       <h2 class="page-title">Log in to continue</h2>
 
-      <!-- EMAIL -->
+      <!-- EMAIL FIELD -->
       <div class="label-row">
         <label for="email-input" class="field-label">Email Address</label>
         <span class="required-label">(required)</span>
       </div>
       <ion-item lines="none">
-        <ion-input id="email-input" type="email" fill="outline" [(ngModel)]="email" required>
-        </ion-input>
+        <!-- Two-way binding with ngModel for email -->
+        <ion-input id="email-input" type="email" fill="outline" [(ngModel)]="email" required></ion-input>
       </ion-item>
 
-      <!-- PASSWORD -->
+      <!-- PASSWORD FIELD -->
       <div class="label-row">
         <label for="password-input" class="field-label">Password</label>
         <span class="required-label">(required)</span>
       </div>
       <ion-item lines="none">
-        <ion-input id="password-input" [type]="showPassword ? 'text' : 'password'" fill="outline" [(ngModel)]="password"
-          required>
+        <!-- Toggling password visibility with showPassword flag -->
+        <ion-input id="password-input" 
+                   [type]="showPassword ? 'text' : 'password'" 
+                   fill="outline" 
+                   [(ngModel)]="password"
+                   required>
         </ion-input>
       </ion-item>
 
+      <!-- Show/Hide password toggle -->
       <div class="show-toggle">
         <a (click)="togglePassword()">
           {{ showPassword ? 'Hide' : 'Show' }}
         </a>
       </div>
 
+      <!-- Navigation link to forgot password page -->
       <div class="forgot-password">
         <a (click)="goToForgotPassword()">Forgot your password?</a>
       </div>     
 
+      <!-- Login button triggers onLogin() -->
       <ion-button expand="block" fill="outline" (click)="onLogin()">Login</ion-button>
 
+      <!-- Display error message if authentication fails -->
       <div *ngIf="errorMessage" class="error-message">
         {{ errorMessage }}
       </div>
 
+      <!-- Navigation link to registration page -->
       <p class="signup-text">
         New here? <a (click)="goToRegister()">Sign up today!</a>
       </p>
     </div>
 
-    <!-- COLUNA DIREITA: IMAGEM + TEXTO -->
+    <!-- RIGHT COLUMN: BACKGROUND IMAGE AND SLOGAN -->
     <div class="login-right">
       <div class="hero-text">YOUR TIME. YOUR WOD</div>
     </div>
-
 
   </div>
 </ion-content>

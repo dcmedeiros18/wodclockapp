@@ -1,3 +1,4 @@
+// Wrapper with responsive layout
 .login-wrapper {
   display: flex;
   flex-direction: row;
@@ -5,10 +6,11 @@
   overflow: hidden;
 
   @media (max-width: 768px) {
-    flex-direction: column;
+    flex-direction: column; // Stack layout for small screens
   }
 }
 
+// Left column - login form
 .login-left {
   flex: 1;
   padding: 40px 30px;
@@ -24,6 +26,7 @@
   }
 }
 
+// Right column - background image
 .login-right {
   flex: 1;
   background-image: url('/assets/images/login-page.png');
@@ -33,7 +36,7 @@
   position: relative;
 
   @media (max-width: 768px) {
-    display: none;
+    display: none; // Hide image on mobile
   }
 
   .hero-text {
@@ -50,6 +53,7 @@
   }
 }
 
+// Logo placeholder styling
 .logo-box {
   width: 100%;
   height: 120px;
@@ -66,6 +70,7 @@
   }
 }
 
+// Page title
 .page-title {
   font-size: 24px;
   font-weight: bold;
@@ -78,6 +83,7 @@
   }
 }
 
+// Label and required indicator row
 .label-row {
   display: flex;
   justify-content: space-between;
@@ -96,6 +102,7 @@
   color: black;
 }
 
+// Styling for IonInput components
 ion-item {
   width: 100%;
   margin-bottom: 12px;
@@ -109,6 +116,7 @@ ion-item {
   }
 }
 
+// Show/hide password link
 .show-toggle {
   text-align: right;
   margin: 5px 0 20px;
@@ -120,6 +128,7 @@ ion-item {
   }
 }
 
+// Forgot password link
 .forgot-password {
   width: 100%;
   text-align: right;
@@ -138,6 +147,7 @@ ion-item {
   }
 }
 
+// Custom styling for outline login button
 ion-button[fill="outline"] {
   --color: white;
   --border-color: red;
@@ -150,6 +160,7 @@ ion-button[fill="outline"] {
   margin-top: 10px;
 }
 
+// Error message styling
 .error-message {
   color: #ff3333;
   margin-top: 12px;
@@ -157,6 +168,7 @@ ion-button[fill="outline"] {
   text-align: center;
 }
 
+// Sign-up message at bottom
 .signup-text {
   color: black;
   margin-top: 20px;

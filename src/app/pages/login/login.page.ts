@@ -18,41 +18,44 @@ export class LoginPage implements OnInit {
   errorMessage: string = '';
   showPassword: boolean = false;
 
-
-  constructor(private authService: AuthService, private router: Router) { }
+  constructor(private authService: AuthService, private router: Router) {}
 
   ngOnInit() {
+    // Lifecycle hook for initialization
   }
 
+  // Handles login logic using AuthService
   onLogin() {
     this.errorMessage = '';
     this.authService.login(this.email, this.password).subscribe({
       next: (res) => {
-        // Só redireciona se houver token e user
+        // Check if response contains token and user info
         if (res && res.access_token && res.user) {
+          // Navigate to user area on successful login
           this.router.navigate(['./user-membership']);
         } else {
-          this.errorMessage = 'Login inválido. Verifique suas credenciais.';
+          this.errorMessage = 'Invalid login. Please check your credentials.';
         }
       },
       error: (err) => {
-        this.errorMessage = (err.error && err.error.message) ? err.error.message : 'Erro ao fazer login. Tente novamente.';
+        // Display backend error message or fallback message
+        this.errorMessage = (err.error && err.error.message) ? err.error.message : 'Login failed. Please try again.';
       }
     });
   }
+
+  // Redirects to the registration page
   goToRegister() {   
     this.router.navigateByUrl('/register');
   }
+
+  // Toggles visibility of the password field
   togglePassword() {
     this.showPassword = !this.showPassword;
   }
 
+  // Redirects to the forgot password page
   goToForgotPassword() {
-    // Exemplo: navega para página específica
     this.router.navigate(['/forgot-password']);
-  
-    // ou abre um modal no futuro
-    // this.modalController.create({ component: ForgotPasswordComponent })
   }
-  
 }

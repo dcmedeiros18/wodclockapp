@@ -1,40 +1,101 @@
-<head>
-  <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
-  <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
-</head>
+<ion-content [fullscreen]="true">
+  <div class="membership-wrapper">
 
-<ion-content>
-  <!-- background -->
-</ion-content>
+    <!-- SIDEBAR MENU -->
+    <!-- Navigation buttons on the left side of the screen -->
+    <div class="sidebar">
+      <div class="sidebar-title">Menu</div>
 
-<ion-footer>
-  <ion-toolbar>
-    <div class="footer-buttons">
-      <div class="button-name">
-        <ion-icon name="clipboard" slot="icon-only" (click)="goToBook()"></ion-icon>
-        <div class="button-label">Book</div>
+      <!-- Button to navigate to the booking page -->
+      <button class="sidebar-btn" (click)="goToBook()">
+        <ion-icon name="clipboard-outline"></ion-icon> Book
+      </button>
+
+      <!-- Button to view WOD (Workout of the Day) -->
+      <button class="sidebar-btn" (click)="goToWod()">
+        <ion-icon name="barbell-outline"></ion-icon> WOD
+      </button>
+
+      <!-- Button to access the cancel booking page -->
+      <button class="sidebar-btn" (click)="goToCancel()">
+        <ion-icon name="close" color="danger"></ion-icon> Cancel
+      </button>
+
+      <!-- Button to view the user's class history -->
+      <button class="sidebar-btn" (click)="goToFrequency()">
+        <ion-icon name="calendar-number"></ion-icon> History
+      </button>
+    </div>
+
+    <!-- MAIN PANEL -->
+    <!-- Central content area -->
+    <div class="main-panel">
+
+      <!-- Top bar with welcome message and logout button -->
+      <div class="top-bar">
+        <h1 class="welcome-text">Welcome, {{ currentUserName }}</h1>
+
+        <!-- Logout action -->
+        <button class="logout-button" (click)="logout()">
+          <ion-icon name="log-out-outline" color="danger"></ion-icon> Logout
+        </button>
       </div>
 
-      <div class="button-name">
-        <ion-icon name="barbell-outline" slot="icon-only" (click)="goToWod()"></ion-icon>
-        <div class="button-label">WOD</div>
+      <!-- Dashboard section title -->
+      <h2 class="section-title">Your Dashboard</h2>
+
+      <!-- Cards that provide quick access to main actions -->
+      <div class="card-grid">
+
+        <!-- Booking card -->
+        <div class="card-box" (click)="goToBook()">
+          <ion-icon name="clipboard-outline"></ion-icon>
+          <div>
+            <h3>Book Class</h3>
+            <p>Reserve your training session.</p>
+          </div>
+        </div>
+
+        <!-- WOD card -->
+        <div class="card-box" (click)="goToWod()">
+          <ion-icon name="barbell-outline"></ion-icon>
+          <div>
+            <h3>WOD</h3>
+            <p>Check your workout of the day.</p>
+          </div>
+        </div>
+
+        <!-- Cancel booking card -->
+        <div class="card-box" (click)="goToCancel()">
+          <ion-icon name="close"></ion-icon>
+          <div>
+            <h3>Cancel</h3>
+            <p>Manage and cancel your classes.</p>
+          </div>
+        </div>
+
+        <!-- Frequency/history card -->
+        <div class="card-box" (click)="goToFrequency()">
+          <ion-icon name="calendar-number"></ion-icon>
+          <div>
+            <h3>History</h3>
+            <p>See your training frequency.</p>
+          </div>
+        </div>
       </div>
 
-      <div class="button-name">
-        <ion-icon name="close" slot="icon-only" color="danger" (click)="goToCancel()"></ion-icon>
-        <div class="button-label">Cancel</div>
-      </div>
+      <!-- IMAGE CAROUSEL INSIDE DASHBOARD -->
+      <!-- Rotating image section to display community moments -->
+      <div class="carousel-wrapper">
+        <h3 class="carousel-title">Community Moments</h3>
 
-      <div class="button-name">
-        <ion-icon name='calendar-number' slot="icon-only" (click)="goToFrequency()"></ion-icon>
-        <div class="button-label">History</div>
-      </div>
-
-      <div class="button-name">
-        <ion-icon name="log-out-outline" slot="icon-only" color="danger" (click)="logout()"></ion-icon>
-        <div class="button-label">Logout</div>
+        <!-- Carousel image display area -->
+        <div class="photo-carousel">
+          <!-- Dynamically loads current image -->
+          <img *ngIf="carouselImages.length" [src]="carouselImages[currentCarouselIndex]" alt="Carousel image" />
+        </div>
       </div>
 
     </div>
-  </ion-toolbar>
-</ion-footer>
+  </div>
+</ion-content>
