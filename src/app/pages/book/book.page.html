@@ -1,27 +1,40 @@
 <ion-content [fullscreen]="true">
   <div class="membership-wrapper">
 
-    <!-- Sidebar Navigation -->
+    <!-- ===== SIDEBAR MENU (LEFT NAVIGATION) ===== -->
     <div class="sidebar">
       <div class="sidebar-title">Menu</div>
+
+      <!-- Navigation to Home Page -->
+      <button class="sidebar-btn" (click)="goToUserMembership()">
+        <ion-icon name="body"></ion-icon> Home
+      </button>
+
+      <!-- Navigation to Booking Page (Current) -->
       <button class="sidebar-btn" (click)="goToBook()">
         <ion-icon name="clipboard-outline"></ion-icon> Book
       </button>
+
+      <!-- Navigation to WOD Page -->
       <button class="sidebar-btn" (click)="goToWod()">
         <ion-icon name="barbell-outline"></ion-icon> WOD
       </button>
+
+      <!-- Navigation to Cancel Page -->
       <button class="sidebar-btn" (click)="goToCancel()">
         <ion-icon name="close" color="danger"></ion-icon> Cancel
       </button>
+
+      <!-- Navigation to Class History -->
       <button class="sidebar-btn" (click)="goToFrequency()">
         <ion-icon name="calendar-number"></ion-icon> History
       </button>
     </div>
 
-    <!-- Main Content Panel -->
+    <!-- ===== MAIN CONTENT PANEL ===== -->
     <div class="main-panel">
 
-      <!-- Top Bar with Page Title and Logout -->
+      <!-- Top bar with page title and logout button -->
       <div class="top-bar">
         <h1 class="welcome-text">My Booking</h1>
         <button class="logout-button" (click)="logout()">
@@ -36,10 +49,10 @@
         </div>
       </div>
 
-      <!-- Calendar and Class Slots Layout -->
+      <!-- Layout for calendar and booking section -->
       <div class="calendar-booking-layout">
 
-        <!-- Calendar Date Picker -->
+        <!-- ===== DATE PICKER (CALENDAR) ===== -->
         <div class="datetime-container">
           <ion-datetime
             presentation="date"
@@ -48,10 +61,10 @@
           </ion-datetime>
         </div>
 
-        <!-- Class Slots Section -->
+        <!-- ===== AVAILABLE CLASSES SECTION ===== -->
         <div class="booking-section">
 
-          <!-- Alert Messages -->
+          <!-- Feedback Messages -->
           <div *ngIf="successMessage" class="success-message">
             {{ successMessage }}
           </div>
@@ -60,24 +73,24 @@
             {{ errorMessage }}
           </div>
 
-          <!-- Title above available classes -->
+          <!-- Section title -->
           <h2 class="calendar-title">Available Classes</h2>
 
-          <!-- Booking Slot List -->
+          <!-- List of available class slots -->
           <div class="booking-slots" *ngIf="selectedDate && timeSlots.length > 0">
             <div *ngFor="let slot of timeSlots" class="booking-slot">
 
-              <!-- Class Header Info -->
+              <!-- Class Info (Time, Spots, Cancellation) -->
               <div class="card-header">
                 <span class="hour">{{ slot.time }}</span>
                 <span>• {{ slot.spotsLeft }} spots left</span>
                 <span *ngIf="slot.cancelled" class="cancelled-text">• CLASS CANCELLED</span>
               </div>
 
-              <!-- Admin or Coach View (with checkbox for cancel) -->
+              <!-- Admin/Coach Controls -->
               <div *ngIf="isAdminOrCoach()">
-                <div *ngIf="isPastClass(slot)" class="warning-text">(AULA JÁ REALIZADA)</div>
-                <div *ngIf="!isPastClass(slot) && !canCancelClass(slot) && !slot.cancelled" class="warning-text">(MENOS DE 2 HORAS PARA A AULA)</div>
+                <div *ngIf="isPastClass(slot)" class="warning-text">(CLASS ALREADY HELD)</div>
+                <div *ngIf="!isPastClass(slot) && !canCancelClass(slot) && !slot.cancelled" class="warning-text">(LESS THAN 2 HOURS LEFT)</div>
 
                 <ion-checkbox
                   slot="start"
@@ -88,7 +101,7 @@
 
                 <span *ngIf="slot.cancelled" class="cancelled-text">CLASS CANCELLED</span>
                 <span *ngIf="!slot.cancelled">
-                  {{ isPastClass(slot) ? 'Aula já realizada' : (!canCancelClass(slot) ? 'Menos de 2h para cancelar' : 'Select to Cancel') }}
+                  {{ isPastClass(slot) ? 'Class already held' : (!canCancelClass(slot) ? 'Less than 2h to cancel' : 'Select to Cancel') }}
                 </span>
               </div>
 
@@ -103,10 +116,9 @@
                 </ion-button>
                 <div *ngIf="isPastClass(slot)" class="warning-text">CLASS ALREADY HELD</div>
               </div>
-
             </div>
 
-            <!-- Multiple Class Cancel Button (Only for Admin/Coach) -->
+            <!-- Cancel Multiple Classes (Admin/Coach Only) -->
             <div *ngIf="isAdminOrCoach()" class="cancel-group">
               <ion-button
                 expand="block"
@@ -118,7 +130,7 @@
             </div>
           </div>
 
-          <!-- Message when no classes are available -->
+          <!-- Message when no classes are found -->
           <div *ngIf="selectedDate && timeSlots.length === 0" class="no-classes">
             <p>No classes available for the selected date.</p>
           </div>

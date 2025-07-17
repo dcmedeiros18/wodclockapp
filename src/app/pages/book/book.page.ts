@@ -39,11 +39,11 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class BookPage implements OnInit {
-  selectedDate: string = '';
-  timeSlots: ClassSlot[] = [];
-  selectedClassIds: number[] = [];
-  successMessage: string = '';
-  errorMessage: string = '';
+  selectedDate: string = '';               // Currently selected date
+  timeSlots: ClassSlot[] = [];             // List of available class slots
+  selectedClassIds: number[] = [];         // For multi-cancel (admin/coach)
+  successMessage: string = '';             // Success feedback
+  errorMessage: string = '';               // Error feedback
 
   constructor(
     private router: Router,
@@ -52,7 +52,7 @@ export class BookPage implements OnInit {
     private alertController: AlertController
   ) {}
 
-  // Runs when component initializes
+  // On component load
   ngOnInit() {
     const currentUser = this.authService.getCurrentUser();
     if (!currentUser) {
@@ -60,7 +60,7 @@ export class BookPage implements OnInit {
       return;
     }
 
-    // Event listener to refresh available classes when needed
+    // Listen to custom events to refresh class list
     window.addEventListener('classesUpdated', (e: any) => {
       const updatedDate = e?.detail?.date || this.selectedDate;
       if (updatedDate) {
@@ -68,33 +68,32 @@ export class BookPage implements OnInit {
       }
     });
 
-    // Load classes if date is already selected
     if (this.selectedDate) {
       this.onDateSelected({ detail: { value: this.selectedDate } });
     }
   }
 
-  // Allow weekdays only (Sunday blocked)
+  // Allow weekdays only
   isWeekday = (dateString: string) => {
     const date = new Date(dateString);
     const utcDay = date.getUTCDay();
-    return utcDay !== 0;
+    return utcDay !== 0; // Disable Sundays
   };
 
-  // Verify if current user is admin or coach
+  // Check if current user is admin or coach
   isAdminOrCoach(): boolean {
     const profile = this.authService.getUserProfile();
     return profile === 'admin' || profile === 'coach';
   }
 
-  // Check if a class is already in the past
+  // Check if class has already passed
   isPastClass(slot: ClassSlot): boolean {
     const now = new Date();
     const classTime = new Date(`${this.selectedDate}T${slot.time}`);
     return classTime.getTime() <= now.getTime();
   }
 
-  // Check if the user can still cancel the class (at least 2h before start)
+  // Check if user is still allowed to cancel the class (minimum 2 hours in advance)
   canCancelClass(slot: ClassSlot): boolean {
     const now = new Date();
     const classTime = new Date(`${this.selectedDate}T${slot.time}`);
@@ -102,7 +101,7 @@ export class BookPage implements OnInit {
     return diffMinutes >= 120;
   }
 
-  // Toggle class selection (used by admin/coach for multi-cancel)
+  // Admin/Coach: toggle class selection
   toggleSelectClass(classId: number) {
     if (this.selectedClassIds.includes(classId)) {
       this.selectedClassIds = this.selectedClassIds.filter(id => id !== classId);
@@ -111,7 +110,7 @@ export class BookPage implements OnInit {
     }
   }
 
-  // Open confirmation alert for canceling selected classes
+  // Show confirmation before cancelling multiple classes
   confirmCancelSelected() {
     const selectedClasses = this.timeSlots.filter(c => this.selectedClassIds.includes(c.id));
     const message =
@@ -132,7 +131,7 @@ export class BookPage implements OnInit {
     }).then(alert => alert.present());
   }
 
-  // Cancel the selected class slots (admin/coach)
+  // Cancel all selected classes (admin/coach only)
   cancelSelectedClasses() {
     for (const classId of this.selectedClassIds) {
       this.classService.cancelClass(classId).subscribe({
@@ -147,11 +146,12 @@ export class BookPage implements OnInit {
         }
       });
     }
+
     this.selectedClassIds = [];
     this.successMessage = 'Classes cancelled successfully.';
   }
 
-  // Triggered when a new date is selected in the calendar
+  // Load available classes when user selects a date
   onDateSelected(event: any): void {
     const isoDate = event.detail.value;
     const datePart = isoDate && isoDate.includes('T') ? isoDate.split('T')[0] : isoDate;
@@ -167,7 +167,6 @@ export class BookPage implements OnInit {
 
     this.classService.getAvailableClasses(this.selectedDate).subscribe({
       next: (slots) => {
-        // Add 'cancelled' property based on backend status
         this.timeSlots = slots.map(slot => ({
           ...slot,
           cancelled: slot.status === 'cancelled'
@@ -176,6 +175,7 @@ export class BookPage implements OnInit {
       error: (error) => {
         this.errorMessage = error.message;
         this.timeSlots = [];
+
         if (error.status === 401 || error.status === 403) {
           this.router.navigateByUrl('/login');
         }
@@ -183,21 +183,25 @@ export class BookPage implements OnInit {
     });
   }
 
-  // Book a class for the user
+  // User books a class
   bookClass(classId: number) {
     const slot = this.timeSlots.find(s => s.id === classId);
+
     if (!classId || isNaN(classId)) {
       this.errorMessage = 'Invalid class ID!';
       return;
     }
+
     if (slot && this.isPastClass(slot)) {
       this.errorMessage = 'It is not possible to book a class that has already been held.';
       return;
     }
+
     this.classService.bookClass(classId).subscribe({
       next: (res) => {
         this.successMessage = res.message || 'Class successfully booked.';
         this.errorMessage = '';
+
         const bookedSlot = this.timeSlots.find(slot => slot.id === classId);
         if (bookedSlot) {
           bookedSlot.alreadyBooked = true;
@@ -210,7 +214,7 @@ export class BookPage implements OnInit {
     });
   }
 
-  // Navigation Methods
+  // ========= Navigation Methods =========
   goToWod() {
     this.router.navigateByUrl('/wod');
   }
@@ -231,7 +235,7 @@ export class BookPage implements OnInit {
     this.router.navigateByUrl('/book');
   }
 
-  // Clears token and returns to login
+  // Clear session and logout
   logout() {
     localStorage.removeItem('token');
     this.router.navigateByUrl('/login');

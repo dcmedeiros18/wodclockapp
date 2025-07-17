@@ -1,53 +1,49 @@
 <ion-content [fullscreen]="true">
   <div class="membership-wrapper">
 
-    <!-- SIDEBAR MENU -->
-    <!-- Navigation buttons on the left side of the screen -->
+    <!-- ===== SIDEBAR MENU (LEFT NAVIGATION) ===== -->
     <div class="sidebar">
       <div class="sidebar-title">Menu</div>
 
-      <!-- Button to navigate to the booking page -->
+      <!-- Navigation to Booking Page -->
       <button class="sidebar-btn" (click)="goToBook()">
         <ion-icon name="clipboard-outline"></ion-icon> Book
       </button>
 
-      <!-- Button to view WOD (Workout of the Day) -->
+      <!-- Navigation to WOD Page -->
       <button class="sidebar-btn" (click)="goToWod()">
         <ion-icon name="barbell-outline"></ion-icon> WOD
       </button>
 
-      <!-- Button to access the cancel booking page -->
+      <!-- Navigation to Cancel Page -->
       <button class="sidebar-btn" (click)="goToCancel()">
         <ion-icon name="close" color="danger"></ion-icon> Cancel
       </button>
 
-      <!-- Button to view the user's class history -->
+      <!-- Navigation to Class History -->
       <button class="sidebar-btn" (click)="goToFrequency()">
         <ion-icon name="calendar-number"></ion-icon> History
       </button>
     </div>
 
-    <!-- MAIN PANEL -->
-    <!-- Central content area -->
+    <!-- ===== MAIN PANEL (RIGHT CONTENT) ===== -->
     <div class="main-panel">
 
-      <!-- Top bar with welcome message and logout button -->
+      <!-- Top bar with welcome message and logout -->
       <div class="top-bar">
         <h1 class="welcome-text">Welcome, {{ currentUserName }}</h1>
-
-        <!-- Logout action -->
         <button class="logout-button" (click)="logout()">
           <ion-icon name="log-out-outline" color="danger"></ion-icon> Logout
         </button>
       </div>
 
-      <!-- Dashboard section title -->
+      <!-- Section title for the dashboard -->
       <h2 class="section-title">Your Dashboard</h2>
 
-      <!-- Cards that provide quick access to main actions -->
+      <!-- ===== QUICK ACTION CARDS ===== -->
       <div class="card-grid">
 
-        <!-- Booking card -->
+        <!-- Book Class Card -->
         <div class="card-box" (click)="goToBook()">
           <ion-icon name="clipboard-outline"></ion-icon>
           <div>
@@ -56,7 +52,7 @@
           </div>
         </div>
 
-        <!-- WOD card -->
+        <!-- WOD Card -->
         <div class="card-box" (click)="goToWod()">
           <ion-icon name="barbell-outline"></ion-icon>
           <div>
@@ -65,7 +61,7 @@
           </div>
         </div>
 
-        <!-- Cancel booking card -->
+        <!-- Cancel Booking Card -->
         <div class="card-box" (click)="goToCancel()">
           <ion-icon name="close"></ion-icon>
           <div>
@@ -74,7 +70,7 @@
           </div>
         </div>
 
-        <!-- Frequency/history card -->
+        <!-- History/Frequency Card -->
         <div class="card-box" (click)="goToFrequency()">
           <ion-icon name="calendar-number"></ion-icon>
           <div>
@@ -84,19 +80,17 @@
         </div>
       </div>
 
-      <!-- IMAGE CAROUSEL INSIDE DASHBOARD -->
-      <!-- Rotating image section to display community moments -->
+      <!-- ===== COMMUNITY PHOTO CAROUSEL ===== -->
       <div class="carousel-wrapper">
         <h3 class="carousel-title">Community Moments</h3>
 
-        <!-- Carousel image display area -->
+        <!-- Display the current image from the carousel -->
         <div class="photo-carousel">
-          <!-- Dynamically loads current image -->
           <img *ngIf="carouselImages.length" [src]="carouselImages[currentCarouselIndex]" alt="Carousel image" />
         </div>
       </div>
 
-    </div> <!-- End of .main-panel -->
+    </div> <!-- /main-panel -->
 
-  </div> <!-- End of .membership-wrapper -->
+  </div> <!-- /membership-wrapper -->
 </ion-content>

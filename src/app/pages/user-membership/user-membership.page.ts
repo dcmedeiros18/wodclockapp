@@ -1,12 +1,18 @@
-import { Component, OnInit, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { Component, OnInit, OnDestroy, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule, Router } from '@angular/router';
 import { IonContent, IonIcon, IonToolbar } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { barbellOutline, calendarNumber, close, clipboardOutline, logOutOutline } from 'ionicons/icons';
+import {
+  barbellOutline,
+  calendarNumber,
+  close,
+  clipboardOutline,
+  logOutOutline
+} from 'ionicons/icons';
 
-// Registering Ionicons for use in the component
+// Register Ionicons globally for use in templates
 addIcons({
   'barbell-outline': barbellOutline,
   'close': close,
@@ -16,62 +22,76 @@ addIcons({
 });
 
 @Component({
-  selector: 'app-user-membership', // Component selector for the HTML tag
-  templateUrl: './user-membership.page.html', // HTML template file
-  styleUrls: ['./user-membership.page.scss'], // SCSS style file
+  selector: 'app-user-membership',
+  templateUrl: './user-membership.page.html',
+  styleUrls: ['./user-membership.page.scss'],
   standalone: true,
-  imports: [IonContent, CommonModule, FormsModule, IonIcon, IonToolbar, RouterModule], // Required Angular and Ionic modules
+  imports: [
+    IonContent,
+    CommonModule,
+    FormsModule,
+    IonIcon,
+    IonToolbar,
+    RouterModule
+  ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
-export class UserMembershipPage implements OnInit {
-  currentUserName: string = ''; // Stores the current user's name for greeting
+export class UserMembershipPage implements OnInit, OnDestroy {
+  currentUserName: string = ''; // Holds current user's name for welcome message
 
-  // Array of carousel image paths
+  // Image carousel sources (local assets)
   carouselImages: string[] = [
     '/assets/images/crossfit_crew.png',
     '/assets/images/woman_and_kettlebell.png',
     '/assets/images/login-page.png'
   ];
 
-  currentCarouselIndex: number = 0; // Tracks the current image index
-  carouselInterval: any; // Holds the interval reference
+  currentCarouselIndex: number = 0; // Current image being shown
+  carouselInterval: any; // Reference to the interval for clearing on destroy
 
   constructor(private router: Router) {
-    // Ensures icons are available even if initialized before the constructor runs
-    addIcons({ clipboardOutline, barbellOutline, close, calendarNumber, logOutOutline });
+    // Register icons again in constructor to ensure availability
+    addIcons({
+      clipboardOutline,
+      barbellOutline,
+      close,
+      calendarNumber,
+      logOutOutline
+    });
   }
 
   ngOnInit() {
-    // Load user info from localStorage
+    // Get current user from localStorage
     const user = localStorage.getItem('currentUser');
     if (user) {
       const parsedUser = JSON.parse(user);
-      // Fallback options in case 'name' is missing
       this.currentUserName = parsedUser.name || parsedUser.fullName || 'Athlete';
     }
 
-    // Starts the image carousel auto-rotation
+    // Start the image carousel rotation
     this.startCarousel();
   }
 
-  // Starts rotating carousel images every 3 seconds
+  // Starts carousel auto-rotation every 3 seconds
   startCarousel() {
     if (this.carouselInterval) {
-      clearInterval(this.carouselInterval); // Clear any existing interval
+      clearInterval(this.carouselInterval); // Prevent multiple intervals
     }
+
     this.carouselInterval = setInterval(() => {
-      this.currentCarouselIndex = (this.currentCarouselIndex + 1) % this.carouselImages.length;
-    }, 3000); // Change image every 3000ms (3s)
+      this.currentCarouselIndex =
+        (this.currentCarouselIndex + 1) % this.carouselImages.length;
+    }, 3000);
   }
 
-  // Clears the interval when the component is destroyed to avoid memory leaks
+  // Clear the interval to prevent memory leaks
   ngOnDestroy() {
     if (this.carouselInterval) {
       clearInterval(this.carouselInterval);
     }
   }
 
-  // Optional carousel config (not being used directly unless tied to ion-slides)
+  // Carousel options (for future integration with ion-slides if needed)
   slideOpts = {
     initialSlide: 0,
     speed: 400,
@@ -82,7 +102,7 @@ export class UserMembershipPage implements OnInit {
     loop: true
   };
 
-  // Navigation methods to different routes
+  // ========= Navigation methods =========
   goToBook() {
     this.router.navigateByUrl('/book');
   }
@@ -99,7 +119,7 @@ export class UserMembershipPage implements OnInit {
     this.router.navigateByUrl('/frequency');
   }
 
-  // Logs the user out by clearing storage and redirecting to login page
+  // Logs out the user and redirects to login page
   logout() {
     localStorage.removeItem('token');
     localStorage.removeItem('currentUser');

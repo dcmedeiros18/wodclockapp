@@ -190,6 +190,12 @@ ion-icon {
   font-weight: bold;
 }
 
+.book-btn:hover {
+  --background: #b30000;
+  transform: scale(1.02);
+}
+
+
 .cancelled-text {
   color: red;
   font-weight: bold;
