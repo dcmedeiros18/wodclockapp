@@ -52,6 +52,7 @@ export class BookPage implements OnInit {
     private alertController: AlertController
   ) {}
 
+  // Runs when component initializes
   ngOnInit() {
     const currentUser = this.authService.getCurrentUser();
     if (!currentUser) {
@@ -59,6 +60,7 @@ export class BookPage implements OnInit {
       return;
     }
 
+    // Event listener to refresh available classes when needed
     window.addEventListener('classesUpdated', (e: any) => {
       const updatedDate = e?.detail?.date || this.selectedDate;
       if (updatedDate) {
@@ -66,28 +68,33 @@ export class BookPage implements OnInit {
       }
     });
 
+    // Load classes if date is already selected
     if (this.selectedDate) {
       this.onDateSelected({ detail: { value: this.selectedDate } });
     }
   }
 
+  // Allow weekdays only (Sunday blocked)
   isWeekday = (dateString: string) => {
     const date = new Date(dateString);
     const utcDay = date.getUTCDay();
     return utcDay !== 0;
   };
 
+  // Verify if current user is admin or coach
   isAdminOrCoach(): boolean {
     const profile = this.authService.getUserProfile();
     return profile === 'admin' || profile === 'coach';
   }
 
+  // Check if a class is already in the past
   isPastClass(slot: ClassSlot): boolean {
     const now = new Date();
     const classTime = new Date(`${this.selectedDate}T${slot.time}`);
     return classTime.getTime() <= now.getTime();
   }
 
+  // Check if the user can still cancel the class (at least 2h before start)
   canCancelClass(slot: ClassSlot): boolean {
     const now = new Date();
     const classTime = new Date(`${this.selectedDate}T${slot.time}`);
@@ -95,6 +102,7 @@ export class BookPage implements OnInit {
     return diffMinutes >= 120;
   }
 
+  // Toggle class selection (used by admin/coach for multi-cancel)
   toggleSelectClass(classId: number) {
     if (this.selectedClassIds.includes(classId)) {
       this.selectedClassIds = this.selectedClassIds.filter(id => id !== classId);
@@ -103,12 +111,14 @@ export class BookPage implements OnInit {
     }
   }
 
+  // Open confirmation alert for canceling selected classes
   confirmCancelSelected() {
     const selectedClasses = this.timeSlots.filter(c => this.selectedClassIds.includes(c.id));
     const message =
       'Are you sure you want to cancel the following classes? This action is irreversible.' +
       '\n\n' +
       selectedClasses.map(c => `Date: ${this.selectedDate} - Time: ${c.time}`).join('\n');
+
     this.alertController.create({
       header: 'Confirm',
       message,
@@ -122,6 +132,7 @@ export class BookPage implements OnInit {
     }).then(alert => alert.present());
   }
 
+  // Cancel the selected class slots (admin/coach)
   cancelSelectedClasses() {
     for (const classId of this.selectedClassIds) {
       this.classService.cancelClass(classId).subscribe({
@@ -132,7 +143,7 @@ export class BookPage implements OnInit {
           }
         },
         error: (err) => {
-          console.error('Erro ao cancelar aula:', err);
+          console.error('Error canceling class:', err);
         }
       });
     }
@@ -140,6 +151,7 @@ export class BookPage implements OnInit {
     this.successMessage = 'Classes cancelled successfully.';
   }
 
+  // Triggered when a new date is selected in the calendar
   onDateSelected(event: any): void {
     const isoDate = event.detail.value;
     const datePart = isoDate && isoDate.includes('T') ? isoDate.split('T')[0] : isoDate;
@@ -155,9 +167,10 @@ export class BookPage implements OnInit {
 
     this.classService.getAvailableClasses(this.selectedDate).subscribe({
       next: (slots) => {
+        // Add 'cancelled' property based on backend status
         this.timeSlots = slots.map(slot => ({
           ...slot,
-          cancelled: slot.status === 'cancelled'  // <- VERIFICAÇÃO REAL DO BACKEND
+          cancelled: slot.status === 'cancelled'
         }));
       },
       error: (error) => {
@@ -170,6 +183,7 @@ export class BookPage implements OnInit {
     });
   }
 
+  // Book a class for the user
   bookClass(classId: number) {
     const slot = this.timeSlots.find(s => s.id === classId);
     if (!classId || isNaN(classId)) {
@@ -196,14 +210,28 @@ export class BookPage implements OnInit {
     });
   }
 
+  // Navigation Methods
   goToWod() {
     this.router.navigateByUrl('/wod');
+  }
+
+  goToCancel() {
+    this.router.navigateByUrl('/cancel');
+  }
+
+  goToFrequency() {
+    this.router.navigateByUrl('/frequency');
   }
 
   goToUserMembership() {
     this.router.navigateByUrl('/user-membership');
   }
 
+  goToBook() {
+    this.router.navigateByUrl('/book');
+  }
+
+  // Clears token and returns to login
   logout() {
     localStorage.removeItem('token');
     this.router.navigateByUrl('/login');

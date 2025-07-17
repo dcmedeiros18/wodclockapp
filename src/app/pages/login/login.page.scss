@@ -1,4 +1,6 @@
+// ===============================
 // Wrapper with responsive layout
+// ===============================
 .login-wrapper {
   display: flex;
   flex-direction: row;
@@ -10,7 +12,9 @@
   }
 }
 
+// ===============================
 // Left column - login form
+// ===============================
 .login-left {
   flex: 1;
   padding: 40px 30px;
@@ -26,8 +30,9 @@
     padding: 30px 20px;
   }
 }
-
+// ===============================
 // Right column - background image
+// ===============================
 .login-right {
   flex: 1;
   background-image: url('/assets/images/login-page.png');
@@ -54,7 +59,9 @@
   }
 }
 
+// ===============================
 // Logo placeholder styling
+// ===============================
 .logo-box {
   width: 100%;
   height: 120px;
@@ -71,7 +78,9 @@
   }
 }
 
+// ===============================
 // Page title
+// ===============================
 .page-title {
   font-size: 24px;
   font-weight: bold;
@@ -84,7 +93,9 @@
   }
 }
 
+// ===============================
 // Label and required indicator row
+// ===============================
 .label-row {
   display: flex;
   justify-content: space-between;
@@ -103,7 +114,9 @@
   color: black;
 }
 
+// ===============================
 // Styling for IonInput components
+// ===============================
 ion-item {
   width: 100%;
   margin-bottom: 12px;
@@ -118,7 +131,9 @@ ion-item {
   }
 }
 
+// ===============================
 // Show/hide password link
+// ===============================
 .show-toggle {
   text-align: right;
   margin: 5px 0 20px;
@@ -130,7 +145,9 @@ ion-item {
   }
 }
 
+// ===============================
 // Forgot password link
+// ===============================
 .forgot-password {
   width: 100%;
   text-align: right;

@@ -1,114 +1,133 @@
-<ion-content [fullscreen]="true" class="bg-img">
-  <div class="main-container">
-    <div style="display: flex; justify-content: flex-end; width: 100%; margin-bottom: 10px;">
-      <ion-button color="danger" (click)="logout()">LOGOUT</ion-button>
+<ion-content [fullscreen]="true">
+  <div class="membership-wrapper">
+
+    <!-- Sidebar Navigation -->
+    <div class="sidebar">
+      <div class="sidebar-title">Menu</div>
+      <button class="sidebar-btn" (click)="goToBook()">
+        <ion-icon name="clipboard-outline"></ion-icon> Book
+      </button>
+      <button class="sidebar-btn" (click)="goToWod()">
+        <ion-icon name="barbell-outline"></ion-icon> WOD
+      </button>
+      <button class="sidebar-btn" (click)="goToCancel()">
+        <ion-icon name="close" color="danger"></ion-icon> Cancel
+      </button>
+      <button class="sidebar-btn" (click)="goToFrequency()">
+        <ion-icon name="calendar-number"></ion-icon> History
+      </button>
     </div>
 
-    <!-- Header do agendamento -->
-    <div class="book-container">
-      <ion-icon name="clipboard-outline"></ion-icon>
-      <div class="book-text">
-        CLASS BOOKING
+    <!-- Main Content Panel -->
+    <div class="main-panel">
+
+      <!-- Top Bar with Page Title and Logout -->
+      <div class="top-bar">
+        <h1 class="welcome-text">My Booking</h1>
+        <button class="logout-button" (click)="logout()">
+          <ion-icon name="log-out-outline" color="danger"></ion-icon> Logout
+        </button>
       </div>
-    </div>
 
-    <!-- Componente do calendário -->
-    <div class="datetime-container">
-      <ion-datetime
-        presentation="date"
-        [isDateEnabled]="isWeekday"
-        (ionChange)="onDateSelected($event)">
-      </ion-datetime>
-    </div>
+      <!-- Header aligned with calendar -->
+      <div class="booking-header-row">
+        <div class="datetime-container">
+          <p class="sub-instruction">Book your class</p>
+        </div>
+      </div>
 
-    <!-- Mensagem de sucesso ao agendar -->
-    <div *ngIf="successMessage" class="success-message" style="color: green; text-align: center; margin: 16px 0; font-weight: bold;">
-      {{ successMessage }}
-    </div>
+      <!-- Calendar and Class Slots Layout -->
+      <div class="calendar-booking-layout">
 
-    <!-- Mensagem de erro -->
-    <div *ngIf="errorMessage" class="error-message">
-      {{ errorMessage }}
-    </div>
-
-    <!-- Card de horários disponíveis -->
-    <ion-card class="booking-card" *ngIf="selectedDate && timeSlots.length > 0">
-      <ion-card-header>
-        <ion-card-title>Available Classes</ion-card-title>
-      </ion-card-header>
-
-      <ion-card-content>
-        <!-- Lista de horários -->
-        <div *ngFor="let slot of timeSlots; let i = index" class="booking-slot">
-          <div class="card-header">
-            <span class="hour">{{ slot.time }}</span>
-            <span>• {{ slot.spotsLeft }} spots left</span>
-            <span *ngIf="slot.cancelled" style="color: red; font-weight: bold;">• CLASS CANCELLED</span>
-          </div>
-
-          <!-- Checkbox para admin/coach -->
-          <div *ngIf="isAdminOrCoach()" style="margin-bottom: 10px;">
-            <div *ngIf="isPastClass(slot)" style="color: red; margin-bottom: 5px; font-size: 0.9em;">
-              (AULA JÁ REALIZADA)
-            </div>
-            <div *ngIf="!isPastClass(slot) && !canCancelClass(slot) && !slot.cancelled" style="color: orange; margin-bottom: 5px; font-size: 0.9em;">
-              (MENOS DE 2 HORAS PARA A AULA)
-            </div>
-            <ion-checkbox 
-              slot="start" 
-              [checked]="selectedClassIds.includes(slot.id)" 
-              [disabled]="isPastClass(slot) || !canCancelClass(slot) || slot.cancelled"
-              (ionChange)="toggleSelectClass(slot.id)">
-            </ion-checkbox>
-            <span style="margin-left: 8px; color: red; font-weight: bold;" *ngIf="slot.cancelled">CLASS CANCELLED</span>
-            <span style="margin-left: 8px;" *ngIf="!slot.cancelled">
-              {{ isPastClass(slot) ? 'Aula já realizada' : 
-                 !canCancelClass(slot) ? 'Menos de 2h para cancelar' : 
-                 'Select to Cancel' }}
-            </span>
-          </div>
-
-          <!-- Mensagem para usuário comum se aula cancelada -->
-          <div *ngIf="!isAdminOrCoach() && slot.cancelled" style="color: red; font-weight: bold; margin-bottom: 8px;">
-            CLASS CANCELLED
-          </div>
-
-          <!-- Botão para reservar -->
-          <ion-button
-            expand="block"
-            class="book-btn"
-            *ngIf="!isAdminOrCoach() && !slot.cancelled"
-            [disabled]="slot.spots === 0 || slot.alreadyBooked || isPastClass(slot)"
-            (click)="bookClass(slot.id)">
-            {{ slot.alreadyBooked ? 'ALREADY BOOKED' : 'BOOK CLASS' }}
-          </ion-button>
-          <div *ngIf="!isAdminOrCoach() && isPastClass(slot) && !slot.cancelled" style="color: orange; font-weight: bold; margin-bottom: 8px;">
-            CLASS ALREADY HELD
-          </div>
+        <!-- Calendar Date Picker -->
+        <div class="datetime-container">
+          <ion-datetime
+            presentation="date"
+            [isDateEnabled]="isWeekday"
+            (ionChange)="onDateSelected($event)">
+          </ion-datetime>
         </div>
 
-        <!-- Botão de cancelamento múltiplo -->
-        <div *ngIf="isAdminOrCoach() && timeSlots.length > 0" style="margin-top: 15px;">
-          <ion-button 
-            expand="block" 
-            color="danger" 
-            [disabled]="selectedClassIds.length === 0" 
-            (click)="confirmCancelSelected()">
-            Cancel Selected ({{ selectedClassIds.length }})
-          </ion-button>
-        </div>
-      </ion-card-content>
-    </ion-card>
+        <!-- Class Slots Section -->
+        <div class="booking-section">
 
-    <!-- Botões adicionais fora do card -->
-    <div class="book-btn-container">
-      <ion-button class="bk-btn" (click)="goToWod()">VIEW WOD</ion-button>
-      <ion-button class="bk-btn" (click)="goToUserMembership()">User Home</ion-button>
-    </div>
+          <!-- Alert Messages -->
+          <div *ngIf="successMessage" class="success-message">
+            {{ successMessage }}
+          </div>
 
-    <!-- Mensagem quando não houver horários -->
-    <div *ngIf="selectedDate && timeSlots.length === 0" class="no-classes">
-      <p>No classes available for the selected date.</p>
-    </div>
-  </div>
+          <div *ngIf="errorMessage" class="error-message">
+            {{ errorMessage }}
+          </div>
+
+          <!-- Title above available classes -->
+          <h2 class="calendar-title">Available Classes</h2>
+
+          <!-- Booking Slot List -->
+          <div class="booking-slots" *ngIf="selectedDate && timeSlots.length > 0">
+            <div *ngFor="let slot of timeSlots" class="booking-slot">
+
+              <!-- Class Header Info -->
+              <div class="card-header">
+                <span class="hour">{{ slot.time }}</span>
+                <span>• {{ slot.spotsLeft }} spots left</span>
+                <span *ngIf="slot.cancelled" class="cancelled-text">• CLASS CANCELLED</span>
+              </div>
+
+              <!-- Admin or Coach View (with checkbox for cancel) -->
+              <div *ngIf="isAdminOrCoach()">
+                <div *ngIf="isPastClass(slot)" class="warning-text">(AULA JÁ REALIZADA)</div>
+                <div *ngIf="!isPastClass(slot) && !canCancelClass(slot) && !slot.cancelled" class="warning-text">(MENOS DE 2 HORAS PARA A AULA)</div>
+
+                <ion-checkbox
+                  slot="start"
+                  [checked]="selectedClassIds.includes(slot.id)"
+                  [disabled]="isPastClass(slot) || !canCancelClass(slot) || slot.cancelled"
+                  (ionChange)="toggleSelectClass(slot.id)">
+                </ion-checkbox>
+
+                <span *ngIf="slot.cancelled" class="cancelled-text">CLASS CANCELLED</span>
+                <span *ngIf="!slot.cancelled">
+                  {{ isPastClass(slot) ? 'Aula já realizada' : (!canCancelClass(slot) ? 'Menos de 2h para cancelar' : 'Select to Cancel') }}
+                </span>
+              </div>
+
+              <!-- Regular User Booking Button -->
+              <div *ngIf="!isAdminOrCoach() && !slot.cancelled">
+                <ion-button
+                  expand="block"
+                  class="book-btn"
+                  [disabled]="slot.spots === 0 || slot.alreadyBooked || isPastClass(slot)"
+                  (click)="bookClass(slot.id)">
+                  {{ slot.alreadyBooked ? 'ALREADY BOOKED' : 'BOOK CLASS' }}
+                </ion-button>
+                <div *ngIf="isPastClass(slot)" class="warning-text">CLASS ALREADY HELD</div>
+              </div>
+
+            </div>
+
+            <!-- Multiple Class Cancel Button (Only for Admin/Coach) -->
+            <div *ngIf="isAdminOrCoach()" class="cancel-group">
+              <ion-button
+                expand="block"
+                color="danger"
+                [disabled]="selectedClassIds.length === 0"
+                (click)="confirmCancelSelected()">
+                Cancel Selected ({{ selectedClassIds.length }})
+              </ion-button>
+            </div>
+          </div>
+
+          <!-- Message when no classes are available -->
+          <div *ngIf="selectedDate && timeSlots.length === 0" class="no-classes">
+            <p>No classes available for the selected date.</p>
+          </div>
+
+        </div> <!-- End of .booking-section -->
+
+      </div> <!-- End of .calendar-booking-layout -->
+
+    </div> <!-- End of .main-panel -->
+
+  </div> <!-- End of .membership-wrapper -->
 </ion-content>
