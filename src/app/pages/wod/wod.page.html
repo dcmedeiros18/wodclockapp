@@ -1,81 +1,129 @@
-<ion-content>
-  <div class="main-container">
+<ion-content [fullscreen]="true">
+  <div class="membership-wrapper">
+    
+    <!-- SIDEBAR MENU (LEFT NAVIGATION)  -->
+    <div class="sidebar">
+      <div class="sidebar-title">Menu</div>
 
-    <!-- Título e ícone do WOD -->
-    <div class="wod-container">
-      <ion-icon name="barbell-outline"></ion-icon>
-      <div class="wod-text">WORKOUT<br>OF THE DAY</div>
+      <!-- Navigate to the booking page -->
+      <button class="sidebar-btn" (click)="goToBook()">
+        <ion-icon name="clipboard-outline"></ion-icon> Book
+      </button>
+
+      <!-- Navigate to the WOD page -->
+      <button class="sidebar-btn" (click)="goToWod()">
+        <ion-icon name="barbell-outline"></ion-icon> WOD
+      </button>
+
+      <!-- Navigate to the cancellation page -->
+      <button class="sidebar-btn" (click)="goToCancel()">
+        <ion-icon name="close" color="danger"></ion-icon> Cancel
+      </button>
+
+      <!-- Navigate to the user's booking history -->
+      <button class="sidebar-btn" (click)="goToHistory()">
+        <ion-icon name="calendar-number"></ion-icon> History
+      </button>
     </div>
+    <!-- /sidebar -->
 
-    <!-- Calendário -->
-    <div class="datetime-container">
-      <ion-datetime
-        presentation="date"
-        [value]="selectedDate"
-        (ionChange)="onDateSelected($event)">
-      </ion-datetime>
-    </div>
+    <!-- MAIN PANEL  -->
+    <div class="main-panel">
 
-    <!-- Card do WOD -->
-    <ion-card *ngIf="selectedDate && wodDescription">
-      <ion-card-header>
-        <ion-card-title>{{ wodTitle }}</ion-card-title>
-      </ion-card-header>
-      <ion-card-content>
-        <div [innerHTML]="wodDescription"></div>
-      </ion-card-content>
-    </ion-card>
+      <!--  Top bar with page title and logout button  -->
+      <div class="top-bar">
+        <h1 class="welcome-text">Workout of the Day</h1>
+        <button class="logout-button" (click)="logout()">
+          <ion-icon name="log-out-outline" color="danger"></ion-icon> Logout
+        </button>
+      </div>
+      <!-- /top-bar -->
 
-    <!-- Mensagem caso não haja WOD -->
-    <div *ngIf="selectedDate && !wodDescription" class="no-wod">
-      <p>No WOD available for the selected date.</p>
-    </div>
+      <!--  Layout with calendar and WOD content side by side  -->
+      <div class="calendar-wod-layout">
 
-    <!-- Card de edição (somente admin ou coach) -->
-    <ion-card *ngIf="selectedDate && isAdminOrCoach()">
-      <ion-card-header>
-        <ion-card-title>Description of WOD</ion-card-title>
-      </ion-card-header>
-
-      <ion-card-content>
-        <ion-textarea 
-          name="wodNotes"
-          [(ngModel)]="wodNotes" 
-          placeholder="Digite a descrição do WOD...">
-        </ion-textarea>
-
-        <div class="button-group">
-          <ion-button 
-            color="danger" 
-            expand="block" 
-            (click)="deleteWod()" 
-            [disabled]="!wodDescription">
-            Delete
-          </ion-button>
-          <ion-button color="primary" (click)="editWod()" *ngIf="wodDescription && isAdminOrCoach()">
-            Edit
-          </ion-button>
-          
-          <ion-button 
-            color="success" 
-            expand="block" 
-            (click)="saveWodNotes()" 
-            [disabled]="!wodNotes || !wodNotes.trim()">
-            Save
-          </ion-button>
+        <!--  Calendar Section (left column)  -->
+        <div class="datetime-container">
+          <ion-datetime
+            presentation="date"
+            [value]="selectedDate"
+            (ionChange)="onDateSelected($event)">
+          </ion-datetime>
         </div>
-      </ion-card-content>
-    </ion-card>
+        <!-- /datetime-container -->
 
-    <!-- Botão: voltar para home -->
-    <ion-button expand="block" class="custom-button" (click)="goToUserMembership()">
-      User home
-    </ion-button>
+        <!--  WOD Content Section (right column)  -->
+        <div class="wod-section">
 
-    <!-- Botão: logout -->
-    <ion-button expand="block" color="medium" (click)="logout()">
-      Logout
-    </ion-button>
+          <!-- WOD card shown when a description exists for the selected date -->
+          <ion-card class="wod-card" *ngIf="selectedDate && wodDescription">
+            <ion-card-header>
+              <ion-card-title>{{ wodTitle }}</ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+              <div [innerHTML]="wodDescription"></div>
+            </ion-card-content>
+          </ion-card>
+
+          <!-- Message shown when no WOD is found for selected date -->
+          <div *ngIf="selectedDate && !wodDescription" class="no-wod">
+            <p>No WOD available for the selected date.</p>
+          </div>
+
+          <!-- WOD editing interface for admin and coach users -->
+          <ion-card class="wod-edit-card" *ngIf="selectedDate && isAdminOrCoach()">
+            <ion-card-header>
+              <ion-card-title>Description of WOD</ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+              <!-- Textarea for editing the WOD -->
+              <ion-textarea
+                name="wodNotes"  [(ngModel)]="wodNotes" placeholder="Digite a descrição do WOD...">
+              </ion-textarea>
+
+              <!-- Action buttons for admin/coach -->
+              <div class="button-group">
+                <ion-button
+                  color="danger" expand="block" (click)="deleteWod()" 
+                  [disabled]="!wodDescription">Delete</ion-button>
+                <ion-button
+                  color="primary"
+                  (click)="editWod()"
+                  *ngIf="wodDescription && isAdminOrCoach()">
+                  Edit
+                </ion-button>
+
+                <ion-button
+                  color="success"
+                  expand="block"
+                  (click)="saveWodNotes()"
+                  [disabled]="!wodNotes || !wodNotes.trim()">
+                  Save
+                </ion-button>
+              </div>
+              <!-- /button-group -->
+            </ion-card-content>
+          </ion-card>
+
+        </div> <!-- /wod-section -->
+
+      </div> <!-- /calendar-wod-layout -->
+
+      <!--  MOTIVATIONAL QUOTE CAROUSEL  -->
+      <div class="motivational-card">
+        <ion-card>
+          <ion-card-content>
+            <div class="motivational-text">
+              {{ motivationalPhrases[currentPhraseIndex] }}
+            </div>
+          </ion-card-content>
+        </ion-card>
+      </div>
+      <!-- /motivational-card -->
+
+    </div>
+    <!-- /main-panel -->
 
   </div>
+  <!-- /membership-wrapper -->
 </ion-content>

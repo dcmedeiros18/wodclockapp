@@ -49,6 +49,11 @@ ion-content {
   color: #ff4c4c;
 }
 
+ion-icon {
+  font-size: 40px;  
+  margin-right: 10px;
+}
+
 // ===============================
 // MAIN PANEL CONTENT
 // ===============================
@@ -243,4 +248,37 @@ ion-content {
     flex-direction: column;
     align-items: flex-start;
   }
+}
+
+// ===============================
+// Customização específica do calendário //
+// ===============================
+ion-datetime.md::part(calendar-day active),
+ion-datetime.md::part(calendar-day active):focus {
+  background-color: red;
+  border-color: white;
+  color: white;
+}
+
+ion-datetime.md::part(calendar-day today) {
+  border-color: red;
+}
+
+ion-datetime {
+  --background: black;
+  --wheel-highlight-background: red;
+  --ion-color-primary: #e90012;
+  box-shadow: white;
+}
+
+ion-datetime::part(wheel-item) {
+  color: rgb(255, 66, 97);
+}
+
+ion-datetime::part(wheel-item active) {
+  color: white;
+}
+
+ion-datetime::part(calendar-day) {
+  color: white;
 }
