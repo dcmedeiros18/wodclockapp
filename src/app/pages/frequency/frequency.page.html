@@ -1,60 +1,170 @@
 <ion-content [fullscreen]="true">
-  <div class="main-container">
-    <div style="display: flex; justify-content: flex-end; width: 100%; margin-bottom: 10px;">
-      <ion-button color="danger" (click)="logout()">LOGOUT</ion-button>
-    </div>
+  <div class="membership-wrapper">
 
-    <div class="history-container">
-      <ion-icon name="calendar-number"></ion-icon>
-      <div class="history-text">
-        CLASS HISTORY
+    <!-- ===== SIDEBAR MENU ===== -->
+    <div class="sidebar">
+      <div class="sidebar-title">Menu</div>
+
+      <!-- Navigation Buttons -->
+      <button class="sidebar-btn" (click)="goToUserMembership()">
+        <ion-icon name="body"></ion-icon> Home
+      </button>
+
+      <button class="sidebar-btn" (click)="goToBook()">
+        <ion-icon name="clipboard-outline"></ion-icon> Book
+      </button>
+
+      <button class="sidebar-btn" (click)="goToWod()">
+        <ion-icon name="barbell-outline"></ion-icon> WOD
+      </button>
+
+      <button class="sidebar-btn" (click)="goToCancel()">
+        <ion-icon name="close" color="danger"></ion-icon> Cancel
+      </button>
+
+      <button class="sidebar-btn" (click)="goToHistory()">
+        <ion-icon name="calendar-number"></ion-icon> History
+      </button>
+    </div>
+    <!-- /sidebar -->
+
+    <!-- ===== MAIN PANEL ===== -->
+    <div class="main-panel">
+
+      <!-- Top bar with title and logout -->
+      <div class="top-bar">
+        <h1 class="welcome-text">Class History</h1>
+        <button class="logout-button" (click)="logout()">
+          <ion-icon name="log-out-outline" color="danger"></ion-icon> Logout
+        </button>
       </div>
-    </div>
 
-    <div class="date-range">
-      <ion-datetime-button datetime="startDate"></ion-datetime-button>
-      <ion-modal [keepContentsMounted]="true">
-        <ng-template>
-          <ion-datetime id="startDate" presentation="date" [(ngModel)]="startDateValue" [isDateEnabled]="isWeekday"
-            (ngModelChange)="onDateChange()"> <!--method to block day of the week -->
-          </ion-datetime>
-        </ng-template>
-      </ion-modal>
+      <!-- Two-column layout: LEFT = filters | RIGHT = results -->
+      <div class="calendar-wod-layout">
 
-      <ion-datetime-button datetime="endDate"></ion-datetime-button>
-      <ion-modal [keepContentsMounted]="true">
-        <ng-template>
-          <ion-datetime id="endDate" presentation="date" [(ngModel)]="endDateValue" [isDateEnabled]="isWeekday"
-            (ngModelChange)="onDateChange()"> <!--method to block day of the week -->
-          </ion-datetime>
-        </ng-template>
-      </ion-modal>
+        <!-- ===== LEFT COLUMN (Date filters + calendar) ===== -->
+        <div class="left-column">
 
-      <div>
-      </div>
-      <ion-button class="ok-button" (click)="calculateHistory()" [disabled]="!!errorMessage">OK</ion-button>
-    </div>
+          <!-- Date Range Selector -->
+          <div class="date-range">
+            <!-- Start Date Picker -->
+            <ion-datetime-button datetime="startDate"></ion-datetime-button>
+            <ion-modal [keepContentsMounted]="true">
+              <ng-template>
+                <ion-datetime
+                  id="startDate"
+                  presentation="date"
+                  [(ngModel)]="startDateValue"
+                  [isDateEnabled]="isWeekday"
+                  (ngModelChange)="onDateChange()">
+                </ion-datetime>
+              </ng-template>
+            </ion-modal>
 
-    <!-- Exibe o calendário apenas após clicar em OK e datas selecionadas -->
-    <div class="calendar-box" *ngIf="showCalendar">
-      <ion-datetime presentation="date" [highlightedDates]="highlightedDates" [isDateEnabled]="isWeekday">
-        <!--method to block day of the week -->
-      </ion-datetime>
-    </div>
+            <!-- End Date Picker -->
+            <ion-datetime-button datetime="endDate"></ion-datetime-button>
+            <ion-modal [keepContentsMounted]="true">
+              <ng-template>
+                <ion-datetime
+                  id="endDate"
+                  presentation="date"
+                  [(ngModel)]="endDateValue"
+                  [isDateEnabled]="isWeekday"
+                  (ngModelChange)="onDateChange()">
+                </ion-datetime>
+              </ng-template>
+            </ion-modal>
+          </div>
 
-    <div class="stats-box" *ngIf="totalClasses !== null">
-      <div class="stats-label">TOTAL OF CLASSES BOOKED:</div>
-      <div class="stats-number">{{ totalClasses }}</div>
-    </div>
+          <!-- OK button to confirm selection -->
+          <div class="ok-button-wrapper">
+            <ion-button class="ok-button" (click)="calculateHistory()" [disabled]="!!errorMessage">
+              OK
+            </ion-button>
+          </div>
 
-    <div *ngIf="errorMessage" class="error-message"
-      style="color: #ff3333; text-align: center; margin: 16px 0; font-weight: bold;">
-      {{ errorMessage }}
-    </div>
+          <!-- Calendar appears only after clicking OK -->
+          <div class="calendar-box" *ngIf="showCalendar">
+            <ion-datetime
+              presentation="date"
+              [highlightedDates]="highlightedDates"
+              [isDateEnabled]="isWeekday">
+            </ion-datetime>
+          </div>
+        </div>
 
-    <div class="history-buttons">
-      <ion-button expand="block" (click)="goToUserMembership()">User Home</ion-button>
-    </div>
+        <!-- ===== RIGHT COLUMN (Results + Personal Goals) ===== -->
+        <div class="right-column">
 
-  </div>
+          <!-- Total classes result -->
+          <div class="stats-box" *ngIf="totalClasses !== null">
+            <div class="stats-label">TOTAL OF CLASSES BOOKED:</div>
+            <div class="stats-number">{{ totalClasses }}</div>
+          </div>
+
+          <!-- ===== Personal Goal Card ===== -->
+          <ion-card class="goal-card">
+            <ion-card-header>
+              <ion-card-title>Add a personal goal, you're the boss here!</ion-card-title>
+            </ion-card-header>
+
+            <ion-card-content>
+
+              <!-- Input to type a new goal -->
+              <ion-textarea
+                [(ngModel)]="personalGoalInput"
+                placeholder="Write your goal here..."
+                autoGrow="true">
+              </ion-textarea>
+
+              <!-- Save new goal -->
+              <ion-button
+                color="success"
+                expand="block"
+                (click)="saveGoal()"
+                [disabled]="!personalGoalInput || !personalGoalInput.trim()">
+                Save Goal
+              </ion-button>
+
+              <!-- List of existing goals -->
+              <div *ngIf="personalGoals.length > 0" class="goal-list">
+                <ion-label class="goal-list-label">Your Goals:</ion-label>
+                <ion-list>
+                  <ion-item
+                    *ngFor="let goal of personalGoals; let i = index"
+                    (click)="selectGoalToDelete(i)"
+                    button
+                    detail>
+                    <ion-label>
+                      <div class="goal-text">{{ goal.text }}</div>
+                      <div class="goal-date">{{ goal.date }}</div>
+                    </ion-label>
+                  </ion-item>
+                </ion-list>
+
+                <!-- Delete selected goal with confirmation -->
+                <ion-button
+                  color="danger"
+                  expand="block"
+                  *ngIf="selectedGoalIndex !== null"
+                  (click)="confirmDeleteGoal()">
+                  Delete Selected Goal
+                </ion-button>
+              </div>
+
+            </ion-card-content>
+          </ion-card>
+
+          <!-- Display any error message -->
+          <div *ngIf="errorMessage" class="info-message">
+            {{ errorMessage }}
+          </div>
+
+        </div> <!-- /right-column -->
+
+      </div> <!-- /calendar-wod-layout -->
+
+    </div> <!-- /main-panel -->
+
+  </div> <!-- /membership-wrapper -->
 </ion-content>

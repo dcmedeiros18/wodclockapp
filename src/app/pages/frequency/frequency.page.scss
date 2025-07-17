@@ -1,117 +1,222 @@
+// ===============================
+// PAGE BASE STYLES
+// ===============================
 ion-content {
-    --background: url('/assets/images/crossfit_crew.png') no-repeat center/cover fixed;
-  }
-  
-  .main-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 20px;
-  }
-  
-  .history-container {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 20px;
-  }
-  
-  .history-text {
-    text-align: center;
-    font-size: 35px;
-    font-weight: bold;
-    color: red;
-  }
-  
-  ion-icon {
-    font-size: 60px;
-    color: red;
-    margin-right: 10px;
-  }
-  
-  .date-range {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 10px;
-    flex-wrap: wrap; /* ajuda em telas pequenas */
-    margin-bottom: 20px;
-  }
-  
-  .date-range ion-datetime {
-    --background: white;
-    --color: black;
-    border-radius: 8px;
-    padding: 5px;
-    max-width: 150px;
-  }
-  
-  .date-range ion-button {
-    height: 2px; /* altura padrão do ion-datetime para alinhar */
-  }
-  
-  .calendar-box {
-    margin-bottom: 20px;    
-  }
-  
-  .stats-box {
-    text-align: center;
-    color: white;
-    margin-bottom: 20px;
-  }
-  
-  .stats-label {
-    color: red;
-    font-size: 20px;
-    font-weight: bold;
-    
-  }
-  
-  .stats-number {
-    color: red;
-    font-size: 40px;
-    font-weight: bold;
-  }
-  
-  .history-buttons {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    width: 100%;
-    max-width: 350px;
-  }
+  --background: #f8f8f8;
+  height: 100vh;
+  display: flex;
+  overflow: hidden;
+}
 
-  ion-button {
-    --background: white;
-    --color: black;
-    font-weight: bold;
-  }
+.membership-wrapper {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  font-family: 'Arial', sans-serif;
+}
 
-  .ok-button {
-    --background: red;
-    --color: white;
-    font-weight: bold;
-    
-  }
-  
-  .stats-text {
-    color: white;
-    font-size: 20px;
-    font-weight: bold;
-    margin-top: 10px;
-    text-align: center;
-  }
-  
+// ===============================
+// SIDEBAR NAVIGATION
+// ===============================
+.sidebar {
+  width: 220px;
+  background-color: #1a1a1a;
+  color: white;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  box-sizing: border-box;
+  overflow-y: auto;
+}
 
- /*
-* Custom Material Design Datetime Day Parts and calendar
-* -------------------------------------------
-*/
+.sidebar-title {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
 
+.sidebar-btn {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.sidebar-btn:hover {
+  color: #ff4c4c;
+}
+
+ion-icon {
+  font-size: 40px;
+  margin-right: 10px;
+}
+
+// ===============================
+// MAIN PANEL
+// ===============================
+.main-panel {
+  flex: 1;
+  padding: 40px;
+  background-color: #f8f8f8;
+  overflow-y: auto;
+}
+
+.top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.welcome-text {
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.logout-button {
+  background: none;
+  border: none;
+  color: #d40000;
+  font-size: 16px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+}
+
+// ===============================
+// CALENDAR & FILTERS LAYOUT
+// ===============================
+.calendar-wod-layout {
+  display: flex;
+  gap: 40px;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
+
+// LEFT COLUMN – Date pickers + calendar
+.left-column {
+  flex: 1;
+  min-width: 320px;
+  max-width: 500px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.date-range {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.ok-button-wrapper {
+  margin-top: 10px;
+}
+
+.ok-button {
+  --background: red;
+  --color: white;
+  font-weight: bold;
+  width: 70%;
+}
+
+.calendar-box {
+  margin-bottom: 20px;
+}
+
+// ===============================
+// RIGHT COLUMN – Results + Goals
+// ===============================
+.right-column {
+  flex: 1;
+  min-width: 300px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  margin-top: 10px;
+}
+
+.stats-box {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.stats-label {
+  color: red;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.stats-number {
+  color: red;
+  font-size: 40px;
+  font-weight: bold;
+}
+
+.info-message {
+  color: #ff3333;
+  text-align: center;
+  margin: 16px 0;
+  font-weight: bold;
+}
+
+// ===============================
+// PERSONAL GOALS CARD
+// ===============================
+.goal-card {
+  margin-top: 30px;
+  width: 100%;
+  max-width: 500px;
+  --background: #f0f0f0;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+ion-textarea {
+  --background: #f0f0f0;
+  --color: black;
+  border-radius: 8px;
+  padding: 10px;
+  font-size: 14px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.goal-list-label {
+  margin: 10px 0;
+  font-weight: bold;
+  font-size: 16px;
+  color: #333;
+  display: block;
+}
+
+.goal-text {
+  font-weight: bold;
+  color: #222;
+}
+
+.goal-date {
+  font-size: 12px;
+  color: #777;
+}
+
+// ===============================
+// CALENDAR CUSTOMIZATION
+// ===============================
 ion-datetime.md::part(calendar-day active),
 ion-datetime.md::part(calendar-day active):focus {
-  background-color: red; //wheel select color 
+  background-color: red;
   border-color: white;
   color: white;
 }
@@ -121,12 +226,10 @@ ion-datetime.md::part(calendar-day today) {
 }
 
 ion-datetime {
-  --background: black; //background do calendario 
-  --background-rgb: white;
-  --wheel-highlight-background: red; // seleção do background do mes e ano
-  --wheel-highlight-border-radius: green;  
-    box-shadow: white;
-    --ion-color-primary: #e90012;
+  --background: black;
+  --wheel-highlight-background: red;
+  --ion-color-primary: #e90012;
+  box-shadow: white;
 }
 
 ion-datetime::part(wheel-item) {
@@ -134,13 +237,37 @@ ion-datetime::part(wheel-item) {
 }
 
 ion-datetime::part(wheel-item active) {
-  color: white; //color of month and year
+  color: white;
 }
 
 ion-datetime::part(calendar-day) {
-  color: white; //day color of calendar
+  color: white;
 }
 
+// ===============================
+// RESPONSIVE DESIGN
+// ===============================
+@media (max-width: 768px) {
+  .membership-wrapper {
+    flex-direction: column;
+  }
 
+  .sidebar {
+    width: 100%;
+    flex-direction: row;
+    overflow-x: auto;
+    justify-content: space-around;
+  }
 
-  
+  .main-panel {
+    padding: 20px;
+  }
+
+  ion-icon {
+    font-size: 32px;
+  }
+
+  .welcome-text {
+    font-size: 24px;
+  }
+}
