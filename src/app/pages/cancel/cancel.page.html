@@ -1,42 +1,102 @@
 <ion-content [fullscreen]="true">
-  <div class="main-container">
-    <div style="display: flex; justify-content: flex-end; width: 100%; margin-bottom: 10px;">
-      <ion-button color="danger" (click)="logout()">LOGOUT</ion-button>
+  <div class="membership-wrapper">
+
+    <!-- ===== SIDEBAR MENU (LEFT NAVIGATION) ===== -->
+    <div class="sidebar">
+      <div class="sidebar-title">Menu</div>
+
+      <!-- Navigation to Home -->
+      <button class="sidebar-btn" (click)="goToUserMembership()">
+        <ion-icon name="body"></ion-icon> Home
+      </button>
+
+      <!-- Navigation to Booking Page -->
+      <button class="sidebar-btn" (click)="goToBook()">
+        <ion-icon name="clipboard-outline"></ion-icon> Book
+      </button>
+
+      <!-- Navigation to Workout of the Day -->
+      <button class="sidebar-btn" (click)="goToWod()">
+        <ion-icon name="barbell-outline"></ion-icon> WOD
+      </button>
+
+      <!-- Navigation to Cancel Booking Page (current) -->
+      <button class="sidebar-btn" (click)="goToCancel()">
+        <ion-icon name="close" color="danger"></ion-icon> Cancel
+      </button>
+
+      <!-- Navigation to Class History -->
+      <button class="sidebar-btn" (click)="goToHistory()">
+        <ion-icon name="calendar-number"></ion-icon> History
+      </button>
     </div>
 
-    <div class="cancel-container">
-      <ion-icon name="close"></ion-icon>
-      <div class="cancel-text">
-        CANCELLING<br>YOUR BOOKING
+    <!-- ===== MAIN PANEL (RIGHT CONTENT) ===== -->
+    <div class="main-panel">
+
+      <!-- Top bar with title and logout button -->
+      <div class="top-bar">
+        <h1 class="welcome-text">Cancel Booking</h1>
+        <button class="logout-button" (click)="logout()">
+          <ion-icon name="log-out-outline" color="danger"></ion-icon> Logout
+        </button>
       </div>
-    </div>
 
-    <div class="calendar-box">
-      <ion-datetime [isDateEnabled]="isWeekday" presentation="date" (ionChange)="onDateSelected($event)"></ion-datetime>
-    </div>
+      <!-- Two-column layout: LEFT = Calendar | RIGHT = Booking Info -->
+      <div class="calendar-wod-layout">
 
-    <div *ngIf="loading" style="text-align:center; color:gray; margin: 10px 0;">Carregando...</div>
+        <!-- ===== LEFT COLUMN: Date selection ===== -->
+        <div class="left-column">
+          <div class="calendar-box">
+            <ion-datetime
+              [isDateEnabled]="isWeekday"
+              presentation="date"
+              (ionChange)="onDateSelected($event)">
+            </ion-datetime>
+          </div>
+        </div>
 
-    <div *ngIf="message && bookingsForDate.length === 0" class="info-message" style="color: #ff3333; text-align: center; margin: 16px 0; font-weight: bold;">
-      {{ message }}
-    </div>
+        <!-- ===== RIGHT COLUMN: Booking Cards and Messages ===== -->
+        <div class="right-column">
+          
+          <!-- Loading message while fetching data -->
+          <div *ngIf="loading" class="info-message gray-message spaced-message">
+            Loading...
+          </div>
 
-    <ion-card *ngFor="let booking of bookingsForDate">
-      <ion-card-header>
-        <ion-card-title>{{ booking.class.time }}</ion-card-title>
-      </ion-card-header>
-      <ion-card-content>
-        <p>Status: {{ booking.status }}</p>
-        <ion-button expand="block" color="danger" (click)="cancelBooking(booking)">
-          Cancel Booking
-        </ion-button>
-      </ion-card-content>
-    </ion-card>
+          <!-- Informative message when no booking found or class is past -->
+          <div *ngIf="message && bookingsForDate.length === 0" class="info-message spaced-message">
+            {{ message }}
+          </div>
 
-    <div style="margin-top: 20px;">
-      <ion-button expand="block" class="custom-button" (click)="goToUserMembership()">
-        User Home
-      </ion-button>
-    </div>
-  </div>
+          <!-- List of class bookings for the selected day -->
+          <ion-card *ngFor="let booking of bookingsForDate">
+            <ion-card-header>
+              <ion-card-title>{{ booking.class.time }}</ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+              <p>Status: {{ booking.status }}</p>
+              <ion-button expand="block" color="danger" (click)="cancelBooking(booking)">
+                Cancel Booking
+              </ion-button>
+            </ion-card-content>
+          </ion-card>
+
+          <!-- ===== Fixed Motivational Phrase ===== -->
+          <ion-text class="motivation-phrase">
+            "Constancy beats intensity. See you at the next WOD!"
+          </ion-text>
+
+          <!-- ===== Rotating Motivational Quote (carousel-style) ===== -->
+          <ion-card class="phrase-card">
+            <ion-card-content class="phrase-text">
+              {{ motivationalPhrases[currentPhraseIndex] }}
+            </ion-card-content>
+          </ion-card>
+
+        </div> <!-- /right-column -->
+      </div> <!-- /calendar-wod-layout -->
+
+    </div> <!-- /main-panel -->
+  </div> <!-- /membership-wrapper -->
 </ion-content>
