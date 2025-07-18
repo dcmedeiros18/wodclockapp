@@ -18,8 +18,7 @@ import {
   clipboardOutline,
   close,
   calendarNumber,
-  logOutOutline,
-} from 'ionicons/icons';
+  logOutOutline, body } from 'ionicons/icons';
 import { RouterModule, Router } from '@angular/router';
 import { WodService } from '../../services/wod.service';
 import { AuthService } from 'src/app/services/auth.service';
@@ -87,13 +86,7 @@ export class WodPage implements OnInit {
     private alertController: AlertController,
     private toastController: ToastController
   ) {
-    addIcons({
-      clipboardOutline,
-      barbellOutline,
-      close,
-      calendarNumber,
-      logOutOutline,
-    });
+    addIcons({body,clipboardOutline,barbellOutline,close,calendarNumber,logOutOutline,});
   }
 
   // INITIALIZATION 

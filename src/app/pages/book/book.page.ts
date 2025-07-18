@@ -17,6 +17,14 @@ import {
 } from '@ionic/angular/standalone';
 import { AlertController } from '@ionic/angular';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { addIcons } from 'ionicons';
+import { body, clipboardOutline, barbellOutline, close, calendarNumber, logOutOutline, person } from 'ionicons/icons';
+
+// Registering icons globally
+addIcons({
+  body, clipboardOutline, barbellOutline, close,
+  calendarNumber, logOutOutline, person
+});
 
 @Component({
   selector: 'app-book',

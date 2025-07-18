@@ -256,7 +256,7 @@ ion-icon {
   }
 }
 
-// ===============================
+// // ===============================
 // Customização específica do calendário //
 // ===============================
 ion-datetime.md::part(calendar-day active),
@@ -272,19 +272,25 @@ ion-datetime.md::part(calendar-day today) {
 
 ion-datetime {
   --background: black;
-  --wheel-highlight-background: red;
-  --ion-color-primary: #e90012;
+  
+  --wheel-highlight-background: white;
+  --ion-color-primary: black;
   box-shadow: white;
-}
+  }
 
 ion-datetime::part(wheel-item) {
-  color: rgb(255, 66, 97);
+  color: white;
 }
 
 ion-datetime::part(wheel-item active) {
-  color: white;
+  color: black;
 }
 
 ion-datetime::part(calendar-day) {
   color: white;
 }
+
+.calendar-month-year-toggle #toggle-wrapper {
+  color: white !important;
+}
+
