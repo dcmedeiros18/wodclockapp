@@ -131,6 +131,19 @@ ion-item {
   }
 }
 
+.forgot-text {
+  margin-top: 8px;
+  text-align: center;
+  color: #666;
+
+  a {
+    color: #ff3c3c;
+    font-weight: bold;
+    cursor: pointer;
+    text-decoration: none;
+  }
+}
+
 // ===============================
 // Show/hide password link
 // ===============================

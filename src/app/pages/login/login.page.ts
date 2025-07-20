@@ -47,13 +47,12 @@ export class LoginPage implements OnInit {
     this.router.navigateByUrl('/register');
   }
 
+  goToForgot() {
+    this.router.navigateByUrl('/forgot-password');
+  }
+
   // Toggles visibility of the password field
   togglePassword() {
     this.showPassword = !this.showPassword;
-  }
-
-  // Redirects to the forgot password page
-  goToForgotPassword() {
-    this.router.navigate(['/forgot-password']);
   }
 }

@@ -122,10 +122,13 @@ const authenticateToken = (req, res, next) => {
 // Rotas de autenticação
 app.post('/auth/register', async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const { email, password, secretQuestion, secretAnswer } = req.body;
 
     if (!email || !password) {
       return res.status(400).json({ message: 'Email e senha são obrigatórios' });
+    }
+    if (!secretQuestion || !secretAnswer) {
+      return res.status(400).json({ message: 'Pergunta e resposta secreta são obrigatórias' });
     }
 
     // Verificar se usuário já existe
@@ -136,12 +139,15 @@ app.post('/auth/register', async (req, res) => {
 
     // Hash da senha
     const hashedPassword = await bcrypt.hash(password, 10);
+    const hashedSecretAnswer = await bcrypt.hash(secretAnswer, 10);
 
     // Criar novo usuário
     const newUser = {
       id: users.length + 1,
       email,
       password: hashedPassword,
+      secretQuestion,
+      secretAnswer: hashedSecretAnswer,
       profile: 'user'
     };
 
@@ -199,6 +205,36 @@ app.post('/auth/login', async (req, res) => {
   } catch (error) {
     res.status(500).json({ message: 'Internal server error' });
   }
+});
+
+// Endpoint para obter a pergunta secreta
+app.post('/auth/get-secret-question', (req, res) => {
+  const { email } = req.body;
+  if (!email) return res.status(400).json({ message: 'Email é obrigatório.' });
+  const user = users.find(u => u.email === email);
+  if (!user) return res.status(404).json({ message: 'Usuário não encontrado.' });
+  res.json({ secretQuestion: user.secretQuestion });
+});
+
+// Endpoint para verificar resposta secreta
+app.post('/auth/verify-secret-answer', async (req, res) => {
+  const { email, answer } = req.body;
+  if (!email || !answer) return res.status(400).json({ message: 'Email e resposta são obrigatórios.' });
+  const user = users.find(u => u.email === email);
+  if (!user) return res.status(404).json({ message: 'Usuário não encontrado.' });
+  const valid = await bcrypt.compare(answer, user.secretAnswer);
+  if (!valid) return res.status(400).json({ message: 'Resposta secreta incorreta.' });
+  res.json({ message: 'Resposta correta.' });
+});
+
+// Endpoint para resetar senha via pergunta secreta
+app.post('/auth/reset-password-with-secret', async (req, res) => {
+  const { email, newPassword } = req.body;
+  if (!email || !newPassword) return res.status(400).json({ message: 'Email e nova senha são obrigatórios.' });
+  const user = users.find(u => u.email === email);
+  if (!user) return res.status(404).json({ message: 'Usuário não encontrado.' });
+  user.password = await bcrypt.hash(newPassword, 10);
+  res.json({ message: 'Senha redefinida com sucesso.' });
 });
 
 // Rotas para WOD

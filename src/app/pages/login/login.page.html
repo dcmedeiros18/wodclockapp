@@ -25,17 +25,7 @@
         </ion-input>
       </ion-item>
 
-      <!-- Show/Hide password toggle -->
-      <div class="show-toggle">
-        <a (click)="togglePassword()">
-          {{ showPassword ? 'Hide' : 'Show' }}
-        </a>
-      </div>
-
-      <!-- Navigation link to forgot password page -->
-      <div class="forgot-password">
-        <a (click)="goToForgotPassword()">Forgot your password?</a>
-      </div>     
+     
 
       <!-- Login button triggers onLogin() -->
       <ion-button expand="block" fill="outline" (click)="onLogin()">Login</ion-button>
@@ -44,6 +34,11 @@
       <div *ngIf="errorMessage" class="error-message">
         {{ errorMessage }}
       </div>
+
+      <!-- Forgot password link -->
+    <div class="forgot-text">
+      Forgot your password? <a (click)="goToForgot()">Click here</a>
+    </div>
 
       <!-- Navigation link to registration page -->
       <p class="signup-text">

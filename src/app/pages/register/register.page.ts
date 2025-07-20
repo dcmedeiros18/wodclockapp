@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import {
@@ -9,11 +9,12 @@ import {
   IonInputPasswordToggle,
   IonButton,
   ToastController,
-  AlertController
+  AlertController,
+  IonSelect,
+  IonSelectOption,
 } from '@ionic/angular/standalone';
 import { AuthService } from 'src/app/services/auth.service';
 import { Router } from '@angular/router';
-import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 @Component({
   selector: 'app-register',
@@ -29,7 +30,9 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
     IonInput,
     IonItem,
     IonList,
-    IonInputPasswordToggle
+    IonInputPasswordToggle,
+    IonSelect,
+    IonSelectOption
   ],
 })
 export class RegisterPage implements OnInit {
@@ -44,6 +47,18 @@ export class RegisterPage implements OnInit {
   password: string = '';
   confirmPassword: string = '';
 
+  // Secret question
+  secretQuestions: string[] = [
+    'What is the name of your first pet?',
+    'What is your favorite book?',
+    'What city were you born in?',
+    'What is your mother’s maiden name?',
+    'What was your childhood nickname?',
+    'What is your dream travel destination?'
+  ];
+  selectedQuestion: string = '';
+  secretAnswer: string = '';
+
   constructor(
     private authService: AuthService,
     private router: Router,
@@ -57,7 +72,8 @@ export class RegisterPage implements OnInit {
     if (
       !this.firstName || !this.surname || !this.dateOfBirth ||
       !this.phoneNumber || !this.emergencyContactName || !this.emergencyContactPhone ||
-      !this.email || !this.confirmEmail || !this.password || !this.confirmPassword
+      !this.email || !this.confirmEmail || !this.password || !this.confirmPassword ||
+      !this.selectedQuestion || !this.secretAnswer
     ) {
       await this.presentToast('Please fill in all required fields.', 'warning');
       return;
@@ -68,7 +84,6 @@ export class RegisterPage implements OnInit {
       return;
     }
 
-    // Validação de email
     const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,}$/;
     if (!emailRegex.test(this.email)) {
       await this.presentToast('Enter a valid email address.', 'warning');
@@ -80,7 +95,6 @@ export class RegisterPage implements OnInit {
       return;
     }
 
-    // Validação de senha forte
     const passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]).{6,}$/;
     if (!passwordRegex.test(this.password)) {
       await this.presentToast('Password must have at least 6 characters, 1 uppercase letter, 1 number and 1 special character.', 'warning');
@@ -103,16 +117,18 @@ export class RegisterPage implements OnInit {
       confirmEmail: this.confirmEmail,
       password: this.password,
       confirmPassword: this.confirmPassword,
+      secretQuestion: this.selectedQuestion,
+      secretAnswer: this.secretAnswer,
       profile: 'membership'
     };
 
     this.authService.register(newUser).subscribe({
-      next: async (res) => {
+      next: async () => {
         await this.presentToast('User registered successfully!', 'success');
         this.router.navigate(['/login']);
       },
       error: async (err) => {
-        if (err.error && err.error.message) {
+        if (err.error?.message) {
           await this.presentToast(err.error.message, 'danger');
         } else {
           await this.presentToast('Unexpected error. Please try again.', 'danger');
@@ -134,4 +150,6 @@ export class RegisterPage implements OnInit {
   goToLogin() {
     this.router.navigateByUrl('/login');
   }
+
+  
 }
