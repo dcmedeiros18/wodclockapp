@@ -12,21 +12,28 @@ import {
   IonCardHeader,
   IonCardTitle,
 } from '@ionic/angular/standalone';
+import { RouterModule, Router } from '@angular/router';
 import { addIcons } from 'ionicons';
 import {
   barbellOutline,
   clipboardOutline,
   close,
   calendarNumber,
-  logOutOutline, body } from 'ionicons/icons';
-import { RouterModule, Router } from '@angular/router';
+  logOutOutline,
+  body,
+} from 'ionicons/icons';
 import { WodService } from '../../services/wod.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { AlertController, ToastController } from '@ionic/angular';
 
-// Add required Ionicons
+// Register icons globally
 addIcons({
-  'barbell-outline': barbellOutline,
+  barbellOutline,
+  clipboardOutline,
+  close,
+  calendarNumber,
+  logOutOutline,
+  body,
 });
 
 @Component({
@@ -50,14 +57,9 @@ addIcons({
   ],
 })
 export class WodPage implements OnInit {
-  // DATE AND DATA 
-
-  isWeekday = (dateString: string) => {
-    const date = new Date(dateString);
-    const utcDay = date.getUTCDay();
-    return utcDay !== 0; // disable Sundays
-  };
-
+  // ==============================
+  // PROPERTIES
+  // ==============================
   selectedDate: string = '';
   wodTitle: string = '';
   wodDescription: string = '';
@@ -65,8 +67,7 @@ export class WodPage implements OnInit {
   isNoteChanged: boolean = false;
   userProfile: string = '';
 
-  // MOTIVATIONAL QUOTE CAROUSEL 
-
+  // Motivational quotes carousel
   motivationalPhrases: string[] = [
     'No pain, no gain!',
     'You are stronger than you think.',
@@ -76,114 +77,101 @@ export class WodPage implements OnInit {
     'Train insane or remain the same.',
     "Don’t stop when you're tired. Stop when you're done.",
   ];
-
   currentPhraseIndex: number = 0;
 
+  // ==============================
+  // CONSTRUCTOR
+  // ==============================
   constructor(
     private router: Router,
     private wodService: WodService,
     private authService: AuthService,
     private alertController: AlertController,
     private toastController: ToastController
-  ) {
-    addIcons({body,clipboardOutline,barbellOutline,close,calendarNumber,logOutOutline,});
-  }
+  ) {}
 
-  // INITIALIZATION 
-
-  ngOnInit() {
-    // Load current user profile
+  // ==============================
+  // LIFECYCLE
+  // ==============================
+  ngOnInit(): void {
+    // Get current user role
     this.userProfile = this.authService.getUserProfile();
-    console.log('User Profile:', this.userProfile);
-    console.log('Is Admin or Coach:', this.isAdminOrCoach());
 
-    // Redirect to login if no user is found
+    // Redirect if not authenticated
     const currentUser = this.authService.getCurrentUser();
     if (!currentUser) {
       this.router.navigateByUrl('/login');
     }
 
-    // Start rotating motivational quotes every 5 seconds
+    // Start rotating motivational phrases
     setInterval(() => {
       this.currentPhraseIndex =
         (this.currentPhraseIndex + 1) % this.motivationalPhrases.length;
     }, 5000);
   }
 
-  // DATE SELECTION LOGIC 
-
-  onDateSelected(event: any) {
+  // ==============================
+  // DATE SELECTION HANDLER
+  // ==============================
+  onDateSelected(event: any): void {
     const isoDate = event.detail.value;
-    const datePart = isoDate.includes('T') ? isoDate.split('T')[0] : isoDate;
-    this.selectedDate = datePart;
+    const dateOnly = isoDate.includes('T') ? isoDate.split('T')[0] : isoDate;
+    this.selectedDate = dateOnly;
 
-    // Fetch WOD from backend
+    // Fetch WOD by date
     this.wodService.getWod(this.selectedDate).subscribe((wod: any) => {
-      if (wod) {
-        this.wodTitle = wod.title;
-        this.wodDescription = wod.description;
-      } else {
-        this.wodTitle = '';
-        this.wodDescription = '';
-      }
-
-      // Clear editing state
+      this.wodTitle = wod?.title || '';
+      this.wodDescription = wod?.description || '';
       this.wodNotes = '';
       this.isNoteChanged = false;
     });
   }
 
-  // NAVIGATION 
+  // ==============================
+  // ROLE CHECK
+  // ==============================
+  isAdminOrCoach(): boolean {
+    return this.userProfile === 'admin' || this.userProfile === 'coach';
+  }
 
-  logout() {
+  // ==============================
+  // NAVIGATION
+  // ==============================
+  logout(): void {
     this.router.navigateByUrl('/login');
   }
 
-  goToUserMembership() {
+  goToUserMembership(): void {
     this.router.navigateByUrl('/user-membership');
   }
 
-  goToBook() {
+  goToBook(): void {
     this.router.navigateByUrl('/book');
   }
 
-  goToWod() {
+  goToWod(): void {
     this.router.navigateByUrl('/wod');
   }
 
-  goToCancel() {
+  goToCancel(): void {
     this.router.navigateByUrl('/cancel');
   }
 
-  goToHistory() {
+  goToHistory(): void {
     this.router.navigateByUrl('/frequency');
   }
 
-  // ROLE CHECK 
+  // ==============================
+  // ADMIN/COACH ACTIONS
+  // ==============================
 
-  isAdminOrCoach(): boolean {
-    const isAdmin =
-      this.userProfile === 'admin' || this.userProfile === 'coach';
-    console.log(
-      'Checking admin/coach access:',
-      this.userProfile,
-      'Result:',
-      isAdmin
-    );
-    return isAdmin;
-  }
-
-  // ACTIONS FOR ADMIN/COACH 
-
-  async deleteWod() {
+  // Confirm and delete WOD
+  async deleteWod(): Promise<void> {
     const alert = await this.alertController.create({
       header: 'Confirm Deletion',
       message: 'Are you sure you want to delete this WOD?',
       buttons: [
-        {
-          text: 'Cancel',
-          role: 'cancel',
-        },
+        { text: 'Cancel', role: 'cancel' },
         {
           text: 'OK',
           handler: () => {
@@ -204,7 +192,8 @@ export class WodPage implements OnInit {
     await alert.present();
   }
 
-  editWod() {
+  // Prepare WOD for editing
+  editWod(): void {
     if (this.wodDescription) {
       this.wodNotes = this.wodDescription;
       this.isNoteChanged = true;
@@ -212,7 +201,8 @@ export class WodPage implements OnInit {
     }
   }
 
-  saveWodNotes() {
+  // Save or create WOD
+  saveWodNotes(): void {
     if (!this.wodNotes.trim()) return;
 
     const wodData = {
@@ -221,48 +211,47 @@ export class WodPage implements OnInit {
       description: this.wodNotes,
     };
 
-    // Try to update first
-    this.wodService
-      .updateWod(this.selectedDate, { description: this.wodNotes })
-      .subscribe({
-        next: () => {
-          this.wodDescription = this.wodNotes;
-          this.wodTitle = 'Workout of the Day';
-          this.wodNotes = '';
-          this.isNoteChanged = false;
-          this.presentToast('WOD updated successfully.', 'success');
-        },
-        error: (err) => {
-          // If not found, create new WOD
-          if (err.status === 404) {
-            this.wodService.createWod(wodData).subscribe({
-              next: (created) => {
-                this.wodTitle = created.title;
-                this.wodDescription = created.description;
-                this.wodNotes = '';
-                this.isNoteChanged = false;
-                this.presentToast('WOD created successfully.', 'success');
-              },
-              error: () => {
-                this.presentToast('Failed to create WOD.', 'danger');
-              },
-            });
-          } else {
-            this.presentToast('Unexpected error saving WOD.', 'danger');
-          }
-        },
-      });
+    this.wodService.updateWod(this.selectedDate, { description: this.wodNotes }).subscribe({
+      next: () => {
+        this.wodDescription = this.wodNotes;
+        this.wodTitle = 'Workout of the Day';
+        this.wodNotes = '';
+        this.isNoteChanged = false;
+        this.presentToast('WOD updated successfully.', 'success');
+      },
+      error: (err) => {
+        if (err.status === 404) {
+          this.wodService.createWod(wodData).subscribe({
+            next: (created) => {
+              this.wodTitle = created.title;
+              this.wodDescription = created.description;
+              this.wodNotes = '';
+              this.isNoteChanged = false;
+              this.presentToast('WOD created successfully.', 'success');
+            },
+            error: () => {
+              this.presentToast('Failed to create WOD.', 'danger');
+            },
+          });
+        } else {
+          this.presentToast('Unexpected error saving WOD.', 'danger');
+        }
+      },
+    });
   }
 
-  //  EDIT FIELD LISTENER
+  // ==============================
+  // EVENT HANDLERS
+  // ==============================
 
-  onNotesChange() {
+  onNotesChange(): void {
     this.isNoteChanged = !!this.wodNotes.trim();
   }
 
-  //  TOAST UTILITY 
-
-  async presentToast(message: string, color: string = 'medium') {
+  // ==============================
+  // TOAST UTILITY
+  // ==============================
+  async presentToast(message: string, color: string = 'medium'): Promise<void> {
     const toast = await this.toastController.create({
       message,
       duration: 2000,

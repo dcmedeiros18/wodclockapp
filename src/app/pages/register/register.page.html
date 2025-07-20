@@ -1,81 +1,132 @@
 <ion-content [fullscreen]="true" class="signup-bg">
   <div class="signup-wrapper">
-    <!-- LEFT SIDE -->
+
+    <!-- ==== LEFT COLUMN: REGISTRATION FORM ==== -->
     <div class="signup-form">
-      <!-- Logo + Title side-by-side -->
+
+      <!-- Header with logo and form title -->
       <div class="form-header-row">
         <div class="logo-small"></div>
         <h2 class="form-title">Create an account</h2>
       </div>
 
-      <!-- FORM INPUTS -->
+      <!-- ==== FORM INPUT FIELDS ==== -->
       <ion-list>
+
+        <!-- First Name -->
         <ion-item>
           <ion-input label="First Name" labelPlacement="floating" [(ngModel)]="firstName"></ion-input>
         </ion-item>
+
+        <!-- Surname -->
         <ion-item>
           <ion-input label="Surname" labelPlacement="floating" [(ngModel)]="surname"></ion-input>
         </ion-item>
+
+        <!-- Date of Birth -->
         <ion-item>
           <ion-input label="Date of Birth" type="date" labelPlacement="floating" [(ngModel)]="dateOfBirth"></ion-input>
         </ion-item>
+
+        <!-- Phone Number -->
         <ion-item>
-          <ion-input label="Phone Number" type="tel" maxlength="15" inputmode="numeric"
-            [(ngModel)]="phoneNumber"></ion-input>
+          <ion-input
+            label="Phone Number"
+            type="tel"
+            maxlength="15"
+            inputmode="numeric"
+            [(ngModel)]="phoneNumber">
+          </ion-input>
         </ion-item>
+
+        <!-- Emergency Contact Name -->
         <ion-item>
-          <ion-input label="Emergency Contact Name" labelPlacement="floating"
-            [(ngModel)]="emergencyContactName"></ion-input>
+          <ion-input
+            label="Emergency Contact Name"
+            labelPlacement="floating"
+            [(ngModel)]="emergencyContactName">
+          </ion-input>
         </ion-item>
+
+        <!-- Emergency Contact Phone -->
         <ion-item>
-          <ion-input label="Emergency Contact Phone" type="tel" maxlength="15" inputmode="numeric"
-            labelPlacement="floating" [(ngModel)]="emergencyContactPhone"></ion-input>
+          <ion-input
+            label="Emergency Contact Phone"
+            type="tel"
+            maxlength="15"
+            inputmode="numeric"
+            labelPlacement="floating"
+            [(ngModel)]="emergencyContactPhone">
+          </ion-input>
         </ion-item>
+
+        <!-- Email -->
         <ion-item>
           <ion-input label="Email" labelPlacement="floating" [(ngModel)]="email"></ion-input>
         </ion-item>
+
+        <!-- Confirm Email -->
         <ion-item>
           <ion-input label="Confirm Email" labelPlacement="floating" [(ngModel)]="confirmEmail"></ion-input>
         </ion-item>
+
+        <!-- Password -->
         <ion-item>
-          <ion-input label="Password" type="password" labelPlacement="floating" [(ngModel)]="password">
-            <ion-input-password-toggle slot="end"></ion-input-password-toggle>
-          </ion-input>
-        </ion-item>
-        <ion-item>
-          <ion-input label="Confirm Password" type="password" labelPlacement="floating" [(ngModel)]="confirmPassword">
+          <ion-input
+            label="Password"
+            type="password"
+            labelPlacement="floating"
+            [(ngModel)]="password">
             <ion-input-password-toggle slot="end"></ion-input-password-toggle>
           </ion-input>
         </ion-item>
 
-        <!-- Secret Question -->
+        <!-- Confirm Password -->
+        <ion-item>
+          <ion-input
+            label="Confirm Password"
+            type="password"
+            labelPlacement="floating"
+            [(ngModel)]="confirmPassword">
+            <ion-input-password-toggle slot="end"></ion-input-password-toggle>
+          </ion-input>
+        </ion-item>
+
+        <!-- Secret Question Dropdown -->
         <ion-item>
           <ion-label>Secret Question</ion-label>
           <ion-select [(ngModel)]="selectedQuestion">
-            <ion-select-option *ngFor="let q of secretQuestions" [value]="q">{{ q }}</ion-select-option>
+            <ion-select-option *ngFor="let q of secretQuestions" [value]="q">
+              {{ q }}
+            </ion-select-option>
           </ion-select>
         </ion-item>
 
-        <!-- Secret Answer -->
+        <!-- Secret Answer Input -->
         <ion-item *ngIf="selectedQuestion">
-          <ion-input label="Your Answer" labelPlacement="floating" [(ngModel)]="secretAnswer"></ion-input>
+          <ion-input
+            label="Your Answer"
+            labelPlacement="floating"
+            [(ngModel)]="secretAnswer">
+          </ion-input>
         </ion-item>
       </ion-list>
 
-      <!-- Submit Button -->
+      <!-- ==== SUBMIT BUTTON ==== -->
       <div class="center-btn">
         <ion-button color="danger" expand="block" (click)="onRegister()">SIGN UP</ion-button>
       </div>
 
-      <!-- Login link -->
+      <!-- ==== REDIRECT TO LOGIN ==== -->
       <div class="login-text">
         Already have an account? <a (click)="goToLogin()">Log in</a>
       </div>
-    </div>    
+    </div>
 
-    <!-- RIGHT SIDE -->
+    <!-- ==== RIGHT COLUMN: VISUAL/LOGO ==== -->
     <div class="signup-visual">
       <div class="logo-bg"></div>
     </div>
+
   </div>
 </ion-content>

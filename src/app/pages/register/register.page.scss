@@ -1,3 +1,6 @@
+// ===============================
+// PAGE BACKGROUND + WRAPPER
+// ===============================
 ion-content.signup-bg {
   --background: none;
   display: flex;
@@ -11,22 +14,26 @@ ion-content.signup-bg {
   height: 100%;
 
   @media (max-width: 768px) {
-    flex-direction: column;
+    flex-direction: column; // Stack layout on smaller screens
   }
 }
 
-/* LEFT SIDE */
+// ===============================
+// LEFT COLUMN: REGISTRATION FORM
+// ===============================
 .signup-form {
   flex: 1;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  padding: 32px 32px;
+  padding: 32px;
   background: #ffffff;
   overflow-y: auto;
 }
 
-/* Row with logo and title side by side */
+// ===============================
+// HEADER WITH LOGO AND TITLE
+// ===============================
 .form-header-row {
   display: flex;
   align-items: center;
@@ -37,12 +44,14 @@ ion-content.signup-bg {
   margin-bottom: 24px;
 }
 
+// Logo container (small version)
 .logo-small {
   width: 150px;
   height: 150px;
   background: url('/assets/images/temp-logo.png') no-repeat center center / contain;
 }
 
+// Title for the signup form
 .form-title {
   font-size: 26px;
   font-weight: bold;
@@ -50,16 +59,18 @@ ion-content.signup-bg {
   margin: 0;
 }
 
-/* Inputs: increase font size */
+// ===============================
+// ION-ITEM AND INPUT STYLING
+// ===============================
 ion-item {
   max-width: 500px;
   width: 100%;
   --padding-start: 0;
   --inner-padding-end: 0;
   --min-height: 56px;
-  --border-color: #ccc; 
+  --border-color: #ccc;
   --highlight-height: 2px;
-  --highlight-color-focused: #e53935; 
+  --highlight-color-focused: #e53935;
 
   ion-label {
     font-size: 20px;
@@ -69,12 +80,13 @@ ion-item {
   ion-input {
     font-size: 20px;
     font-weight: bold;
-    text-align: start; 
+    text-align: start;
   }
 }
 
-
-/* Button full width and taller */
+// ===============================
+// SIGN UP BUTTON
+// ===============================
 .center-btn {
   margin-top: 24px;
   width: 100%;
@@ -87,7 +99,9 @@ ion-item {
   }
 }
 
-/* Login text aligned left below button */
+// ===============================
+// REDIRECT TO LOGIN TEXT
+// ===============================
 .login-text {
   margin-top: 16px;
   text-align: center;
@@ -101,6 +115,9 @@ ion-item {
   }
 }
 
+// ===============================
+// OPTIONAL CONTAINERS (if reused)
+// ===============================
 .container {
   padding: 20px;
 }
@@ -112,10 +129,9 @@ ion-item {
   text-align: center;
 }
 
-
-
-
-/* RIGHT SIDE */
+// ===============================
+// RIGHT COLUMN: BACKGROUND IMAGE
+// ===============================
 .signup-visual {
   flex: 1;
   background: url('/assets/images/login-page.png') no-repeat center center / cover;

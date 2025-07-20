@@ -12,7 +12,9 @@ import {
   logOutOutline
 } from 'ionicons/icons';
 
-// Register Ionicons globally for use in templates
+// ====================================
+// Register Ionicons globally
+// ====================================
 addIcons({
   'barbell-outline': barbellOutline,
   'close': close,
@@ -37,20 +39,24 @@ addIcons({
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class UserMembershipPage implements OnInit, OnDestroy {
-  currentUserName: string = ''; // Holds current user's name for welcome message
+  // Holds current user's name to display in welcome message
+  currentUserName: string = '';
 
-  // Image carousel sources (local assets)
+  // Array of images used in the community photo carousel
   carouselImages: string[] = [
     '/assets/images/crossfit_crew.png',
     '/assets/images/woman_and_kettlebell.png',
     '/assets/images/login-page.png'
   ];
 
-  currentCarouselIndex: number = 0; // Current image being shown
-  carouselInterval: any; // Reference to the interval for clearing on destroy
+  // Index of the currently displayed image in the carousel
+  currentCarouselIndex: number = 0;
+
+  // Interval reference for the carousel auto-rotation
+  carouselInterval: any;
 
   constructor(private router: Router) {
-    // Register icons again in constructor to ensure availability
+    // Register icons again to ensure availability
     addIcons({
       clipboardOutline,
       barbellOutline,
@@ -60,38 +66,43 @@ export class UserMembershipPage implements OnInit, OnDestroy {
     });
   }
 
+  // ====================================
+  // Lifecycle Hook - OnInit
+  // ====================================
   ngOnInit() {
-    // Get current user from localStorage
+    // Load the current user's name from localStorage
     const user = localStorage.getItem('currentUser');
     if (user) {
       const parsedUser = JSON.parse(user);
       this.currentUserName = parsedUser.name || parsedUser.fullName || 'Athlete';
     }
 
-    // Start the image carousel rotation
+    // Start rotating carousel images
     this.startCarousel();
   }
 
-  // Starts carousel auto-rotation every 3 seconds
+  // Starts the automatic image carousel rotation
   startCarousel() {
     if (this.carouselInterval) {
-      clearInterval(this.carouselInterval); // Prevent multiple intervals
+      clearInterval(this.carouselInterval); // Clear any existing interval
     }
 
     this.carouselInterval = setInterval(() => {
       this.currentCarouselIndex =
         (this.currentCarouselIndex + 1) % this.carouselImages.length;
-    }, 3000);
+    }, 3000); // Rotate every 3 seconds
   }
 
-  // Clear the interval to prevent memory leaks
+  // ====================================
+  // Lifecycle Hook - OnDestroy
+  // ====================================
   ngOnDestroy() {
     if (this.carouselInterval) {
-      clearInterval(this.carouselInterval);
+      clearInterval(this.carouselInterval); // Prevent memory leaks
     }
   }
 
-  // Carousel options (for future integration with ion-slides if needed)
+  // Optional settings for carousel (for future enhancement)
   slideOpts = {
     initialSlide: 0,
     speed: 400,
@@ -102,7 +113,9 @@ export class UserMembershipPage implements OnInit, OnDestroy {
     loop: true
   };
 
-  // ========= Navigation methods =========
+  // ====================================
+  // Navigation methods
+  // ====================================
   goToBook() {
     this.router.navigateByUrl('/book');
   }
@@ -119,7 +132,7 @@ export class UserMembershipPage implements OnInit, OnDestroy {
     this.router.navigateByUrl('/frequency');
   }
 
-  // Logs out the user and redirects to login page
+  // Logs the user out and redirects to login page
   logout() {
     localStorage.removeItem('token');
     localStorage.removeItem('currentUser');

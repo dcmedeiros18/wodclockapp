@@ -8,7 +8,6 @@ import {
   IonList, IonItem
 } from '@ionic/angular/standalone';
 import { Router } from '@angular/router';
-
 import {
   calendarNumber, clipboardOutline, barbellOutline,
   close, logOutOutline, person, body
@@ -18,8 +17,7 @@ import { ClassService } from 'src/app/services/class.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { AlertController } from '@ionic/angular';
 
-
-// Registering icons globally
+// Register all icons used in the component
 addIcons({
   body, clipboardOutline, barbellOutline, close,
   calendarNumber, logOutOutline, person
@@ -49,7 +47,7 @@ export class FrequencyPage implements OnInit {
   showCalendar = false;
   errorMessage: string | null = null;
 
-  // Goal tracking
+  // Personal goal tracking
   personalGoalInput: string = '';
   personalGoals: { text: string; date: string }[] = [];
   selectedGoalIndex: number | null = null;
@@ -59,21 +57,20 @@ export class FrequencyPage implements OnInit {
     private classService: ClassService,
     private authService: AuthService,
     private alertController: AlertController
-
-  ) { }
+  ) {}
 
   // ==============================
-  // LIFECYCLE
+  // LIFECYCLE HOOK
   // ==============================
   ngOnInit() {
-    this.loadGoalsFromStorage(); // Load personal goals from localStorage
+    this.loadGoalsFromStorage(); // Load personal goals from localStorage on component init
   }
 
   // ==============================
   // PERSONAL GOALS METHODS
   // ==============================
 
-  // Save a new goal to the list and persist to localStorage
+  // Save a new goal and persist it to localStorage
   saveGoal() {
     const trimmed = this.personalGoalInput.trim();
     if (!trimmed) return;
@@ -85,42 +82,34 @@ export class FrequencyPage implements OnInit {
       year: 'numeric',
     });
 
-    const newGoal = {
-      text: trimmed,
-      date: formattedDate,
-    };
-
+    const newGoal = { text: trimmed, date: formattedDate };
     this.personalGoals.push(newGoal);
     this.personalGoalInput = '';
     this.saveGoalsToStorage();
   }
 
-  // Set index of selected goal (for deletion)
+  // Set index of selected goal (to prepare for deletion)
   selectGoalToDelete(index: number) {
     this.selectedGoalIndex = index;
   }
 
-  // Show confirm alert and delete selected goal
+  // Confirm deletion with alert before removing goal
   async confirmDeleteGoal() {
     const selected = this.personalGoals[this.selectedGoalIndex!];
 
     const alert = await this.alertController.create({
       header: 'Confirm Deletion',
-      message: `Are you sure you want to delete this goal?"${selected.text}"`,
+      message: `Are you sure you want to delete this goal?\n"${selected.text}"`,
       buttons: [
         {
           text: 'Cancel',
           role: 'cancel',
           cssClass: 'secondary',
-          handler: () => {
-            // Do nothing on cancel
-          },
         },
         {
           text: 'Delete',
           role: 'destructive',
           handler: () => {
-            // Remove goal from array
             this.personalGoals.splice(this.selectedGoalIndex!, 1);
             this.selectedGoalIndex = null;
             this.saveGoalsToStorage();
@@ -132,13 +121,12 @@ export class FrequencyPage implements OnInit {
     await alert.present();
   }
 
-
-  // Save goal list to localStorage
+  // Save all goals to localStorage
   saveGoalsToStorage() {
     localStorage.setItem('personalGoals', JSON.stringify(this.personalGoals));
   }
 
-  // Load saved goals from localStorage
+  // Load goals from localStorage on component init
   loadGoalsFromStorage() {
     const stored = localStorage.getItem('personalGoals');
     if (stored) {
@@ -150,14 +138,14 @@ export class FrequencyPage implements OnInit {
   // DATE RANGE & VALIDATION
   // ==============================
 
-  // Only allow weekdays (Monday–Saturday)
+  // Only allow weekdays (Monday to Saturday)
   isWeekday = (dateString: string): boolean => {
     const date = new Date(dateString);
-    const utcDay = date.getUTCDay();
-    return utcDay !== 0; // Block Sundays
+    const day = date.getUTCDay();
+    return day !== 0; // Exclude Sundays
   };
 
-  // Validate selected dates
+  // Validate selected start and end dates
   onDateChange() {
     this.errorMessage = null;
 
@@ -168,52 +156,54 @@ export class FrequencyPage implements OnInit {
 
     const today = new Date();
     today.setHours(0, 0, 0, 0);
+
     const start = new Date(this.startDateValue);
     start.setHours(0, 0, 0, 0);
+
     const end = new Date(this.endDateValue);
     end.setHours(0, 0, 0, 0);
 
     if (end > today) {
-      this.errorMessage = 'End date cannot be greater than today.';
+      this.errorMessage = 'End date cannot be in the future.';
       return;
     }
 
     if (start > end) {
-      this.errorMessage = 'Start date cannot be greater than end date.';
+      this.errorMessage = 'Start date must be before end date.';
       return;
     }
   }
 
   // ==============================
-  // CALCULATE USER HISTORY
+  // FETCH USER BOOKING HISTORY
   // ==============================
 
   async calculateHistory(): Promise<void> {
     this.showCalendar = false;
     this.errorMessage = null;
-    this.onDateChange();
 
+    this.onDateChange(); // Validate before proceeding
     if (this.errorMessage) {
       this.totalClasses = null;
       this.highlightedDates = [];
       return;
     }
 
-    const startDate = this.startDateValue as string;
-    const endDate = this.endDateValue as string;
-
     try {
-      const bookingsRaw = await this.classService.getUserBookingsByPeriod(startDate, endDate).toPromise();
+      const bookingsRaw = await this.classService
+        .getUserBookingsByPeriod(this.startDateValue!, this.endDateValue!)
+        .toPromise();
+
       const bookings = Array.isArray(bookingsRaw) ? bookingsRaw : [];
 
       // Filter out cancelled bookings
       const activeBookings = bookings.filter((b: any) => b.status !== 'cancelled');
       this.totalClasses = activeBookings.length;
 
-      // Highlight range between selected dates
+      // Highlight selected date range
       const highlights: any[] = [];
-      const start = new Date(startDate);
-      const end = new Date(endDate);
+      const start = new Date(this.startDateValue!);
+      const end = new Date(this.endDateValue!);
 
       for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
         highlights.push({
@@ -234,7 +224,7 @@ export class FrequencyPage implements OnInit {
   }
 
   // ==============================
-  // NAVIGATION METHODS
+  // NAVIGATION
   // ==============================
 
   logout() {
@@ -242,23 +232,23 @@ export class FrequencyPage implements OnInit {
     this.router.navigateByUrl('/login');
   }
 
-  goToUserMembership(): void {
+  goToUserMembership() {
     this.router.navigateByUrl('/user-membership');
   }
 
-  goToBook(): void {
+  goToBook() {
     this.router.navigateByUrl('/book');
   }
 
-  goToWod(): void {
+  goToWod() {
     this.router.navigateByUrl('/wod');
   }
 
-  goToCancel(): void {
+  goToCancel() {
     this.router.navigateByUrl('/cancel');
   }
 
-  goToHistory(): void {
+  goToHistory() {
     this.router.navigateByUrl('/frequency');
   }
 }

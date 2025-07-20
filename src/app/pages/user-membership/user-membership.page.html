@@ -1,35 +1,39 @@
 <ion-content [fullscreen]="true">
   <div class="membership-wrapper">
 
-    <!-- ===== SIDEBAR MENU (LEFT NAVIGATION) ===== -->
+    <!-- ===========================
+         SIDEBAR NAVIGATION MENU
+    ============================ -->
     <div class="sidebar">
       <div class="sidebar-title">Menu</div>
 
-      <!-- Navigation to Booking Page -->
+      <!-- Navigate to the Booking Page -->
       <button class="sidebar-btn" (click)="goToBook()">
         <ion-icon name="clipboard-outline"></ion-icon> Book
       </button>
 
-      <!-- Navigation to WOD Page -->
+      <!-- Navigate to the WOD Page -->
       <button class="sidebar-btn" (click)="goToWod()">
         <ion-icon name="barbell-outline"></ion-icon> WOD
       </button>
 
-      <!-- Navigation to Cancel Page -->
+      <!-- Navigate to the Cancel Booking Page -->
       <button class="sidebar-btn" (click)="goToCancel()">
         <ion-icon name="close" color="danger"></ion-icon> Cancel
       </button>
 
-      <!-- Navigation to Class History -->
+      <!-- Navigate to the Class History Page -->
       <button class="sidebar-btn" (click)="goToFrequency()">
         <ion-icon name="calendar-number"></ion-icon> History
       </button>
     </div>
 
-    <!-- ===== MAIN PANEL (RIGHT CONTENT) ===== -->
+    <!-- ===========================
+         MAIN PANEL (RIGHT CONTENT)
+    ============================ -->
     <div class="main-panel">
 
-      <!-- Top bar with welcome message and logout -->
+      <!-- Top Bar with Welcome Message and Logout Button -->
       <div class="top-bar">
         <h1 class="welcome-text">Welcome, {{ currentUserName }}</h1>
         <button class="logout-button" (click)="logout()">
@@ -37,13 +41,15 @@
         </button>
       </div>
 
-      <!-- Section title for the dashboard -->
+      <!-- Section Title -->
       <h2 class="section-title">Your Dashboard</h2>
 
-      <!-- ===== QUICK ACTION CARDS ===== -->
+      <!-- ===========================
+           QUICK ACTION CARDS
+      ============================ -->
       <div class="card-grid">
 
-        <!-- Book Class Card -->
+        <!-- Card: Book a Class -->
         <div class="card-box" (click)="goToBook()">
           <ion-icon name="clipboard-outline"></ion-icon>
           <div>
@@ -52,7 +58,7 @@
           </div>
         </div>
 
-        <!-- WOD Card -->
+        <!-- Card: View WOD -->
         <div class="card-box" (click)="goToWod()">
           <ion-icon name="barbell-outline"></ion-icon>
           <div>
@@ -61,7 +67,7 @@
           </div>
         </div>
 
-        <!-- Cancel Booking Card -->
+        <!-- Card: Cancel Booking -->
         <div class="card-box" (click)="goToCancel()">
           <ion-icon name="close"></ion-icon>
           <div>
@@ -70,7 +76,7 @@
           </div>
         </div>
 
-        <!-- History/Frequency Card -->
+        <!-- Card: View Training History -->
         <div class="card-box" (click)="goToFrequency()">
           <ion-icon name="calendar-number"></ion-icon>
           <div>
@@ -80,13 +86,18 @@
         </div>
       </div>
 
-      <!-- ===== COMMUNITY PHOTO CAROUSEL ===== -->
+      <!-- ===========================
+           COMMUNITY PHOTO CAROUSEL
+      ============================ -->
       <div class="carousel-wrapper">
         <h3 class="carousel-title">Community Moments</h3>
 
-        <!-- Display the current image from the carousel -->
+        <!-- Display currently active image in the carousel -->
         <div class="photo-carousel">
-          <img *ngIf="carouselImages.length" [src]="carouselImages[currentCarouselIndex]" alt="Carousel image" />
+          <img
+            *ngIf="carouselImages.length"
+            [src]="carouselImages[currentCarouselIndex]"
+            alt="Carousel image" />
         </div>
       </div>
 

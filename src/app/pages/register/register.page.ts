@@ -36,6 +36,10 @@ import { Router } from '@angular/router';
   ],
 })
 export class RegisterPage implements OnInit {
+
+  // ===============================
+  // Form Fields
+  // ===============================
   firstName: string = '';
   surname: string = '';
   dateOfBirth: string = '';
@@ -47,7 +51,9 @@ export class RegisterPage implements OnInit {
   password: string = '';
   confirmPassword: string = '';
 
-  // Secret question
+  // ===============================
+  // Secret Question & Answer
+  // ===============================
   secretQuestions: string[] = [
     'What is the name of your first pet?',
     'What is your favorite book?',
@@ -68,7 +74,11 @@ export class RegisterPage implements OnInit {
 
   ngOnInit() {}
 
+  // ===============================
+  // Handles user registration logic
+  // ===============================
   async onRegister() {
+    // Validate required fields
     if (
       !this.firstName || !this.surname || !this.dateOfBirth ||
       !this.phoneNumber || !this.emergencyContactName || !this.emergencyContactPhone ||
@@ -79,33 +89,42 @@ export class RegisterPage implements OnInit {
       return;
     }
 
+    // Validate numeric phone inputs
     if (!/^[0-9]+$/.test(this.phoneNumber) || !/^[0-9]+$/.test(this.emergencyContactPhone)) {
       await this.presentToast('Phone numbers must contain only digits.', 'warning');
       return;
     }
 
+    // Validate email format
     const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,}$/;
     if (!emailRegex.test(this.email)) {
       await this.presentToast('Enter a valid email address.', 'warning');
       return;
     }
 
+    // Check if email and confirm email match
     if (this.email !== this.confirmEmail) {
       await this.presentToast('Emails do not match.', 'warning');
       return;
     }
 
+    // Validate password strength
     const passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]).{6,}$/;
     if (!passwordRegex.test(this.password)) {
-      await this.presentToast('Password must have at least 6 characters, 1 uppercase letter, 1 number and 1 special character.', 'warning');
+      await this.presentToast(
+        'Password must have at least 6 characters, 1 uppercase letter, 1 number and 1 special character.',
+        'warning'
+      );
       return;
     }
 
+    // Check if password and confirm password match
     if (this.password !== this.confirmPassword) {
       await this.presentToast('Passwords do not match.', 'warning');
       return;
     }
 
+    // Create user object to send to backend
     const newUser = {
       firstName: this.firstName,
       surname: this.surname,
@@ -119,9 +138,10 @@ export class RegisterPage implements OnInit {
       confirmPassword: this.confirmPassword,
       secretQuestion: this.selectedQuestion,
       secretAnswer: this.secretAnswer,
-      profile: 'membership'
+      profile: 'membership' // default user profile
     };
 
+    // Send registration request to backend
     this.authService.register(newUser).subscribe({
       next: async () => {
         await this.presentToast('User registered successfully!', 'success');
@@ -137,6 +157,9 @@ export class RegisterPage implements OnInit {
     });
   }
 
+  // ===============================
+  // Displays toast notifications
+  // ===============================
   async presentToast(message: string, color: 'success' | 'warning' | 'danger' | 'primary') {
     const toast = await this.toastController.create({
       message,
@@ -147,9 +170,10 @@ export class RegisterPage implements OnInit {
     await toast.present();
   }
 
+  // ===============================
+  // Navigates to the login page
+  // ===============================
   goToLogin() {
     this.router.navigateByUrl('/login');
   }
-
-  
 }

@@ -1,4 +1,6 @@
-
+// ===============================
+// GLOBAL LAYOUT SETTINGS
+// ===============================
 ion-content {
   --background: #f8f8f8;
   height: 100vh;
@@ -50,12 +52,12 @@ ion-content {
 }
 
 ion-icon {
-  font-size: 40px;  
+  font-size: 40px;
   margin-right: 10px;
 }
 
 // ===============================
-// MAIN PANEL CONTENT
+// MAIN CONTENT PANEL
 // ===============================
 .main-panel {
   flex: 1;
@@ -89,7 +91,7 @@ ion-icon {
 }
 
 // ===============================
-// HEADER ROW (Book your class)
+// HEADER ABOVE CALENDAR
 // ===============================
 .booking-header-row {
   display: flex;
@@ -108,11 +110,11 @@ ion-icon {
   font-size: 18px;
   color: #444;
   font-weight: bold;
-  margin: 0 0 8px 0;
+  margin-bottom: 8px;
 }
 
 // ===============================
-// BOOKING LAYOUT
+// BOOKING SECTION LAYOUT
 // ===============================
 .calendar-booking-layout {
   display: flex;
@@ -160,7 +162,7 @@ ion-icon {
 }
 
 // ===============================
-// CLASS LIST / SLOTS
+// CLASS SLOT CARDS
 // ===============================
 .booking-slots {
   display: flex;
@@ -195,7 +197,6 @@ ion-icon {
   transform: scale(1.02);
 }
 
-
 .cancelled-text {
   color: red;
   font-weight: bold;
@@ -220,13 +221,13 @@ ion-icon {
 }
 
 // ===============================
-// HEADERS - SECTION TITLES
+// SECTION HEADERS
 // ===============================
 .calendar-title {
   font-size: 22px;
   font-weight: bold;
   color: #333;
-  margin: 8px auto 8px auto;  // centers it horizontally
+  margin: 8px auto;
   text-align: center;
   width: fit-content;
 }
@@ -256,8 +257,8 @@ ion-icon {
   }
 }
 
-// // ===============================
-// Customização específica do calendário //
+// ===============================
+// CALENDAR STYLING CUSTOMIZATION
 // ===============================
 ion-datetime.md::part(calendar-day active),
 ion-datetime.md::part(calendar-day active):focus {
@@ -272,11 +273,10 @@ ion-datetime.md::part(calendar-day today) {
 
 ion-datetime {
   --background: black;
-  
   --wheel-highlight-background: white;
   --ion-color-primary: black;
   box-shadow: white;
-  }
+}
 
 ion-datetime::part(wheel-item) {
   color: white;
@@ -293,4 +293,3 @@ ion-datetime::part(calendar-day) {
 .calendar-month-year-toggle #toggle-wrapper {
   color: white !important;
 }
-

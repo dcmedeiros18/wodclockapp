@@ -1,52 +1,60 @@
 <ion-content [fullscreen]="true">
   <div class="login-wrapper">
-  
-    <!-- LEFT COLUMN: LOGIN FORM -->
+
+    <!-- ==== LEFT COLUMN: LOGIN FORM ==== -->
     <div class="login-left">
-    
-      <!-- Logo placeholder -->
+
+      <!-- Logo Container -->
       <div class="logo-box"></div>
 
-      <!-- Page title -->
+      <!-- Login Page Title -->
       <h2 class="page-title">Log in to continue</h2>
 
-      <!-- EMAIL FIELD -->
+      <!-- ==== EMAIL INPUT FIELD ==== -->
       <ion-item>
-        <ion-input 
-          id="email-input" label="Email" labelPlacement="floating" type="email" [(ngModel)]="email"required>
+        <ion-input
+          id="email-input"
+          label="Email"
+          labelPlacement="floating"
+          type="email"
+          [(ngModel)]="email"
+          required>
         </ion-input>
       </ion-item>
 
-      <!-- PASSWORD FIELD -->
+      <!-- ==== PASSWORD INPUT FIELD ==== -->
       <ion-item>
-        <ion-input 
-          id="password-input" label="Password" labelPlacement="floating" [type]="showPassword ? 'text' : 'password'" [(ngModel)]="password" required>
+        <ion-input
+          id="password-input"
+          label="Password"
+          labelPlacement="floating"
+          [type]="showPassword ? 'text' : 'password'"
+          [(ngModel)]="password"
+          required>
           <ion-input-password-toggle slot="end"></ion-input-password-toggle>
         </ion-input>
       </ion-item>
 
-     
-
-      <!-- Login button triggers onLogin() -->
+      <!-- ==== LOGIN BUTTON ==== -->
       <ion-button expand="block" fill="outline" (click)="onLogin()">Login</ion-button>
 
-      <!-- Display error message if authentication fails -->
+      <!-- ==== ERROR MESSAGE DISPLAY ==== -->
       <div *ngIf="errorMessage" class="error-message">
         {{ errorMessage }}
       </div>
 
-      <!-- Forgot password link -->
-    <div class="forgot-text">
-      Forgot your password? <a (click)="goToForgot()">Click here</a>
-    </div>
+      <!-- ==== FORGOT PASSWORD LINK ==== -->
+      <div class="forgot-text">
+        Forgot your password? <a (click)="goToForgot()">Click here</a>
+      </div>
 
-      <!-- Navigation link to registration page -->
+      <!-- ==== SIGN-UP REDIRECT ==== -->
       <p class="signup-text">
         New here? <a (click)="goToRegister()">Sign up today!</a>
       </p>
     </div>
 
-    <!-- RIGHT COLUMN: BACKGROUND IMAGE AND SLOGAN -->
+    <!-- ==== RIGHT COLUMN: BACKGROUND IMAGE AND SLOGAN ==== -->
     <div class="login-right">
       <div class="hero-text">YOUR TIME. YOUR WOD</div>
     </div>

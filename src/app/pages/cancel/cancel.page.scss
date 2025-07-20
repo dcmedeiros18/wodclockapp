@@ -57,7 +57,7 @@ ion-icon {
 }
 
 // ===============================
-// MAIN PANEL (RIGHT SIDE)
+// MAIN PANEL (RIGHT SIDE CONTENT)
 // ===============================
 .main-panel {
   flex: 1;
@@ -91,7 +91,7 @@ ion-icon {
 }
 
 // ===============================
-// MAIN LAYOUT GRID
+// LAYOUT: MAIN CONTENT
 // ===============================
 .calendar-wod-layout {
   display: flex;
@@ -102,7 +102,7 @@ ion-icon {
 }
 
 // ===============================
-// LEFT COLUMN (CALENDAR)
+// LEFT COLUMN: CALENDAR SECTION
 // ===============================
 .left-column {
   flex: 1;
@@ -115,7 +115,7 @@ ion-icon {
 }
 
 // ===============================
-// RIGHT COLUMN (BOOKINGS & PHRASES)
+// RIGHT COLUMN: BOOKINGS & PHRASES
 // ===============================
 .right-column {
   flex: 1;
@@ -135,7 +135,7 @@ ion-icon {
 }
 
 // ===============================
-// STATUS & ERROR MESSAGES
+// BOOKING STATUS & MESSAGES
 // ===============================
 .info-message {
   color: #ff3333;
@@ -180,7 +180,7 @@ ion-datetime::part(calendar-day) {
 }
 
 // ===============================
-// RESPONSIVE DESIGN (MOBILE)
+// RESPONSIVE DESIGN FOR MOBILE
 // ===============================
 @media (max-width: 768px) {
   .membership-wrapper {
@@ -208,7 +208,7 @@ ion-datetime::part(calendar-day) {
 }
 
 // ===============================
-// MOTIVATIONAL PHRASES
+// MOTIVATIONAL PHRASES BLOCK
 // ===============================
 .motivation-phrase {
   font-size: 24px;

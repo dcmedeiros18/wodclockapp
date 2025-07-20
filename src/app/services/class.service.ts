@@ -4,6 +4,7 @@ import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 
+// ===== Interface for a class slot used in booking screen =====
 export interface ClassSlot {
   id: number;
   time: string;
@@ -14,6 +15,7 @@ export interface ClassSlot {
   status?: string;
 }
 
+// ===== Interface for a successful booking response =====
 export interface BookingResponse {
   message: string;
   booking: {
@@ -34,6 +36,9 @@ export class ClassService {
 
   constructor(private http: HttpClient) {}
 
+  // =========================================
+  // PRIVATE: Add authorization headers to request
+  // =========================================
   private getAuthHeaders(): HttpHeaders {
     const token = localStorage.getItem('token');
     return new HttpHeaders({
@@ -42,77 +47,100 @@ export class ClassService {
     });
   }
 
+  // =========================================
+  // Get list of available classes by date
+  // =========================================
   getAvailableClasses(date: string): Observable<ClassSlot[]> {
     const headers = this.getAuthHeaders();
-    return this.http.get<ClassSlot[]>(`${this.apiUrl}/api/classes/by-date?date=${date}`, { headers }).pipe(
-      catchError((error) => {
-        console.error('Erro ao buscar classes:', error);
-        if (error.status === 400) {
-          return throwError(() => new Error(error.error?.message || 'Formato de data inválido'));
-        } else if (error.status === 401) {
-          return throwError(() => new Error('Token de autenticação inválido ou expirado'));
-        } else if (error.status === 403) {
-          return throwError(() => new Error('Acesso negado'));
-        } else if (error.status === 404) {
-          return throwError(() => new Error('Nenhuma classe encontrada para esta data'));
-        } else if (error.status === 500) {
-          return throwError(() => new Error('Erro interno do servidor'));
-        }
-        return throwError(() => new Error('Erro ao carregar classes disponíveis'));
-      })
-    );
+    return this.http
+      .get<ClassSlot[]>(`${this.apiUrl}/api/classes/by-date?date=${date}`, { headers })
+      .pipe(
+        catchError((error) => {
+          console.error('Error fetching available classes:', error);
+          if (error.status === 400) {
+            return throwError(() => new Error(error.error?.message || 'Invalid date format'));
+          } else if (error.status === 401) {
+            return throwError(() => new Error('Invalid or expired token'));
+          } else if (error.status === 403) {
+            return throwError(() => new Error('Access denied'));
+          } else if (error.status === 404) {
+            return throwError(() => new Error('No classes found for this date'));
+          } else if (error.status === 500) {
+            return throwError(() => new Error('Internal server error'));
+          }
+          return throwError(() => new Error('Failed to load available classes'));
+        })
+      );
   }
 
+  // =========================================
+  // Book a class (requires authentication)
+  // =========================================
   bookClass(classId: number): Observable<BookingResponse> {
     const body = { classId: Number(classId) };
     const headers = this.getAuthHeaders();
 
     return this.http.post<BookingResponse>(`${this.apiUrl}/api/bookings`, body, { headers }).pipe(
       catchError((error) => {
-        console.error('Erro ao agendar aula:', error);
+        console.error('Error booking class:', error);
         if (error.status === 400) {
-          return throwError(() => new Error(error.error?.message || 'Erro ao agendar aula'));
+          return throwError(() => new Error(error.error?.message || 'Failed to book class'));
         }
-        return throwError(() => new Error('Erro ao agendar aula. Tente novamente.'));
+        return throwError(() => new Error('Could not complete booking. Please try again.'));
       })
     );
   }
 
+  // =========================================
+  // Get current user's bookings (filtered by token)
+  // =========================================
   getUserBookings(): Observable<any[]> {
     const headers = this.getAuthHeaders();
-    console.log('TOKEN NOS HEADERS:', headers.get('Authorization'));
+    console.log('Auth Token:', headers.get('Authorization'));
+
     return this.http.get<any[]>(`${this.apiUrl}/api/bookings/user`, { headers }).pipe(
       catchError((error) => {
-        console.error('Erro ao buscar agendamentos:', error);
-        return throwError(() => new Error('Erro ao carregar seus agendamentos'));
+        console.error('Error fetching user bookings:', error);
+        return throwError(() => new Error('Failed to load your bookings'));
       })
     );
   }
 
+  // =========================================
+  // Get user bookings within a specific period
+  // =========================================
   getUserBookingsByPeriod(startDate: string, endDate: string): Observable<any[]> {
     const headers = this.getAuthHeaders();
-    return this.http.get<any[]>(`${this.apiUrl}/api/bookings/user?start=${startDate}&end=${endDate}`, { headers }).pipe(
-      catchError((error) => {
-        console.error('Erro ao buscar agendamentos por período:', error);
-        return throwError(() => new Error('Erro ao carregar seus agendamentos do período'));
-      })
-    );
+
+    return this.http
+      .get<any[]>(`${this.apiUrl}/api/bookings/user?start=${startDate}&end=${endDate}`, { headers })
+      .pipe(
+        catchError((error) => {
+          console.error('Error fetching bookings by period:', error);
+          return throwError(() => new Error('Failed to load bookings in this period'));
+        })
+      );
   }
 
+  // =========================================
+  // Cancel a specific user booking by ID
+  // =========================================
   cancelBooking(bookingId: number): Observable<any> {
     const headers = this.getAuthHeaders();
+
     return this.http.delete(`${this.apiUrl}/api/bookings/${bookingId}`, { headers }).pipe(
       catchError((error) => {
-        console.error('Erro ao cancelar agendamento:', error);
-        return throwError(() => new Error('Erro ao cancelar agendamento'));
+        console.error('Error canceling booking:', error);
+        return throwError(() => new Error('Failed to cancel booking'));
       })
     );
   }
 
-  cancelClass(classId: number) {
+  // =========================================
+  // Cancel an entire class by classId (admin/coach only)
+  // =========================================
+  cancelClass(classId: number): Observable<any> {
     const headers = this.getAuthHeaders();
     return this.http.patch(`${this.apiUrl}/api/classes/${classId}/cancel`, {}, { headers });
   }
-
- 
 }

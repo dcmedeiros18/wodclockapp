@@ -1,41 +1,45 @@
 <ion-content [fullscreen]="true">
   <div class="membership-wrapper">
-    
-    <!-- SIDEBAR MENU (LEFT NAVIGATION)  -->
+
+    <!-- ================================
+         SIDEBAR MENU (LEFT NAVIGATION)
+    ================================== -->
     <div class="sidebar">
       <div class="sidebar-title">Menu</div>
 
-      <!-- Navigation to Home Page -->
+      <!-- Home navigation -->
       <button class="sidebar-btn" (click)="goToUserMembership()">
         <ion-icon name="body"></ion-icon> Home
       </button>
 
-      <!-- Navigate to the booking page -->
+      <!-- Booking navigation -->
       <button class="sidebar-btn" (click)="goToBook()">
         <ion-icon name="clipboard-outline"></ion-icon> Book
       </button>
 
-      <!-- Navigate to the WOD page -->
+      <!-- WOD navigation -->
       <button class="sidebar-btn" (click)="goToWod()">
         <ion-icon name="barbell-outline"></ion-icon> WOD
       </button>
 
-      <!-- Navigate to the cancellation page -->
+      <!-- Cancellation navigation -->
       <button class="sidebar-btn" (click)="goToCancel()">
         <ion-icon name="close" color="danger"></ion-icon> Cancel
       </button>
 
-      <!-- Navigate to the user's booking history -->
+      <!-- Class history navigation -->
       <button class="sidebar-btn" (click)="goToHistory()">
         <ion-icon name="calendar-number"></ion-icon> History
       </button>
     </div>
     <!-- /sidebar -->
 
-    <!-- MAIN PANEL  -->
+    <!-- ================================
+         MAIN PANEL (CONTENT AREA)
+    ================================== -->
     <div class="main-panel">
 
-      <!--  Top bar with page title and logout button  -->
+      <!-- Top bar with title and logout -->
       <div class="top-bar">
         <h1 class="welcome-text">Workout of the Day</h1>
         <button class="logout-button" (click)="logout()">
@@ -44,10 +48,12 @@
       </div>
       <!-- /top-bar -->
 
-      <!--  Layout with calendar and WOD content side by side  -->
+      <!-- Layout containing calendar (left) and WOD info (right) -->
       <div class="calendar-wod-layout">
 
-        <!--  Calendar Section (left column)  -->
+        <!-- ==========================
+             LEFT COLUMN: CALENDAR
+        =========================== -->
         <div class="datetime-container">
           <ion-datetime
             presentation="date"
@@ -57,10 +63,12 @@
         </div>
         <!-- /datetime-container -->
 
-        <!--  WOD Content Section (right column)  -->
+        <!-- ==========================
+             RIGHT COLUMN: WOD CONTENT
+        =========================== -->
         <div class="wod-section">
 
-          <!-- WOD card shown when a description exists for the selected date -->
+          <!-- Display WOD if available -->
           <ion-card class="wod-card" *ngIf="selectedDate && wodDescription">
             <ion-card-header>
               <ion-card-title>{{ wodTitle }}</ion-card-title>
@@ -70,27 +78,35 @@
             </ion-card-content>
           </ion-card>
 
-          <!-- Message shown when no WOD is found for selected date -->
+          <!-- Message if no WOD found -->
           <div *ngIf="selectedDate && !wodDescription" class="no-wod">
             <p>No WOD available for the selected date.</p>
           </div>
 
-          <!-- WOD editing interface for admin and coach users -->
+          <!-- Admin/Coach Editor for WOD -->
           <ion-card class="wod-edit-card" *ngIf="selectedDate && isAdminOrCoach()">
             <ion-card-header>
-              <ion-card-title>Description of WOD</ion-card-title>
+              <ion-card-title>WOD Description</ion-card-title>
             </ion-card-header>
             <ion-card-content>
-              <!-- Textarea for editing the WOD -->
+
+              <!-- Textarea to edit WOD -->
               <ion-textarea
-                name="wodNotes"  [(ngModel)]="wodNotes" placeholder="Digite a descrição do WOD...">
+                name="wodNotes"
+                [(ngModel)]="wodNotes"
+                placeholder="Type the WOD description here...">
               </ion-textarea>
 
-              <!-- Action buttons for admin/coach -->
+              <!-- Action buttons -->
               <div class="button-group">
                 <ion-button
-                  color="danger" expand="block" (click)="deleteWod()" 
-                  [disabled]="!wodDescription">Delete</ion-button>
+                  color="danger"
+                  expand="block"
+                  (click)="deleteWod()"
+                  [disabled]="!wodDescription">
+                  Delete
+                </ion-button>
+
                 <ion-button
                   color="primary"
                   (click)="editWod()"
@@ -107,6 +123,7 @@
                 </ion-button>
               </div>
               <!-- /button-group -->
+
             </ion-card-content>
           </ion-card>
 
@@ -114,7 +131,9 @@
 
       </div> <!-- /calendar-wod-layout -->
 
-      <!--  MOTIVATIONAL QUOTE CAROUSEL  -->
+      <!-- ==========================
+           MOTIVATIONAL QUOTE
+      =========================== -->
       <div class="motivational-card">
         <ion-card>
           <ion-card-content>

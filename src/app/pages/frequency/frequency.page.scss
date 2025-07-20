@@ -101,7 +101,7 @@ ion-icon {
   margin-top: 20px;
 }
 
-// LEFT COLUMN – Date pickers + calendar
+// LEFT COLUMN: Date pickers and calendar
 .left-column {
   flex: 1;
   min-width: 320px;
@@ -135,7 +135,7 @@ ion-icon {
 }
 
 // ===============================
-// RIGHT COLUMN – Results + Goals
+// RIGHT COLUMN: Results and personal goals
 // ===============================
 .right-column {
   flex: 1;
@@ -147,6 +147,7 @@ ion-icon {
   margin-top: 10px;
 }
 
+// Class count summary
 .stats-box {
   text-align: center;
   margin-bottom: 20px;
@@ -164,6 +165,7 @@ ion-icon {
   font-weight: bold;
 }
 
+// Error or informational message
 .info-message {
   color: #ff3333;
   text-align: center;
@@ -212,7 +214,7 @@ ion-textarea {
 }
 
 // ===============================
-// CALENDAR CUSTOMIZATION
+// CALENDAR STYLE CUSTOMIZATION
 // ===============================
 ion-datetime.md::part(calendar-day active),
 ion-datetime.md::part(calendar-day active):focus {
@@ -245,7 +247,7 @@ ion-datetime::part(calendar-day) {
 }
 
 // ===============================
-// RESPONSIVE DESIGN
+// RESPONSIVE DESIGN (MOBILE)
 // ===============================
 @media (max-width: 768px) {
   .membership-wrapper {

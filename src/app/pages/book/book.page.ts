@@ -18,12 +18,15 @@ import {
 import { AlertController } from '@ionic/angular';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { addIcons } from 'ionicons';
-import { body, clipboardOutline, barbellOutline, close, calendarNumber, logOutOutline, person } from 'ionicons/icons';
+import {
+  body, clipboardOutline, barbellOutline,
+  close, calendarNumber, logOutOutline, person
+} from 'ionicons/icons';
 
 // Registering icons globally
 addIcons({
-  body, clipboardOutline, barbellOutline, close,
-  calendarNumber, logOutOutline, person
+  body, clipboardOutline, barbellOutline,
+  close, calendarNumber, logOutOutline, person
 });
 
 @Component({
@@ -47,11 +50,15 @@ addIcons({
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class BookPage implements OnInit {
-  selectedDate: string = '';               // Currently selected date
-  timeSlots: ClassSlot[] = [];             // List of available class slots
-  selectedClassIds: number[] = [];         // For multi-cancel (admin/coach)
-  successMessage: string = '';             // Success feedback
-  errorMessage: string = '';               // Error feedback
+
+  // ===============================
+  // Component State
+  // ===============================
+  selectedDate: string = '';
+  timeSlots: ClassSlot[] = [];
+  selectedClassIds: number[] = [];
+  successMessage: string = '';
+  errorMessage: string = '';
 
   constructor(
     private router: Router,
@@ -60,7 +67,9 @@ export class BookPage implements OnInit {
     private alertController: AlertController
   ) {}
 
-  // On component load
+  // ===============================
+  // Component Initialization
+  // ===============================
   ngOnInit() {
     const currentUser = this.authService.getCurrentUser();
     if (!currentUser) {
@@ -68,7 +77,7 @@ export class BookPage implements OnInit {
       return;
     }
 
-    // Listen to custom events to refresh class list
+    // Refresh class list when triggered externally
     window.addEventListener('classesUpdated', (e: any) => {
       const updatedDate = e?.detail?.date || this.selectedDate;
       if (updatedDate) {
@@ -81,27 +90,34 @@ export class BookPage implements OnInit {
     }
   }
 
-  // Allow weekdays only
+  // ===============================
+  // Allow only weekdays (disable Sundays)
+  // ===============================
   isWeekday = (dateString: string) => {
     const date = new Date(dateString);
-    const utcDay = date.getUTCDay();
-    return utcDay !== 0; // Disable Sundays
+    return date.getUTCDay() !== 0;
   };
 
-  // Check if current user is admin or coach
+  // ===============================
+  // Check if user is admin or coach
+  // ===============================
   isAdminOrCoach(): boolean {
     const profile = this.authService.getUserProfile();
     return profile === 'admin' || profile === 'coach';
   }
 
-  // Check if class has already passed
+  // ===============================
+  // Check if class is in the past
+  // ===============================
   isPastClass(slot: ClassSlot): boolean {
     const now = new Date();
     const classTime = new Date(`${this.selectedDate}T${slot.time}`);
     return classTime.getTime() <= now.getTime();
   }
 
-  // Check if user is still allowed to cancel the class (minimum 2 hours in advance)
+  // ===============================
+  // Check if cancellation is allowed (2 hours before)
+  // ===============================
   canCancelClass(slot: ClassSlot): boolean {
     const now = new Date();
     const classTime = new Date(`${this.selectedDate}T${slot.time}`);
@@ -109,7 +125,9 @@ export class BookPage implements OnInit {
     return diffMinutes >= 120;
   }
 
+  // ===============================
   // Admin/Coach: toggle class selection
+  // ===============================
   toggleSelectClass(classId: number) {
     if (this.selectedClassIds.includes(classId)) {
       this.selectedClassIds = this.selectedClassIds.filter(id => id !== classId);
@@ -118,7 +136,9 @@ export class BookPage implements OnInit {
     }
   }
 
-  // Show confirmation before cancelling multiple classes
+  // ===============================
+  // Admin/Coach: confirm cancellation of selected classes
+  // ===============================
   confirmCancelSelected() {
     const selectedClasses = this.timeSlots.filter(c => this.selectedClassIds.includes(c.id));
     const message =
@@ -139,19 +159,17 @@ export class BookPage implements OnInit {
     }).then(alert => alert.present());
   }
 
-  // Cancel all selected classes (admin/coach only)
+  // ===============================
+  // Admin/Coach: cancel selected classes
+  // ===============================
   cancelSelectedClasses() {
     for (const classId of this.selectedClassIds) {
       this.classService.cancelClass(classId).subscribe({
         next: () => {
           const slot = this.timeSlots.find(s => s.id === classId);
-          if (slot) {
-            slot.cancelled = true;
-          }
+          if (slot) slot.cancelled = true;
         },
-        error: (err) => {
-          console.error('Error canceling class:', err);
-        }
+        error: (err) => console.error('Error canceling class:', err)
       });
     }
 
@@ -159,7 +177,9 @@ export class BookPage implements OnInit {
     this.successMessage = 'Classes cancelled successfully.';
   }
 
-  // Load available classes when user selects a date
+  // ===============================
+  // Load classes based on selected date
+  // ===============================
   onDateSelected(event: any): void {
     const isoDate = event.detail.value;
     const datePart = isoDate && isoDate.includes('T') ? isoDate.split('T')[0] : isoDate;
@@ -191,7 +211,9 @@ export class BookPage implements OnInit {
     });
   }
 
-  // User books a class
+  // ===============================
+  // Book a class
+  // ===============================
   bookClass(classId: number) {
     const slot = this.timeSlots.find(s => s.id === classId);
 
@@ -222,7 +244,9 @@ export class BookPage implements OnInit {
     });
   }
 
-  // ========= Navigation Methods =========
+  // ===============================
+  // Navigation Methods
+  // ===============================
   goToWod() {
     this.router.navigateByUrl('/wod');
   }
@@ -243,7 +267,9 @@ export class BookPage implements OnInit {
     this.router.navigateByUrl('/book');
   }
 
-  // Clear session and logout
+  // ===============================
+  // Logout and clear session
+  // ===============================
   logout() {
     localStorage.removeItem('token');
     this.router.navigateByUrl('/login');

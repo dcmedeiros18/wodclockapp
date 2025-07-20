@@ -7,30 +7,34 @@ import { environment } from '../../environments/environment';
   providedIn: 'root'
 })
 export class ForgotPasswordService {
-  private apiUrl = environment.authUrl; // Usa a URL de autenticação
+  private apiUrl = environment.authUrl; // Base URL for auth-related endpoints
 
   constructor(private http: HttpClient) {}
 
-   // ======= FORGOT PASSWORD: buscar pergunta secreta =======
-   getSecretQuestion(email: string): Observable<any> {
+  // ============================================
+  // Step 1 - Validate Email: Get secret question
+  // ============================================
+  getSecretQuestion(email: string): Observable<any> {
     return this.http.post(`${environment.apiUrl}/forgot-password/validate-email`, { email });
   }
-  
 
-  // ======= FORGOT PASSWORD: validar resposta =======
-  verifySecretAnswer(email: string, answer: string): Observable<any> {    
-      return this.http.post(`${this.apiUrl}/validate-answer`, {
-        email,
-        secretAnswer: answer, // <- usa o nome correto do campo que o backend espera
-      });
-    }
-  
+  // ======================================================
+  // Step 2 - Validate Answer: Check if answer is correct
+  // ======================================================
+  verifySecretAnswer(email: string, answer: string): Observable<any> {
+    return this.http.post(`${this.apiUrl}/validate-answer`, {
+      email,
+      secretAnswer: answer // Backend expects this exact key
+    });
+  }
 
-  // ======= FORGOT PASSWORD: atualizar senha =======
+  // ======================================================
+  // Step 3 - Reset Password: Update user's password
+  // ======================================================
   resetPasswordWithSecret(email: string, newPassword: string): Observable<any> {
     return this.http.post(`${environment.apiUrl}/forgot-password/update-password`, {
       email,
       newPassword
     });
-  }  
+  }
 }

@@ -1,5 +1,5 @@
 // ===============================
-// Wrapper with responsive layout
+// WRAPPER WITH RESPONSIVE LAYOUT
 // ===============================
 .login-wrapper {
   display: flex;
@@ -8,12 +8,12 @@
   overflow: hidden;
 
   @media (max-width: 768px) {
-    flex-direction: column; // Stack layout for small screens
+    flex-direction: column; // Stack layout on smaller screens
   }
 }
 
 // ===============================
-// Left column - login form
+// LEFT COLUMN - LOGIN FORM AREA
 // ===============================
 .login-left {
   flex: 1;
@@ -30,8 +30,9 @@
     padding: 30px 20px;
   }
 }
+
 // ===============================
-// Right column - background image
+// RIGHT COLUMN - IMAGE & SLOGAN
 // ===============================
 .login-right {
   flex: 1;
@@ -42,7 +43,7 @@
   position: relative;
 
   @media (max-width: 768px) {
-    display: none; // Hide image on mobile
+    display: none; // Hide image section on small screens
   }
 
   .hero-text {
@@ -60,7 +61,7 @@
 }
 
 // ===============================
-// Logo placeholder styling
+// LOGO PLACEHOLDER STYLING
 // ===============================
 .logo-box {
   width: 100%;
@@ -79,7 +80,7 @@
 }
 
 // ===============================
-// Page title
+// LOGIN PAGE TITLE
 // ===============================
 .page-title {
   font-size: 24px;
@@ -94,7 +95,7 @@
 }
 
 // ===============================
-// Label and required indicator row
+// FIELD LABEL ROW (if used)
 // ===============================
 .label-row {
   display: flex;
@@ -115,7 +116,7 @@
 }
 
 // ===============================
-// Styling for IonInput components
+// ION-ITEM AND INPUT STYLING
 // ===============================
 ion-item {
   width: 100%;
@@ -131,6 +132,9 @@ ion-item {
   }
 }
 
+// ===============================
+// FORGOT PASSWORD TEXT STYLE
+// ===============================
 .forgot-text {
   margin-top: 8px;
   text-align: center;
@@ -145,7 +149,7 @@ ion-item {
 }
 
 // ===============================
-// Show/hide password link
+// PASSWORD SHOW/HIDE LINK STYLE
 // ===============================
 .show-toggle {
   text-align: right;
@@ -159,7 +163,7 @@ ion-item {
 }
 
 // ===============================
-// Forgot password link
+// FORGOT PASSWORD LINK STYLE (legacy)
 // ===============================
 .forgot-password {
   width: 100%;
@@ -179,11 +183,13 @@ ion-item {
   }
 }
 
-// Custom styling for outline login button
+// ===============================
+// LOGIN BUTTON - CUSTOM OUTLINE STYLE
+// ===============================
 ion-button[fill="outline"] {
   --color: white;
-  --border-color:  #e53935;
-  --background:  #e53935;
+  --border-color: #e53935;
+  --background: #e53935;
   --box-shadow: none;
   --border-width: 10px;
   --ripple-color: white;
@@ -193,7 +199,9 @@ ion-button[fill="outline"] {
   margin-top: 10px;
 }
 
-// Error message styling
+// ===============================
+// ERROR MESSAGE DISPLAY STYLE
+// ===============================
 .error-message {
   color: #ff3333;
   margin-top: 12px;
@@ -201,7 +209,9 @@ ion-button[fill="outline"] {
   text-align: center;
 }
 
-// Sign-up message at bottom
+// ===============================
+// SIGN-UP TEXT AT THE BOTTOM
+// ===============================
 .signup-text {
   color: black;
   margin-top: 20px;

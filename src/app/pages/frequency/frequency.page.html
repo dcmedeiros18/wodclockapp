@@ -1,7 +1,7 @@
 <ion-content [fullscreen]="true">
   <div class="membership-wrapper">
 
-    <!-- ===== SIDEBAR MENU ===== -->
+    <!-- ===== SIDEBAR MENU (LEFT NAVIGATION) ===== -->
     <div class="sidebar">
       <div class="sidebar-title">Menu</div>
 
@@ -26,12 +26,11 @@
         <ion-icon name="calendar-number"></ion-icon> History
       </button>
     </div>
-    <!-- /sidebar -->
 
-    <!-- ===== MAIN PANEL ===== -->
+    <!-- ===== MAIN CONTENT PANEL ===== -->
     <div class="main-panel">
 
-      <!-- Top bar with title and logout -->
+      <!-- Top header with page title and logout button -->
       <div class="top-bar">
         <h1 class="welcome-text">Class History</h1>
         <button class="logout-button" (click)="logout()">
@@ -39,15 +38,16 @@
         </button>
       </div>
 
-      <!-- Two-column layout: LEFT = filters | RIGHT = results -->
+      <!-- Layout: LEFT COLUMN = Filters | RIGHT COLUMN = Data -->
       <div class="calendar-wod-layout">
 
-        <!-- ===== LEFT COLUMN (Date filters + calendar) ===== -->
+        <!-- ===== LEFT COLUMN: Filter Section ===== -->
         <div class="left-column">
 
-          <!-- Date Range Selector -->
+          <!-- Date Range Picker -->
           <div class="date-range">
-            <!-- Start Date Picker -->
+
+            <!-- Start Date -->
             <ion-datetime-button datetime="startDate"></ion-datetime-button>
             <ion-modal [keepContentsMounted]="true">
               <ng-template>
@@ -61,7 +61,7 @@
               </ng-template>
             </ion-modal>
 
-            <!-- End Date Picker -->
+            <!-- End Date -->
             <ion-datetime-button datetime="endDate"></ion-datetime-button>
             <ion-modal [keepContentsMounted]="true">
               <ng-template>
@@ -76,14 +76,14 @@
             </ion-modal>
           </div>
 
-          <!-- OK button to confirm selection -->
+          <!-- Confirmation Button -->
           <div class="ok-button-wrapper">
             <ion-button class="ok-button" (click)="calculateHistory()" [disabled]="!!errorMessage">
               OK
             </ion-button>
           </div>
 
-          <!-- Calendar appears only after clicking OK -->
+          <!-- Calendar appears only after OK is clicked -->
           <div class="calendar-box" *ngIf="showCalendar">
             <ion-datetime
               presentation="date"
@@ -93,31 +93,31 @@
           </div>
         </div>
 
-        <!-- ===== RIGHT COLUMN (Results + Personal Goals) ===== -->
+        <!-- ===== RIGHT COLUMN: History + Personal Goals ===== -->
         <div class="right-column">
 
-          <!-- Total classes result -->
+          <!-- Total number of classes -->
           <div class="stats-box" *ngIf="totalClasses !== null">
-            <div class="stats-label">TOTAL OF CLASSES BOOKED:</div>
+            <div class="stats-label">TOTAL CLASSES BOOKED:</div>
             <div class="stats-number">{{ totalClasses }}</div>
           </div>
 
-          <!-- ===== Personal Goal Card ===== -->
+          <!-- ===== Personal Goals Card ===== -->
           <ion-card class="goal-card">
             <ion-card-header>
-              <ion-card-title>Add a personal goal, you're the boss here!</ion-card-title>
+              <ion-card-title>Set your personal goals here!</ion-card-title>
             </ion-card-header>
 
             <ion-card-content>
 
-              <!-- Input to type a new goal -->
+              <!-- Input to write new goal -->
               <ion-textarea
                 [(ngModel)]="personalGoalInput"
-                placeholder="Write your goal here..."
+                placeholder="Type your goal..."
                 autoGrow="true">
               </ion-textarea>
 
-              <!-- Save new goal -->
+              <!-- Save goal button -->
               <ion-button
                 color="success"
                 expand="block"
@@ -126,7 +126,7 @@
                 Save Goal
               </ion-button>
 
-              <!-- List of existing goals -->
+              <!-- List of saved goals -->
               <div *ngIf="personalGoals.length > 0" class="goal-list">
                 <ion-label class="goal-list-label">Your Goals:</ion-label>
                 <ion-list>
@@ -142,7 +142,7 @@
                   </ion-item>
                 </ion-list>
 
-                <!-- Delete selected goal with confirmation -->
+                <!-- Confirm deletion of selected goal -->
                 <ion-button
                   color="danger"
                   expand="block"
@@ -155,7 +155,7 @@
             </ion-card-content>
           </ion-card>
 
-          <!-- Display any error message -->
+          <!-- Display error message -->
           <div *ngIf="errorMessage" class="info-message">
             {{ errorMessage }}
           </div>
@@ -165,6 +165,5 @@
       </div> <!-- /calendar-wod-layout -->
 
     </div> <!-- /main-panel -->
-
   </div> <!-- /membership-wrapper -->
 </ion-content>

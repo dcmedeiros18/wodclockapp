@@ -29,7 +29,7 @@ import {
 import { ClassService } from 'src/app/services/class.service';
 import { AuthService } from 'src/app/services/auth.service';
 
-// Register required icons
+// Register all necessary icons globally
 addIcons({
   close: closeOutline,
   body,
@@ -60,12 +60,16 @@ addIcons({
 })
 export class CancelPage implements OnInit {
 
-  // Disable Sundays in the calendar
+  // ========== Calendar Control ==========
+
+  // Disable Sundays on the calendar selection
   isWeekday = (dateString: string) => {
     const date = new Date(dateString);
     const utcDay = date.getUTCDay();
-    return utcDay !== 0;
+    return utcDay !== 0; // 0 = Sunday
   };
+
+  // ========== State Variables ==========
 
   selectedDate: string = '';
   userBookings: any[] = [];
@@ -73,7 +77,8 @@ export class CancelPage implements OnInit {
   message: string = '';
   loading: boolean = false;
 
-  // Rotating motivational phrases
+  // ========== Motivational Phrase Rotation ==========
+
   motivationalPhrases: string[] = [
     '"Hard work pays off." – Mat Fraser',
     '"You can either have excuses or results. Not both." – Tia-Clair Toomey',
@@ -91,17 +96,21 @@ export class CancelPage implements OnInit {
     private toastController: ToastController
   ) {}
 
+  // ========== Lifecycle Hook ==========
+
   ngOnInit() {
-    // Rotate motivational phrases every 5 seconds
+    // Automatically rotate motivational phrases every 5 seconds
     setInterval(() => {
       this.currentPhraseIndex =
         (this.currentPhraseIndex + 1) % this.motivationalPhrases.length;
     }, 5000);
   }
 
+  // ========== Handle Date Selection ==========
+
   /**
-   * Called when the user selects a date from the calendar.
-   * Filters bookings for that specific date and checks if the date is past.
+   * Called when a date is selected from the calendar.
+   * Fetches the user's bookings and filters them by selected date.
    */
   onDateSelected(event: any) {
     const selectedDate = new Date(event.detail.value);
@@ -114,19 +123,20 @@ export class CancelPage implements OnInit {
       next: (bookings) => {
         const selectedDay = selectedDate.toDateString();
 
-        // If selected date is in the past, show message
+        // If selected date is in the past, do not allow cancellation
         if (selectedDate.getTime() < today.setHours(0, 0, 0, 0)) {
           this.message = 'This class has already happened.';
           this.loading = false;
           return;
         }
 
-        // Filter bookings for the selected day
+        // Filter bookings to match selected date
         const bookingsOnDate = bookings.filter((booking) => {
           const classDate = new Date(`${booking.class.date}T${booking.class.time}`);
           return new Date(booking.class.date).toDateString() === selectedDay;
         });
 
+        // Display bookings or message
         if (bookingsOnDate.length > 0) {
           this.bookingsForDate = bookingsOnDate;
         } else {
@@ -143,14 +153,17 @@ export class CancelPage implements OnInit {
     });
   }
 
+  // ========== Cancel Booking ==========
+
   /**
-   * Cancels a booking if it is at least 2 hours before the class.
+   * Cancels a booking if it is at least 2 hours in advance.
    */
   async cancelBooking(booking: any) {
     const now = new Date();
     const classDateTime = new Date(`${booking.class.date}T${booking.class.time}`);
     const diffMinutes = (classDateTime.getTime() - now.getTime()) / 60000;
 
+    // Cancellation time constraint check
     if (diffMinutes < 120) {
       this.presentToast(
         'Bookings can only be cancelled at least 2 hours before the scheduled time.',
@@ -162,7 +175,7 @@ export class CancelPage implements OnInit {
     try {
       await this.classService.cancelBooking(booking.id).toPromise();
 
-      // Save confirmation message in local storage for history view
+      // Save state to localStorage to inform other pages
       localStorage.setItem('bookingUpdated', 'true');
       localStorage.setItem('bookingDate', booking.class.date);
       localStorage.setItem(
@@ -170,20 +183,20 @@ export class CancelPage implements OnInit {
         `Booking cancelled for ${booking.class.date} at ${booking.class.time}.`
       );
 
+      // Show success toast
       this.presentToast(
         `Booking cancelled for ${booking.class.date} at ${booking.class.time}.`,
         'success'
       );
 
-      // Remove the cancelled booking from the list
+      // Remove from current list
       this.bookingsForDate = this.bookingsForDate.filter(b => b.id !== booking.id);
 
-      // Show empty state if no more bookings
       if (this.bookingsForDate.length === 0) {
         this.message = 'You have no bookings for the selected date.';
       }
 
-      // Notify other components to refresh
+      // Notify other pages to update the class list
       window.dispatchEvent(new CustomEvent('classesUpdated', {
         detail: { date: booking.class.date }
       }));
@@ -194,7 +207,7 @@ export class CancelPage implements OnInit {
   }
 
   /**
-   * Displays a toast message at the bottom of the screen.
+   * Displays a temporary toast message at the bottom.
    */
   async presentToast(message: string, color: 'success' | 'warning' | 'danger' | 'primary') {
     const toast = await this.toastController.create({
@@ -206,9 +219,7 @@ export class CancelPage implements OnInit {
     await toast.present();
   }
 
-  // ===============================
-  // Navigation Methods
-  // ===============================
+  // ========== Navigation Methods ==========
 
   goToUserMembership() {
     this.router.navigateByUrl('/user-membership');

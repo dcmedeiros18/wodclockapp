@@ -5,22 +5,26 @@ import { tap } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthService {
   private apiUrl = environment.authUrl;
 
   constructor(private http: HttpClient) {}
 
-  // ===== Login com token =====
+  // ============================================
+  // LOGIN: Authenticate user and store session
+  // ============================================
   login(email: string, password: string): Observable<any> {
     return this.http.post(`${this.apiUrl}/login`, { email, password }).pipe(
       tap((response: any) => {
-        console.log('Resposta do login:', response);
+        console.log('Login response:', response);
         if (response && response.access_token && response.user) {
+          // Save JWT and user info to localStorage
           localStorage.setItem('token', response.access_token);
           localStorage.setItem('currentUser', JSON.stringify(response.user));
         } else {
+          // If login fails, clear session
           localStorage.removeItem('token');
           localStorage.removeItem('currentUser');
         }
@@ -28,17 +32,21 @@ export class AuthService {
     );
   }
 
-  // ===== Registro com pergunta secreta =====
+  // ==================================================
+  // REGISTER: Create a new user with secret question
+  // ==================================================
   register(user: any): Observable<any> {
-    // Certifique-se que os campos estão sendo enviados
+    // Make sure secretQuestion and secretAnswer are included
     return this.http.post(`${this.apiUrl}/register`, {
       ...user,
       secretQuestion: user.secretQuestion,
-      secretAnswer: user.secretAnswer
+      secretAnswer: user.secretAnswer,
     });
   }
 
-  // ===== Recuperar usuário atual do localStorage =====
+  // ============================================================
+  // SESSION MANAGEMENT: Retrieve current user from localStorage
+  // ============================================================
   getCurrentUser(): any {
     const userStr = localStorage.getItem('currentUser');
     if (userStr) {
@@ -51,14 +59,15 @@ export class AuthService {
     return null;
   }
 
+  // Get the user's profile/role (admin, coach, athlete, etc.)
   getUserProfile(): string {
     const user = this.getCurrentUser();
     return user?.profile || '';
   }
 
+  // Get the logged-in user's ID
   getCurrentUserId(): number | null {
     const user = this.getCurrentUser();
     return user?.id ?? null;
-  }  
-
   }
+}
