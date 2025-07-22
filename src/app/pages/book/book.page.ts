@@ -20,8 +20,7 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { addIcons } from 'ionicons';
 import {
   body, clipboardOutline, barbellOutline,
-  close, calendarNumber, logOutOutline, person
-} from 'ionicons/icons';
+  close, calendarNumber, logOutOutline, person, documentTextOutline, arrowDownOutline, arrowForwardOutline } from 'ionicons/icons';
 
 // Registering icons globally
 addIcons({
@@ -65,7 +64,8 @@ export class BookPage implements OnInit {
     private classService: ClassService,
     private authService: AuthService,
     private alertController: AlertController
-  ) {}
+  ) {
+      addIcons({body,clipboardOutline,barbellOutline,close,calendarNumber,logOutOutline,arrowForwardOutline,documentTextOutline,arrowDownOutline});}
 
   // ===============================
   // Component Initialization
@@ -273,5 +273,13 @@ export class BookPage implements OnInit {
   logout() {
     localStorage.removeItem('token');
     this.router.navigateByUrl('/login');
+  }
+
+  // ===============================
+  // Feedback users
+  // ===============================
+
+  openGoogleForm() {
+    window.open('https://forms.gle/SEU_LINK_AQUI', '_blank');
   }
 }

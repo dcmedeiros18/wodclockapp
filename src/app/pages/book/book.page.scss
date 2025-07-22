@@ -120,7 +120,7 @@ ion-icon {
   display: flex;
   gap: 40px;
   align-items: flex-start;
-  flex-wrap: wrap;
+  flex-wrap: wrap;   
 }
 
 .datetime-container {
@@ -292,4 +292,57 @@ ion-datetime::part(calendar-day) {
 
 .calendar-month-year-toggle #toggle-wrapper {
   color: white !important;
+}
+
+// ===============================
+// BUTTON FEEDBACK 
+// ===============================
+/* Wrapper that holds all feedback content */
+.fab-wrapper-left {
+  margin-top: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Text above the button */
+.feedback-label {
+  font-size: 16px;
+  font-weight: bold;
+  color: red;
+  margin-bottom: 8px;
+  text-align: center;
+}
+
+/* Row: arrow + button side-by-side */
+.feedback-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+
+/* Arrow beside the button */
+.side-arrow {
+  font-size: 24px;
+  color: #d32f2f;
+  animation: bounce 1.5s infinite;
+}
+
+/* Animated button */
+.pulse-button {
+  animation: pulse 2s infinite;
+}
+
+/* Keyframes */
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.15); }
+  100% { transform: scale(1); }
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(6px); } /* horizontal bounce */
 }

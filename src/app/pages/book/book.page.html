@@ -50,11 +50,26 @@
 
         <!-- Date Picker -->
         <div class="datetime-container">
-          <ion-datetime
-            presentation="date"
-            [isDateEnabled]="isWeekday"
-            (ionChange)="onDateSelected($event)">
+          <ion-datetime presentation="date" [isDateEnabled]="isWeekday" (ionChange)="onDateSelected($event)">
           </ion-datetime>
+
+          <div class="fab-wrapper-left">
+            <!-- Feedback title -->
+            <div class="feedback-label">Give your feedback</div>
+
+            <!-- Row with arrow + button -->
+            <div class="feedback-row">
+              <!-- Arrow pointing to the button -->
+              <div class="side-arrow">
+                <ion-icon name="arrow-forward-outline"></ion-icon>
+              </div>
+
+              <!-- Feedback button -->
+              <ion-fab-button class="pulse-button" (click)="openGoogleForm()">
+                <ion-icon name="document-text-outline"></ion-icon>
+              </ion-fab-button>
+            </div>
+          </div>
         </div>
 
         <!-- ===== AVAILABLE CLASSES SECTION ===== -->
@@ -90,26 +105,22 @@
                   (LESS THAN 2 HOURS LEFT)
                 </div>
 
-                <ion-checkbox
-                  slot="start"
-                  [checked]="selectedClassIds.includes(slot.id)"
+                <ion-checkbox slot="start" [checked]="selectedClassIds.includes(slot.id)"
                   [disabled]="isPastClass(slot) || !canCancelClass(slot) || slot.cancelled"
                   (ionChange)="toggleSelectClass(slot.id)">
                 </ion-checkbox>
 
                 <span *ngIf="slot.cancelled" class="cancelled-text">CLASS CANCELLED</span>
                 <span *ngIf="!slot.cancelled">
-                  {{ isPastClass(slot) ? 'Class already held' : (!canCancelClass(slot) ? 'Less than 2h to cancel' : 'Select to Cancel') }}
+                  {{ isPastClass(slot) ? 'Class already held' : (!canCancelClass(slot) ? 'Less than 2h to cancel' :
+                  'Select to Cancel') }}
                 </span>
               </div>
 
               <!-- Booking Button for Regular Users -->
               <div *ngIf="!isAdminOrCoach() && !slot.cancelled">
-                <ion-button
-                  expand="block"
-                  class="book-btn"
-                  [disabled]="slot.spots === 0 || slot.alreadyBooked || isPastClass(slot)"
-                  (click)="bookClass(slot.id)">
+                <ion-button expand="block" class="book-btn"
+                  [disabled]="slot.spots === 0 || slot.alreadyBooked || isPastClass(slot)" (click)="bookClass(slot.id)">
                   {{ slot.alreadyBooked ? 'ALREADY BOOKED' : 'BOOK CLASS' }}
                 </ion-button>
                 <div *ngIf="isPastClass(slot)" class="warning-text">CLASS ALREADY HELD</div>
@@ -118,10 +129,7 @@
 
             <!-- Cancel Button for Multiple Classes (Admin/Coach Only) -->
             <div *ngIf="isAdminOrCoach()" class="cancel-group">
-              <ion-button
-                expand="block"
-                color="danger"
-                [disabled]="selectedClassIds.length === 0"
+              <ion-button expand="block" color="danger" [disabled]="selectedClassIds.length === 0"
                 (click)="confirmCancelSelected()">
                 Cancel Selected ({{ selectedClassIds.length }})
               </ion-button>
