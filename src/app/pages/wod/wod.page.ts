@@ -10,8 +10,7 @@ import {
   IonCard,
   IonCardContent,
   IonCardHeader,
-  IonCardTitle,
-} from '@ionic/angular/standalone';
+  IonCardTitle, IonFabButton } from '@ionic/angular/standalone';
 import { RouterModule, Router } from '@angular/router';
 import { addIcons } from 'ionicons';
 import {
@@ -20,8 +19,7 @@ import {
   close,
   calendarNumber,
   logOutOutline,
-  body,
-} from 'ionicons/icons';
+  body, arrowForwardOutline, documentTextOutline } from 'ionicons/icons';
 import { WodService } from '../../services/wod.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { AlertController, ToastController } from '@ionic/angular';
@@ -41,7 +39,7 @@ addIcons({
   templateUrl: './wod.page.html',
   styleUrls: ['./wod.page.scss'],
   standalone: true,
-  imports: [
+  imports: [IonFabButton, 
     IonTextarea,
     IonIcon,
     IonContent,
@@ -88,7 +86,8 @@ export class WodPage implements OnInit {
     private authService: AuthService,
     private alertController: AlertController,
     private toastController: ToastController
-  ) {}
+  ) {
+      addIcons({body,clipboardOutline,barbellOutline,close,calendarNumber,logOutOutline,arrowForwardOutline,documentTextOutline});}
 
   // ==============================
   // LIFECYCLE
@@ -259,5 +258,12 @@ export class WodPage implements OnInit {
       position: 'bottom',
     });
     await toast.present();
+  }
+
+  // ===============================
+  // Feedback users
+  // ===============================
+  openGoogleForm() {
+    window.open('https://docs.google.com/forms/d/e/1FAIpQLScEUHsealcBUmCo-xD5mQkHQLjCN7IGqwCRhQuQz_v9n-g-9A/viewform?usp=header');
   }
 }

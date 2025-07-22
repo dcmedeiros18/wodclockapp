@@ -52,7 +52,25 @@
               presentation="date"
               [isDateEnabled]="isWeekday"
               (ionChange)="onDateSelected($event)">
-            </ion-datetime>
+            </ion-datetime> 
+            
+            <div class="fab-wrapper-left">
+              <!-- Feedback title -->
+              <div class="feedback-label">Give your feedback</div>
+  
+              <!-- Row with arrow + button -->
+              <div class="feedback-row">
+                <!-- Arrow pointing to the button -->
+                <div class="side-arrow">
+                  <ion-icon name="arrow-forward-outline"></ion-icon>
+                </div>
+  
+                <!-- Feedback button -->
+                <ion-fab-button class="pulse-button" (click)="openGoogleForm()">
+                  <ion-icon name="document-text-outline"></ion-icon>
+                </ion-fab-button>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -61,13 +79,13 @@
 
           <!-- Display loading message while fetching data -->
           <div *ngIf="loading" class="info-message gray-message spaced-message">
-            Loading...
+            Loading...            
           </div>
 
           <!-- Display when there are no bookings for selected day -->
           <div *ngIf="message && bookingsForDate.length === 0" class="info-message spaced-message">
             {{ message }}
-          </div>
+          </div>          
 
           <!-- Display cards for each class booking available on the selected date -->
           <ion-card *ngFor="let booking of bookingsForDate">

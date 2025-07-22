@@ -59,9 +59,8 @@
             presentation="date"
             [value]="selectedDate"
             (ionChange)="onDateSelected($event)">
-          </ion-datetime>
-        </div>
-        <!-- /datetime-container -->
+          </ion-datetime>          
+        </div> <!-- /datetime-container -->
 
         <!-- ==========================
              RIGHT COLUMN: WOD CONTENT
@@ -82,6 +81,8 @@
           <div *ngIf="selectedDate && !wodDescription" class="no-wod">
             <p>No WOD available for the selected date.</p>
           </div>
+
+          
 
           <!-- Admin/Coach Editor for WOD -->
           <ion-card class="wod-edit-card" *ngIf="selectedDate && isAdminOrCoach()">
@@ -127,7 +128,25 @@
             </ion-card-content>
           </ion-card>
 
-        </div> <!-- /wod-section -->
+        </div> <!-- /wod-section -->    
+        
+        <div class="fab-wrapper-left">
+          <!-- Feedback title -->
+          <div class="feedback-label">Give your feedback</div>
+
+          <!-- Row with arrow + button -->
+          <div class="feedback-row">
+            <!-- Arrow pointing to the button -->
+            <div class="side-arrow">
+              <ion-icon name="arrow-forward-outline"></ion-icon>
+            </div>
+
+            <!-- Feedback button -->
+            <ion-fab-button class="pulse-button" (click)="openGoogleForm()">
+              <ion-icon name="document-text-outline"></ion-icon>
+            </ion-fab-button>
+          </div>
+        </div>
 
       </div> <!-- /calendar-wod-layout -->
 

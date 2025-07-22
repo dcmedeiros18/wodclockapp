@@ -5,13 +5,11 @@ import {
   IonContent, IonIcon, IonDatetime, IonButton,
   IonDatetimeButton, IonModal, IonCard, IonCardHeader,
   IonCardTitle, IonCardContent, IonTextarea, IonLabel,
-  IonList, IonItem
-} from '@ionic/angular/standalone';
+  IonList, IonItem, IonFabButton } from '@ionic/angular/standalone';
 import { Router } from '@angular/router';
 import {
   calendarNumber, clipboardOutline, barbellOutline,
-  close, logOutOutline, person, body
-} from 'ionicons/icons';
+  close, logOutOutline, person, body, arrowForwardOutline, documentTextOutline } from 'ionicons/icons';
 import { addIcons } from 'ionicons';
 import { ClassService } from 'src/app/services/class.service';
 import { AuthService } from 'src/app/services/auth.service';
@@ -28,7 +26,7 @@ addIcons({
   templateUrl: './frequency.page.html',
   styleUrls: ['./frequency.page.scss'],
   standalone: true,
-  imports: [
+  imports: [IonFabButton, 
     IonLabel, IonList, IonItem, IonCard, IonCardHeader,
     IonCardTitle, IonCardContent, IonTextarea, IonModal,
     IonDatetimeButton, IonButton, IonDatetime, IonIcon,
@@ -57,7 +55,8 @@ export class FrequencyPage implements OnInit {
     private classService: ClassService,
     private authService: AuthService,
     private alertController: AlertController
-  ) {}
+  ) {
+      addIcons({body,clipboardOutline,barbellOutline,close,calendarNumber,logOutOutline,arrowForwardOutline,documentTextOutline});}
 
   // ==============================
   // LIFECYCLE HOOK
@@ -250,5 +249,12 @@ export class FrequencyPage implements OnInit {
 
   goToHistory() {
     this.router.navigateByUrl('/frequency');
+  }
+
+   // ===============================
+  // Feedback users
+  // ===============================
+  openGoogleForm() {
+    window.open('https://docs.google.com/forms/d/e/1FAIpQLScEUHsealcBUmCo-xD5mQkHQLjCN7IGqwCRhQuQz_v9n-g-9A/viewform?usp=header');
   }
 }

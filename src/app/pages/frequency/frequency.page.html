@@ -51,12 +51,8 @@
             <ion-datetime-button datetime="startDate"></ion-datetime-button>
             <ion-modal [keepContentsMounted]="true">
               <ng-template>
-                <ion-datetime
-                  id="startDate"
-                  presentation="date"
-                  [(ngModel)]="startDateValue"
-                  [isDateEnabled]="isWeekday"
-                  (ngModelChange)="onDateChange()">
+                <ion-datetime id="startDate" presentation="date" [(ngModel)]="startDateValue"
+                  [isDateEnabled]="isWeekday" (ngModelChange)="onDateChange()">
                 </ion-datetime>
               </ng-template>
             </ion-modal>
@@ -65,11 +61,7 @@
             <ion-datetime-button datetime="endDate"></ion-datetime-button>
             <ion-modal [keepContentsMounted]="true">
               <ng-template>
-                <ion-datetime
-                  id="endDate"
-                  presentation="date"
-                  [(ngModel)]="endDateValue"
-                  [isDateEnabled]="isWeekday"
+                <ion-datetime id="endDate" presentation="date" [(ngModel)]="endDateValue" [isDateEnabled]="isWeekday"
                   (ngModelChange)="onDateChange()">
                 </ion-datetime>
               </ng-template>
@@ -85,10 +77,7 @@
 
           <!-- Calendar appears only after OK is clicked -->
           <div class="calendar-box" *ngIf="showCalendar">
-            <ion-datetime
-              presentation="date"
-              [highlightedDates]="highlightedDates"
-              [isDateEnabled]="isWeekday">
+            <ion-datetime presentation="date" [highlightedDates]="highlightedDates" [isDateEnabled]="isWeekday">
             </ion-datetime>
           </div>
         </div>
@@ -111,17 +100,11 @@
             <ion-card-content>
 
               <!-- Input to write new goal -->
-              <ion-textarea
-                [(ngModel)]="personalGoalInput"
-                placeholder="Type your goal..."
-                autoGrow="true">
+              <ion-textarea [(ngModel)]="personalGoalInput" placeholder="Type your goal..." autoGrow="true">
               </ion-textarea>
 
               <!-- Save goal button -->
-              <ion-button
-                color="success"
-                expand="block"
-                (click)="saveGoal()"
+              <ion-button color="success" expand="block" (click)="saveGoal()"
                 [disabled]="!personalGoalInput || !personalGoalInput.trim()">
                 Save Goal
               </ion-button>
@@ -130,10 +113,7 @@
               <div *ngIf="personalGoals.length > 0" class="goal-list">
                 <ion-label class="goal-list-label">Your Goals:</ion-label>
                 <ion-list>
-                  <ion-item
-                    *ngFor="let goal of personalGoals; let i = index"
-                    (click)="selectGoalToDelete(i)"
-                    button
+                  <ion-item *ngFor="let goal of personalGoals; let i = index" (click)="selectGoalToDelete(i)" button
                     detail>
                     <ion-label>
                       <div class="goal-text">{{ goal.text }}</div>
@@ -143,10 +123,7 @@
                 </ion-list>
 
                 <!-- Confirm deletion of selected goal -->
-                <ion-button
-                  color="danger"
-                  expand="block"
-                  *ngIf="selectedGoalIndex !== null"
+                <ion-button color="danger" expand="block" *ngIf="selectedGoalIndex !== null"
                   (click)="confirmDeleteGoal()">
                   Delete Selected Goal
                 </ion-button>
@@ -158,6 +135,24 @@
           <!-- Display error message -->
           <div *ngIf="errorMessage" class="info-message">
             {{ errorMessage }}
+          </div>
+
+          <div class="fab-wrapper-left">
+            <!-- Feedback title -->
+            <div class="feedback-label">Give your feedback</div>
+
+            <!-- Row with arrow + button -->
+            <div class="feedback-row">
+              <!-- Arrow pointing to the button -->
+              <div class="side-arrow">
+                <ion-icon name="arrow-forward-outline"></ion-icon>
+              </div>
+
+              <!-- Feedback button -->
+              <ion-fab-button class="pulse-button" (click)="openGoogleForm()">
+                <ion-icon name="document-text-outline"></ion-icon>
+              </ion-fab-button>
+            </div>
           </div>
 
         </div> <!-- /right-column -->

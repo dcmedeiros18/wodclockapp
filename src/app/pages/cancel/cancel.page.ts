@@ -7,8 +7,7 @@ import {
   IonDatetime,
   IonIcon,
   IonText,
-  ToastController
-} from '@ionic/angular/standalone';
+  ToastController, IonFabButton } from '@ionic/angular/standalone';
 import {
   IonCard,
   IonCardHeader,
@@ -23,8 +22,7 @@ import {
   clipboardOutline,
   barbellOutline,
   calendarNumber,
-  logOutOutline
-} from 'ionicons/icons';
+  logOutOutline, arrowForwardOutline, documentTextOutline } from 'ionicons/icons';
 
 import { ClassService } from 'src/app/services/class.service';
 import { AuthService } from 'src/app/services/auth.service';
@@ -44,7 +42,7 @@ addIcons({
   templateUrl: './cancel.page.html',
   styleUrls: ['./cancel.page.scss'],
   standalone: true,
-  imports: [
+  imports: [IonFabButton, 
     IonText,
     IonIcon,
     IonButton,
@@ -94,7 +92,8 @@ export class CancelPage implements OnInit {
     private classService: ClassService,
     private authService: AuthService,
     private toastController: ToastController
-  ) {}
+  ) {
+      addIcons({body,clipboardOutline,barbellOutline,calendarNumber,logOutOutline,arrowForwardOutline,documentTextOutline});}
 
   // ========== Lifecycle Hook ==========
 
@@ -244,5 +243,12 @@ export class CancelPage implements OnInit {
   logout() {
     localStorage.removeItem('token');
     this.router.navigateByUrl('/login');
+  }
+
+  // ===============================
+  // Feedback users
+  // ===============================
+  openGoogleForm() {
+    window.open('https://docs.google.com/forms/d/e/1FAIpQLScEUHsealcBUmCo-xD5mQkHQLjCN7IGqwCRhQuQz_v9n-g-9A/viewform?usp=header');
   }
 }

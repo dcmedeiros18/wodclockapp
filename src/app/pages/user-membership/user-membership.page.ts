@@ -9,8 +9,7 @@ import {
   calendarNumber,
   close,
   clipboardOutline,
-  logOutOutline
-} from 'ionicons/icons';
+  logOutOutline, arrowForwardOutline, documentTextOutline } from 'ionicons/icons';
 
 // ====================================
 // Register Ionicons globally
@@ -57,13 +56,7 @@ export class UserMembershipPage implements OnInit, OnDestroy {
 
   constructor(private router: Router) {
     // Register icons again to ensure availability
-    addIcons({
-      clipboardOutline,
-      barbellOutline,
-      close,
-      calendarNumber,
-      logOutOutline
-    });
+    addIcons({clipboardOutline,barbellOutline,close,calendarNumber,logOutOutline,arrowForwardOutline,documentTextOutline});
   }
 
   // ====================================
@@ -137,5 +130,12 @@ export class UserMembershipPage implements OnInit, OnDestroy {
     localStorage.removeItem('token');
     localStorage.removeItem('currentUser');
     this.router.navigateByUrl('/login');
+  }
+
+  // ===============================
+  // Feedback users
+  // ===============================
+  openGoogleForm() {
+    window.open('https://docs.google.com/forms/d/e/1FAIpQLScEUHsealcBUmCo-xD5mQkHQLjCN7IGqwCRhQuQz_v9n-g-9A/viewform?usp=header');
   }
 }
