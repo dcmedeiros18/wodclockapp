@@ -9,7 +9,7 @@ import {
   calendarNumber,
   close,
   clipboardOutline,
-  logOutOutline, arrowForwardOutline, documentTextOutline } from 'ionicons/icons';
+  logOutOutline, arrowForwardOutline, documentTextOutline, body } from 'ionicons/icons';
 
 // ====================================
 // Register Ionicons globally
@@ -56,7 +56,7 @@ export class UserMembershipPage implements OnInit, OnDestroy {
 
   constructor(private router: Router) {
     // Register icons again to ensure availability
-    addIcons({clipboardOutline,barbellOutline,close,calendarNumber,logOutOutline,arrowForwardOutline,documentTextOutline});
+    addIcons({logOutOutline,clipboardOutline,barbellOutline,close,calendarNumber,arrowForwardOutline,documentTextOutline,body});
   }
 
   // ====================================

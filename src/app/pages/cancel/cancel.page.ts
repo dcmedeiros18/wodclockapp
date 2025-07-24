@@ -7,7 +7,7 @@ import {
   IonDatetime,
   IonIcon,
   IonText,
-  ToastController, IonFabButton } from '@ionic/angular/standalone';
+  ToastController, IonFabButton, IonTabs, IonTabButton, IonHeader, IonToolbar, IonTabBar, IonLabel } from '@ionic/angular/standalone';
 import {
   IonCard,
   IonCardHeader,
@@ -26,6 +26,7 @@ import {
 
 import { ClassService } from 'src/app/services/class.service';
 import { AuthService } from 'src/app/services/auth.service';
+import { MenuComponent } from '../menu/menu.component';
 
 // Register all necessary icons globally
 addIcons({
@@ -42,7 +43,14 @@ addIcons({
   templateUrl: './cancel.page.html',
   styleUrls: ['./cancel.page.scss'],
   standalone: true,
-  imports: [IonFabButton, 
+  imports: [
+    IonHeader,
+    IonToolbar,
+    IonTabs,
+    IonTabBar,
+    IonTabButton,
+    IonLabel,
+    IonTabButton, IonTabs, IonFabButton, 
     IonText,
     IonIcon,
     IonButton,
@@ -53,7 +61,8 @@ addIcons({
     IonCard,
     IonCardHeader,
     IonCardTitle,
-    IonCardContent
+    IonCardContent,
+    MenuComponent,
   ]
 })
 export class CancelPage implements OnInit {
@@ -93,7 +102,7 @@ export class CancelPage implements OnInit {
     private authService: AuthService,
     private toastController: ToastController
   ) {
-      addIcons({body,clipboardOutline,barbellOutline,calendarNumber,logOutOutline,arrowForwardOutline,documentTextOutline});}
+      addIcons({logOutOutline,arrowForwardOutline,documentTextOutline,body,clipboardOutline,barbellOutline,calendarNumber});}
 
   // ========== Lifecycle Hook ==========
 

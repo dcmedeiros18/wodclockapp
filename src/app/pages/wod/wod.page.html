@@ -1,73 +1,39 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <div class="top-bar">
+      <h1 class="welcome-text">Workout of the Day</h1>
+      <button class="logout-button" (click)="logout()">
+        <ion-icon name="log-out-outline" color="danger"></ion-icon> Logout
+      </button>
+    </div>
+  </ion-toolbar>
+</ion-header>
+
 <ion-content [fullscreen]="true">
   <div class="membership-wrapper">
 
-    <!-- ================================
-         SIDEBAR MENU (LEFT NAVIGATION)
-    ================================== -->
-    <div class="sidebar">
-      <div class="sidebar-title">Menu</div>
+    <!-- SIDEBAR COMPONENT (desktop only) -->
+    <app-menu></app-menu>
 
-      <!-- Home navigation -->
-      <button class="sidebar-btn" (click)="goToUserMembership()">
-        <ion-icon name="body"></ion-icon> Home
-      </button>
-
-      <!-- Booking navigation -->
-      <button class="sidebar-btn" (click)="goToBook()">
-        <ion-icon name="clipboard-outline"></ion-icon> Book
-      </button>
-
-      <!-- WOD navigation -->
-      <button class="sidebar-btn" (click)="goToWod()">
-        <ion-icon name="barbell-outline"></ion-icon> WOD
-      </button>
-
-      <!-- Cancellation navigation -->
-      <button class="sidebar-btn" (click)="goToCancel()">
-        <ion-icon name="close" color="danger"></ion-icon> Cancel
-      </button>
-
-      <!-- Class history navigation -->
-      <button class="sidebar-btn" (click)="goToHistory()">
-        <ion-icon name="calendar-number"></ion-icon> History
-      </button>
-    </div>
-    <!-- /sidebar -->
-
-    <!-- ================================
-         MAIN PANEL (CONTENT AREA)
-    ================================== -->
+    <!-- MAIN CONTENT PANEL -->
     <div class="main-panel">
 
-      <!-- Top bar with title and logout -->
-      <div class="top-bar">
-        <h1 class="welcome-text">Workout of the Day</h1>
-        <button class="logout-button" (click)="logout()">
-          <ion-icon name="log-out-outline" color="danger"></ion-icon> Logout
-        </button>
-      </div>
-      <!-- /top-bar -->
-
-      <!-- Layout containing calendar (left) and WOD info (right) -->
+      <!-- Layout with calendar (left) and WOD content (right) -->
       <div class="calendar-wod-layout">
 
-        <!-- ==========================
-             LEFT COLUMN: CALENDAR
-        =========================== -->
+        <!-- LEFT: Calendar Date Picker -->
         <div class="datetime-container">
           <ion-datetime
             presentation="date"
             [value]="selectedDate"
             (ionChange)="onDateSelected($event)">
-          </ion-datetime>          
-        </div> <!-- /datetime-container -->
+          </ion-datetime>
+        </div>
 
-        <!-- ==========================
-             RIGHT COLUMN: WOD CONTENT
-        =========================== -->
+        <!-- RIGHT: WOD Information -->
         <div class="wod-section">
 
-          <!-- Display WOD if available -->
+          <!-- Show WOD if available -->
           <ion-card class="wod-card" *ngIf="selectedDate && wodDescription">
             <ion-card-header>
               <ion-card-title>{{ wodTitle }}</ion-card-title>
@@ -77,28 +43,26 @@
             </ion-card-content>
           </ion-card>
 
-          <!-- Message if no WOD found -->
+          <!-- Message if no WOD -->
           <div *ngIf="selectedDate && !wodDescription" class="no-wod">
             <p>No WOD available for the selected date.</p>
           </div>
 
-          
-
-          <!-- Admin/Coach Editor for WOD -->
+          <!-- Admin/Coach Editor Panel -->
           <ion-card class="wod-edit-card" *ngIf="selectedDate && isAdminOrCoach()">
             <ion-card-header>
               <ion-card-title>WOD Description</ion-card-title>
             </ion-card-header>
             <ion-card-content>
 
-              <!-- Textarea to edit WOD -->
+              <!-- WOD Text Editor -->
               <ion-textarea
                 name="wodNotes"
                 [(ngModel)]="wodNotes"
                 placeholder="Type the WOD description here...">
               </ion-textarea>
 
-              <!-- Action buttons -->
+              <!-- Action Buttons -->
               <div class="button-group">
                 <ion-button
                   color="danger"
@@ -123,25 +87,17 @@
                   Save
                 </ion-button>
               </div>
-              <!-- /button-group -->
-
             </ion-card-content>
           </ion-card>
+        </div> <!-- /wod-section -->
 
-        </div> <!-- /wod-section -->    
-        
+        <!-- Feedback Button -->
         <div class="fab-wrapper-left">
-          <!-- Feedback title -->
           <div class="feedback-label">Give your feedback</div>
-
-          <!-- Row with arrow + button -->
           <div class="feedback-row">
-            <!-- Arrow pointing to the button -->
             <div class="side-arrow">
               <ion-icon name="arrow-forward-outline"></ion-icon>
             </div>
-
-            <!-- Feedback button -->
             <ion-fab-button class="pulse-button" (click)="openGoogleForm()">
               <ion-icon name="document-text-outline"></ion-icon>
             </ion-fab-button>
@@ -150,9 +106,7 @@
 
       </div> <!-- /calendar-wod-layout -->
 
-      <!-- ==========================
-           MOTIVATIONAL QUOTE
-      =========================== -->
+      <!-- Motivational Quote Section -->
       <div class="motivational-card">
         <ion-card>
           <ion-card-content>
@@ -162,11 +116,37 @@
           </ion-card-content>
         </ion-card>
       </div>
-      <!-- /motivational-card -->
 
-    </div>
-    <!-- /main-panel -->
+    </div> <!-- /main-panel -->
+  </div> <!-- /membership-wrapper -->
 
-  </div>
-  <!-- /membership-wrapper -->
+  <!-- MOBILE TABS MENU -->
+  <ion-tabs>
+    <ion-tab-bar slot="bottom" class="mobile-only">
+      <ion-tab-button tab="user-membership" (click)="goToUserMembership()">
+        <ion-icon name="body"></ion-icon>
+        <ion-label>Home</ion-label>
+      </ion-tab-button>
+
+      <ion-tab-button tab="book" (click)="goToBook()">
+        <ion-icon name="clipboard-outline"></ion-icon>
+        <ion-label>Book</ion-label>
+      </ion-tab-button>
+
+      <ion-tab-button tab="wod" (click)="goToWod()">
+        <ion-icon name="barbell-outline"></ion-icon>
+        <ion-label>WOD</ion-label>
+      </ion-tab-button>
+
+      <ion-tab-button tab="cancel" (click)="goToCancel()">
+        <ion-icon name="close" color="danger"></ion-icon>
+        <ion-label>Cancel</ion-label>
+      </ion-tab-button>
+
+      <ion-tab-button tab="frequency" (click)="goToHistory()">
+        <ion-icon name="calendar-number"></ion-icon>
+        <ion-label>History</ion-label>
+      </ion-tab-button>
+    </ion-tab-bar>
+  </ion-tabs>
 </ion-content>

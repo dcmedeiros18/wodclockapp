@@ -1,58 +1,41 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <div class="top-bar">
+      <h1 class="welcome-text">Class History</h1>
+      <button class="logout-button" (click)="logout()">
+        <ion-icon name="log-out-outline" color="danger"></ion-icon> Logout
+      </button>
+    </div>
+  </ion-toolbar>
+</ion-header>
+
 <ion-content [fullscreen]="true">
   <div class="membership-wrapper">
 
-    <!-- ===== SIDEBAR MENU (LEFT NAVIGATION) ===== -->
-    <div class="sidebar">
-      <div class="sidebar-title">Menu</div>
+    <!--  SIDEBAR COMPONENT (visible on desktop only) -->
+    <app-menu></app-menu>
 
-      <!-- Navigation Buttons -->
-      <button class="sidebar-btn" (click)="goToUserMembership()">
-        <ion-icon name="body"></ion-icon> Home
-      </button>
-
-      <button class="sidebar-btn" (click)="goToBook()">
-        <ion-icon name="clipboard-outline"></ion-icon> Book
-      </button>
-
-      <button class="sidebar-btn" (click)="goToWod()">
-        <ion-icon name="barbell-outline"></ion-icon> WOD
-      </button>
-
-      <button class="sidebar-btn" (click)="goToCancel()">
-        <ion-icon name="close" color="danger"></ion-icon> Cancel
-      </button>
-
-      <button class="sidebar-btn" (click)="goToHistory()">
-        <ion-icon name="calendar-number"></ion-icon> History
-      </button>
-    </div>
-
-    <!-- ===== MAIN CONTENT PANEL ===== -->
+    <!-- MAIN CONTENT AREA -->
     <div class="main-panel">
 
-      <!-- Top header with page title and logout button -->
-      <div class="top-bar">
-        <h1 class="welcome-text">Class History</h1>
-        <button class="logout-button" (click)="logout()">
-          <ion-icon name="log-out-outline" color="danger"></ion-icon> Logout
-        </button>
-      </div>
-
-      <!-- Layout: LEFT COLUMN = Filters | RIGHT COLUMN = Data -->
+      <!-- Layout containing filter (left) and results (right) -->
       <div class="calendar-wod-layout">
 
-        <!-- ===== LEFT COLUMN: Filter Section ===== -->
+        <!--  LEFT COLUMN: Filters and Calendar -->
         <div class="left-column">
 
           <!-- Date Range Picker -->
           <div class="date-range">
-
             <!-- Start Date -->
             <ion-datetime-button datetime="startDate"></ion-datetime-button>
             <ion-modal [keepContentsMounted]="true">
               <ng-template>
-                <ion-datetime id="startDate" presentation="date" [(ngModel)]="startDateValue"
-                  [isDateEnabled]="isWeekday" (ngModelChange)="onDateChange()">
+                <ion-datetime
+                  id="startDate"
+                  presentation="date"
+                  [(ngModel)]="startDateValue"
+                  [isDateEnabled]="isWeekday"
+                  (ngModelChange)="onDateChange()">
                 </ion-datetime>
               </ng-template>
             </ion-modal>
@@ -61,60 +44,74 @@
             <ion-datetime-button datetime="endDate"></ion-datetime-button>
             <ion-modal [keepContentsMounted]="true">
               <ng-template>
-                <ion-datetime id="endDate" presentation="date" [(ngModel)]="endDateValue" [isDateEnabled]="isWeekday"
+                <ion-datetime
+                  id="endDate"
+                  presentation="date"
+                  [(ngModel)]="endDateValue"
+                  [isDateEnabled]="isWeekday"
                   (ngModelChange)="onDateChange()">
                 </ion-datetime>
               </ng-template>
             </ion-modal>
           </div>
 
-          <!-- Confirmation Button -->
+          <!-- OK Button -->
           <div class="ok-button-wrapper">
             <ion-button class="ok-button" (click)="calculateHistory()" [disabled]="!!errorMessage">
               OK
             </ion-button>
           </div>
 
-          <!-- Calendar appears only after OK is clicked -->
+          <!-- Calendar shown after OK -->
           <div class="calendar-box" *ngIf="showCalendar">
-            <ion-datetime presentation="date" [highlightedDates]="highlightedDates" [isDateEnabled]="isWeekday">
+            <ion-datetime
+              presentation="date"
+              [highlightedDates]="highlightedDates"
+              [isDateEnabled]="isWeekday">
             </ion-datetime>
           </div>
         </div>
 
-        <!-- ===== RIGHT COLUMN: History + Personal Goals ===== -->
+        <!--  RIGHT COLUMN: Results and Goals -->
         <div class="right-column">
 
-          <!-- Total number of classes -->
+          <!-- Total Classes -->
           <div class="stats-box" *ngIf="totalClasses !== null">
             <div class="stats-label">TOTAL CLASSES BOOKED:</div>
             <div class="stats-number">{{ totalClasses }}</div>
           </div>
 
-          <!-- ===== Personal Goals Card ===== -->
+          <!-- Goals Card -->
           <ion-card class="goal-card">
             <ion-card-header>
               <ion-card-title>Set your personal goals here!</ion-card-title>
             </ion-card-header>
-
             <ion-card-content>
 
-              <!-- Input to write new goal -->
-              <ion-textarea [(ngModel)]="personalGoalInput" placeholder="Type your goal..." autoGrow="true">
+              <!-- Input Field -->
+              <ion-textarea
+                [(ngModel)]="personalGoalInput"
+                placeholder="Type your goal..."
+                autoGrow="true">
               </ion-textarea>
 
-              <!-- Save goal button -->
-              <ion-button color="success" expand="block" (click)="saveGoal()"
+              <!-- Save Button -->
+              <ion-button
+                color="success"
+                expand="block"
+                (click)="saveGoal()"
                 [disabled]="!personalGoalInput || !personalGoalInput.trim()">
                 Save Goal
               </ion-button>
 
-              <!-- List of saved goals -->
+              <!-- Goals List -->
               <div *ngIf="personalGoals.length > 0" class="goal-list">
                 <ion-label class="goal-list-label">Your Goals:</ion-label>
                 <ion-list>
-                  <ion-item *ngFor="let goal of personalGoals; let i = index" (click)="selectGoalToDelete(i)" button
-                    detail>
+                  <ion-item *ngFor="let goal of personalGoals; let i = index"
+                            (click)="selectGoalToDelete(i)"
+                            button
+                            detail>
                     <ion-label>
                       <div class="goal-text">{{ goal.text }}</div>
                       <div class="goal-date">{{ goal.date }}</div>
@@ -122,33 +119,30 @@
                   </ion-item>
                 </ion-list>
 
-                <!-- Confirm deletion of selected goal -->
-                <ion-button color="danger" expand="block" *ngIf="selectedGoalIndex !== null"
+                <!-- Delete Button -->
+                <ion-button
+                  color="danger"
+                  expand="block"
+                  *ngIf="selectedGoalIndex !== null"
                   (click)="confirmDeleteGoal()">
                   Delete Selected Goal
                 </ion-button>
               </div>
-
             </ion-card-content>
           </ion-card>
 
-          <!-- Display error message -->
+          <!-- Error Message -->
           <div *ngIf="errorMessage" class="info-message">
             {{ errorMessage }}
           </div>
 
+          <!-- Feedback Button -->
           <div class="fab-wrapper-left">
-            <!-- Feedback title -->
             <div class="feedback-label">Give your feedback</div>
-
-            <!-- Row with arrow + button -->
             <div class="feedback-row">
-              <!-- Arrow pointing to the button -->
               <div class="side-arrow">
                 <ion-icon name="arrow-forward-outline"></ion-icon>
               </div>
-
-              <!-- Feedback button -->
               <ion-fab-button class="pulse-button" (click)="openGoogleForm()">
                 <ion-icon name="document-text-outline"></ion-icon>
               </ion-fab-button>
@@ -161,4 +155,34 @@
 
     </div> <!-- /main-panel -->
   </div> <!-- /membership-wrapper -->
+
+  <!-- MOBILE TABS MENU -->
+  <ion-tabs>
+    <ion-tab-bar slot="bottom" class="mobile-only">
+      <ion-tab-button tab="user-membership" (click)="goToUserMembership()">
+        <ion-icon name="body"></ion-icon>
+        <ion-label>Home</ion-label>
+      </ion-tab-button>
+
+      <ion-tab-button tab="book" (click)="goToBook()">
+        <ion-icon name="clipboard-outline"></ion-icon>
+        <ion-label>Book</ion-label>
+      </ion-tab-button>
+
+      <ion-tab-button tab="wod" (click)="goToWod()">
+        <ion-icon name="barbell-outline"></ion-icon>
+        <ion-label>WOD</ion-label>
+      </ion-tab-button>
+
+      <ion-tab-button tab="cancel" (click)="goToCancel()">
+        <ion-icon name="close" color="danger"></ion-icon>
+        <ion-label>Cancel</ion-label>
+      </ion-tab-button>
+
+      <ion-tab-button tab="frequency" (click)="goToHistory()">
+        <ion-icon name="calendar-number"></ion-icon>
+        <ion-label>History</ion-label>
+      </ion-tab-button>
+    </ion-tab-bar>
+  </ion-tabs>
 </ion-content>

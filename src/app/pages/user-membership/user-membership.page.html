@@ -1,52 +1,26 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <div class="top-bar">
+      <h1 class="welcome-text">Welcome, {{ currentUserName }}</h1>
+      <button class="logout-button" (click)="logout()">
+        <ion-icon name="log-out-outline" color="danger"></ion-icon> Logout
+      </button>
+    </div>
+  </ion-toolbar>
+</ion-header>
+
 <ion-content [fullscreen]="true">
   <div class="membership-wrapper">
 
-    <!-- ===========================
-         SIDEBAR NAVIGATION MENU
-    ============================ -->
-    <div class="sidebar">
-      <div class="sidebar-title">Menu</div>
+    <!-- SIDEBAR MENU (visible on desktop) -->
+    <app-menu></app-menu>
 
-      <!-- Navigate to the Booking Page -->
-      <button class="sidebar-btn" (click)="goToBook()">
-        <ion-icon name="clipboard-outline"></ion-icon> Book
-      </button>
-
-      <!-- Navigate to the WOD Page -->
-      <button class="sidebar-btn" (click)="goToWod()">
-        <ion-icon name="barbell-outline"></ion-icon> WOD
-      </button>
-
-      <!-- Navigate to the Cancel Booking Page -->
-      <button class="sidebar-btn" (click)="goToCancel()">
-        <ion-icon name="close" color="danger"></ion-icon> Cancel
-      </button>
-
-      <!-- Navigate to the Class History Page -->
-      <button class="sidebar-btn" (click)="goToFrequency()">
-        <ion-icon name="calendar-number"></ion-icon> History
-      </button>
-    </div>
-
-    <!-- ===========================
-         MAIN PANEL (RIGHT CONTENT)
-    ============================ -->
+    <!-- MAIN CONTENT AREA -->
     <div class="main-panel">
-
-      <!-- Top Bar with Welcome Message and Logout Button -->
-      <div class="top-bar">
-        <h1 class="welcome-text">Welcome, {{ currentUserName }}</h1>
-        <button class="logout-button" (click)="logout()">
-          <ion-icon name="log-out-outline" color="danger"></ion-icon> Logout
-        </button>
-      </div>
-
       <!-- Section Title -->
       <h2 class="section-title">Your Dashboard</h2>
 
-      <!-- ===========================
-           QUICK ACTION CARDS
-      ============================ -->
+      <!-- 🔹 DASHBOARD QUICK ACTIONS -->
       <div class="card-grid">
 
         <!-- Card: Book a Class -->
@@ -76,7 +50,7 @@
           </div>
         </div>
 
-        <!-- Card: View Training History -->
+        <!-- Card: View History -->
         <div class="card-box" (click)="goToFrequency()">
           <ion-icon name="calendar-number"></ion-icon>
           <div>
@@ -85,42 +59,56 @@
           </div>
         </div>
 
+        <!-- 🔹 Feedback Button -->
         <div class="fab-wrapper-left">
-          <!-- Feedback title -->
           <div class="feedback-label">Give your feedback</div>
-
-          <!-- Row with arrow + button -->
           <div class="feedback-row">
-            <!-- Arrow pointing to the button -->
             <div class="side-arrow">
               <ion-icon name="arrow-forward-outline"></ion-icon>
             </div>
-
-            <!-- Feedback button -->
             <ion-fab-button class="pulse-button" (click)="openGoogleForm()">
               <ion-icon name="document-text-outline"></ion-icon>
             </ion-fab-button>
           </div>
         </div>
-        
-      </div>
 
-      <!-- ===========================
-           COMMUNITY PHOTO CAROUSEL
-      ============================ -->
+      </div> <!-- end card-grid -->
+
+      <!-- 🔹 COMMUNITY PHOTO CAROUSEL -->
       <div class="carousel-wrapper">
         <h3 class="carousel-title">Community Moments</h3>
-
-        <!-- Display currently active image in the carousel -->
         <div class="photo-carousel">
-          <img
-            *ngIf="carouselImages.length"
-            [src]="carouselImages[currentCarouselIndex]"
-            alt="Carousel image" />
+          <img *ngIf="carouselImages.length"
+               [src]="carouselImages[currentCarouselIndex]"
+               alt="Carousel image" />
         </div>
       </div>
+    </div> <!-- end .main-panel -->
+  </div> <!-- end .membership-wrapper -->
 
-    </div> <!-- /main-panel -->
+  <!-- MOBILE TABS MENU -->
+  <ion-tabs>
+    <ion-tab-bar slot="bottom" class="mobile-only">
+      
+      <ion-tab-button tab="book" (click)="goToBook()">
+        <ion-icon name="clipboard-outline"></ion-icon>
+        <ion-label>Book</ion-label>
+      </ion-tab-button>
 
-  </div> <!-- /membership-wrapper -->
+      <ion-tab-button tab="wod" (click)="goToWod()">
+        <ion-icon name="barbell-outline"></ion-icon>
+        <ion-label>WOD</ion-label>
+      </ion-tab-button>
+
+      <ion-tab-button tab="cancel" (click)="goToCancel()">
+        <ion-icon name="close" color="danger"></ion-icon>
+        <ion-label>Cancel</ion-label>
+      </ion-tab-button>
+
+      <ion-tab-button tab="frequency" (click)="goToFrequency()">
+        <ion-icon name="calendar-number"></ion-icon>
+        <ion-label>History</ion-label>
+      </ion-tab-button>
+    </ion-tab-bar>
+  </ion-tabs>
 </ion-content>

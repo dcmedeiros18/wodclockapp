@@ -22,9 +22,9 @@ export class ForgotPasswordService {
   // Step 2 - Validate Answer: Check if answer is correct
   // ======================================================
   verifySecretAnswer(email: string, answer: string): Observable<any> {
-    return this.http.post(`${this.apiUrl}/validate-answer`, {
+    return this.http.post(`${environment.apiUrl}/forgot-password/validate-answer`, {
       email,
-      secretAnswer: answer // Backend expects this exact key
+      secretAnswer: answer
     });
   }
 

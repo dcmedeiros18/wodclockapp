@@ -17,44 +17,26 @@ ion-content {
 }
 
 // ===============================
-// SIDEBAR (LEFT NAVIGATION MENU)
+//  NAVIGATION BOTTOM
 // ===============================
-.sidebar {
-  width: 220px;
-  background-color: #1a1a1a;
-  color: white;
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  box-sizing: border-box;
-  overflow-y: auto;
+.main-panel {   
+  padding-bottom: 90px;  
 }
 
-.sidebar-title {
-  font-size: 18px;
-  font-weight: bold;
-  margin-bottom: 20px;
-}
-
-.sidebar-btn {
-  background: none;
-  border: none;
-  color: white;
-  font-size: 16px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  cursor: pointer;
-}
-
-.sidebar-btn:hover {
-  color: #ff4c4c;
+ion-tab-bar {
+  --background: black;
+  --color: white;
+  --color-selected: white;
+  --color-activated: white;
+  --color-focused: white;
+  --color-hover: white;
+  --color-activated: white; 
+  --font-size: 10px;
+  --font-weight: bold;    
 }
 
 ion-icon {
-  font-size: 40px;
-  margin-right: 10px;
+  font-size: 32px;
 }
 
 // ===============================

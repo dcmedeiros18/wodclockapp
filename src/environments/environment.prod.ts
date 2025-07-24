@@ -1,3 +1,5 @@
 export const environment = {
-  production: true
+  production: true,
+  apiUrl: 'https://SEU_BACKEND_PRODUCAO',
+  authUrl: 'https://SEU_BACKEND_PRODUCAO/auth'
 };

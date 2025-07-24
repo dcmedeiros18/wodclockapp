@@ -10,7 +10,7 @@ import {
   IonCard,
   IonCardContent,
   IonCardHeader,
-  IonCardTitle, IonFabButton } from '@ionic/angular/standalone';
+  IonCardTitle, IonFabButton, IonTabButton, IonTabBar, IonTabs, IonLabel, IonHeader, IonToolbar } from '@ionic/angular/standalone';
 import { RouterModule, Router } from '@angular/router';
 import { addIcons } from 'ionicons';
 import {
@@ -23,6 +23,8 @@ import {
 import { WodService } from '../../services/wod.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { AlertController, ToastController } from '@ionic/angular';
+import { MenuComponent } from '../menu/menu.component';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 // Register icons globally
 addIcons({
@@ -39,7 +41,14 @@ addIcons({
   templateUrl: './wod.page.html',
   styleUrls: ['./wod.page.scss'],
   standalone: true,
-  imports: [IonFabButton, 
+  imports: [
+    IonHeader,
+    IonToolbar,
+    IonLabel,
+    IonTabs,
+    IonTabBar,
+    IonTabButton,
+    IonFabButton,
     IonTextarea,
     IonIcon,
     IonContent,
@@ -52,7 +61,9 @@ addIcons({
     IonCardHeader,
     IonCardTitle,
     RouterModule,
+    MenuComponent,
   ],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class WodPage implements OnInit {
   // ==============================

@@ -1,71 +1,42 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <div class="top-bar">
+      <h1 class="welcome-text">Cancel Booking</h1>
+      <button class="logout-button" (click)="logout()">
+        <ion-icon name="log-out-outline" color="danger"></ion-icon> Logout
+      </button>
+    </div>
+  </ion-toolbar>
+</ion-header>
+
 <ion-content [fullscreen]="true">
   <div class="membership-wrapper">
 
-    <!-- ===== SIDEBAR MENU (LEFT NAVIGATION) ===== -->
-    <div class="sidebar">
-      <div class="sidebar-title">Menu</div>
+    <!-- SIDEBAR COMPONENT (desktop only) -->
+    <app-menu></app-menu>
 
-      <!-- Navigation to Home Page -->
-      <button class="sidebar-btn" (click)="goToUserMembership()">
-        <ion-icon name="body"></ion-icon> Home
-      </button>
-
-      <!-- Navigation to Booking Page -->
-      <button class="sidebar-btn" (click)="goToBook()">
-        <ion-icon name="clipboard-outline"></ion-icon> Book
-      </button>
-
-      <!-- Navigation to Workout of the Day Page -->
-      <button class="sidebar-btn" (click)="goToWod()">
-        <ion-icon name="barbell-outline"></ion-icon> WOD
-      </button>
-
-      <!-- Navigation to Cancel Page (Current Page) -->
-      <button class="sidebar-btn" (click)="goToCancel()">
-        <ion-icon name="close" color="danger"></ion-icon> Cancel
-      </button>
-
-      <!-- Navigation to Class History Page -->
-      <button class="sidebar-btn" (click)="goToHistory()">
-        <ion-icon name="calendar-number"></ion-icon> History
-      </button>
-    </div>
-
-    <!-- ===== MAIN CONTENT PANEL (RIGHT SIDE) ===== -->
+    <!-- MAIN CONTENT AREA -->
     <div class="main-panel">
 
-      <!-- Top bar with page title and logout button -->
-      <div class="top-bar">
-        <h1 class="welcome-text">Cancel Booking</h1>
-        <button class="logout-button" (click)="logout()">
-          <ion-icon name="log-out-outline" color="danger"></ion-icon> Logout
-        </button>
-      </div>
-
-      <!-- Two-column layout: calendar on the left, booking list on the right -->
+      <!-- Layout with calendar (left) and booking list (right) -->
       <div class="calendar-wod-layout">
 
-        <!-- ===== LEFT COLUMN: Calendar for selecting the date ===== -->
+        <!--  LEFT COLUMN: Date Selection -->
         <div class="left-column">
           <div class="calendar-box">
             <ion-datetime
               presentation="date"
               [isDateEnabled]="isWeekday"
               (ionChange)="onDateSelected($event)">
-            </ion-datetime> 
-            
+            </ion-datetime>
+
+            <!-- Feedback Button -->
             <div class="fab-wrapper-left">
-              <!-- Feedback title -->
               <div class="feedback-label">Give your feedback</div>
-  
-              <!-- Row with arrow + button -->
               <div class="feedback-row">
-                <!-- Arrow pointing to the button -->
                 <div class="side-arrow">
                   <ion-icon name="arrow-forward-outline"></ion-icon>
                 </div>
-  
-                <!-- Feedback button -->
                 <ion-fab-button class="pulse-button" (click)="openGoogleForm()">
                   <ion-icon name="document-text-outline"></ion-icon>
                 </ion-fab-button>
@@ -74,20 +45,20 @@
           </div>
         </div>
 
-        <!-- ===== RIGHT COLUMN: Bookings and messages ===== -->
+        <!-- RIGHT COLUMN: Bookings for Selected Day -->
         <div class="right-column">
 
-          <!-- Display loading message while fetching data -->
+          <!-- Show loading while fetching data -->
           <div *ngIf="loading" class="info-message gray-message spaced-message">
-            Loading...            
+            Loading...
           </div>
 
-          <!-- Display when there are no bookings for selected day -->
+          <!-- Show message when no bookings found -->
           <div *ngIf="message && bookingsForDate.length === 0" class="info-message spaced-message">
             {{ message }}
-          </div>          
+          </div>
 
-          <!-- Display cards for each class booking available on the selected date -->
+          <!-- Show bookings as cards -->
           <ion-card *ngFor="let booking of bookingsForDate">
             <ion-card-header>
               <ion-card-title>{{ booking.class.time }}</ion-card-title>
@@ -100,12 +71,12 @@
             </ion-card-content>
           </ion-card>
 
-          <!-- Fixed motivational message at the bottom -->
+          <!-- Fixed motivational phrase -->
           <ion-text class="motivation-phrase">
             "Constancy beats intensity. See you at the next WOD!"
           </ion-text>
 
-          <!-- Rotating motivational message (carousel style) -->
+          <!-- Rotating motivational phrase -->
           <ion-card class="phrase-card">
             <ion-card-content class="phrase-text">
               {{ motivationalPhrases[currentPhraseIndex] }}
@@ -117,4 +88,34 @@
 
     </div> <!-- /main-panel -->
   </div> <!-- /membership-wrapper -->
+
+  <!--  MOBILE TABS MENU -->
+  <ion-tabs>
+    <ion-tab-bar slot="bottom" class="mobile-only">
+      <ion-tab-button tab="user-membership" (click)="goToUserMembership()">
+        <ion-icon name="body"></ion-icon>
+        <ion-label>Home</ion-label>
+      </ion-tab-button>
+
+      <ion-tab-button tab="book" (click)="goToBook()">
+        <ion-icon name="clipboard-outline"></ion-icon>
+        <ion-label>Book</ion-label>
+      </ion-tab-button>
+
+      <ion-tab-button tab="wod" (click)="goToWod()">
+        <ion-icon name="barbell-outline"></ion-icon>
+        <ion-label>WOD</ion-label>
+      </ion-tab-button>
+
+      <ion-tab-button tab="cancel" (click)="goToCancel()">
+        <ion-icon name="close" color="danger"></ion-icon>
+        <ion-label>Cancel</ion-label>
+      </ion-tab-button>
+
+      <ion-tab-button tab="frequency" (click)="goToHistory()">
+        <ion-icon name="calendar-number"></ion-icon>
+        <ion-label>History</ion-label>
+      </ion-tab-button>
+    </ion-tab-bar>
+  </ion-tabs>
 </ion-content>

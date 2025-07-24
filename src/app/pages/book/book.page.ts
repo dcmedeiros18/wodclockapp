@@ -4,6 +4,8 @@ import { ClassService, ClassSlot } from 'src/app/services/class.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { MenuComponent } from '../menu/menu.component';
+
 import {
   IonContent,
   IonIcon,
@@ -13,7 +15,7 @@ import {
   IonCardHeader,
   IonCardTitle,
   IonCardContent,
-  IonCheckbox
+  IonCheckbox  
 } from '@ionic/angular/standalone';
 import { AlertController } from '@ionic/angular';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
@@ -44,7 +46,8 @@ addIcons({
     IonCardHeader,
     IonCardTitle,
     IonCardContent,
-    IonCheckbox
+    IonCheckbox,
+    MenuComponent,
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })

@@ -5,7 +5,7 @@ import {
   IonContent, IonIcon, IonDatetime, IonButton,
   IonDatetimeButton, IonModal, IonCard, IonCardHeader,
   IonCardTitle, IonCardContent, IonTextarea, IonLabel,
-  IonList, IonItem, IonFabButton } from '@ionic/angular/standalone';
+  IonList, IonItem, IonFabButton, IonHeader, IonToolbar, IonTabs, IonTabBar, IonTabButton } from '@ionic/angular/standalone';
 import { Router } from '@angular/router';
 import {
   calendarNumber, clipboardOutline, barbellOutline,
@@ -14,6 +14,7 @@ import { addIcons } from 'ionicons';
 import { ClassService } from 'src/app/services/class.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { AlertController } from '@ionic/angular';
+import { MenuComponent } from '../menu/menu.component';
 
 // Register all icons used in the component
 addIcons({
@@ -26,11 +27,17 @@ addIcons({
   templateUrl: './frequency.page.html',
   styleUrls: ['./frequency.page.scss'],
   standalone: true,
-  imports: [IonFabButton, 
+  imports: [
+    IonHeader,
+    IonToolbar,
+    IonTabs,
+    IonTabBar,
+    IonTabButton,
+    IonFabButton, 
     IonLabel, IonList, IonItem, IonCard, IonCardHeader,
     IonCardTitle, IonCardContent, IonTextarea, IonModal,
     IonDatetimeButton, IonButton, IonDatetime, IonIcon,
-    IonContent, CommonModule, FormsModule
+    IonContent, CommonModule, FormsModule, MenuComponent
   ]
 })
 export class FrequencyPage implements OnInit {

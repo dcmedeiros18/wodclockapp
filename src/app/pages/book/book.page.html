@@ -1,43 +1,19 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <div class="top-bar">
+      <h1 class="welcome-text">My Booking</h1>
+      <button class="logout-button" (click)="logout()">
+        <ion-icon name="log-out-outline" color="danger"></ion-icon> Logout
+      </button>
+    </div>
+  </ion-toolbar>
+</ion-header>
+
 <ion-content [fullscreen]="true">
   <div class="membership-wrapper">
 
-    <!-- ===== SIDEBAR MENU (LEFT NAVIGATION) ===== -->
-    <div class="sidebar">
-      <div class="sidebar-title">Menu</div>
-
-      <!-- Navigation Buttons -->
-      <button class="sidebar-btn" (click)="goToUserMembership()">
-        <ion-icon name="body"></ion-icon> Home
-      </button>
-
-      <button class="sidebar-btn" (click)="goToBook()">
-        <ion-icon name="clipboard-outline"></ion-icon> Book
-      </button>
-
-      <button class="sidebar-btn" (click)="goToWod()">
-        <ion-icon name="barbell-outline"></ion-icon> WOD
-      </button>
-
-      <button class="sidebar-btn" (click)="goToCancel()">
-        <ion-icon name="close" color="danger"></ion-icon> Cancel
-      </button>
-
-      <button class="sidebar-btn" (click)="goToFrequency()">
-        <ion-icon name="calendar-number"></ion-icon> History
-      </button>
-    </div>
-
-    <!-- ===== MAIN PANEL ===== -->
+    <!-- ✅ MAIN PANEL -->
     <div class="main-panel">
-
-      <!-- Top bar with page title and logout -->
-      <div class="top-bar">
-        <h1 class="welcome-text">My Booking</h1>
-        <button class="logout-button" (click)="logout()">
-          <ion-icon name="log-out-outline" color="danger"></ion-icon> Logout
-        </button>
-      </div>
-
       <!-- Header above calendar -->
       <div class="booking-header-row">
         <div class="datetime-container">
@@ -54,17 +30,11 @@
           </ion-datetime>
 
           <div class="fab-wrapper-left">
-            <!-- Feedback title -->
             <div class="feedback-label">Give your feedback</div>
-
-            <!-- Row with arrow + button -->
             <div class="feedback-row">
-              <!-- Arrow pointing to the button -->
               <div class="side-arrow">
                 <ion-icon name="arrow-forward-outline"></ion-icon>
               </div>
-
-              <!-- Feedback button -->
               <ion-fab-button class="pulse-button" (click)="openGoogleForm()">
                 <ion-icon name="document-text-outline"></ion-icon>
               </ion-fab-button>
@@ -72,19 +42,11 @@
           </div>
         </div>
 
-        <!-- ===== AVAILABLE CLASSES SECTION ===== -->
+        <!-- Available Classes -->
         <div class="booking-section">
+          <div *ngIf="successMessage" class="success-message">{{ successMessage }}</div>
+          <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
 
-          <!-- Feedback Messages -->
-          <div *ngIf="successMessage" class="success-message">
-            {{ successMessage }}
-          </div>
-
-          <div *ngIf="errorMessage" class="error-message">
-            {{ errorMessage }}
-          </div>
-
-          <!-- Section Title -->
           <h2 class="calendar-title">Available Classes</h2>
 
           <!-- Class Cards -->
@@ -142,10 +104,37 @@
           </div>
 
         </div> <!-- End of .booking-section -->
-
       </div> <!-- End of .calendar-booking-layout -->
+    </div> <!-- end .main-panel -->
+  </div> <!-- end .membership-wrapper -->
 
-    </div> <!-- End of .main-panel -->
+  <!-- MOBILE TABS MENU -->
+  <ion-tabs>
+    <ion-tab-bar slot="bottom" class="mobile-only">
+      <ion-tab-button tab="user-membership" (click)="goToUserMembership()">
+        <ion-icon name="body"></ion-icon>
+        <ion-label>Home</ion-label>
+      </ion-tab-button>
 
-  </div> <!-- End of .membership-wrapper -->
+      <ion-tab-button tab="book" (click)="goToBook()">
+        <ion-icon name="clipboard-outline"></ion-icon>
+        <ion-label>Book</ion-label>
+      </ion-tab-button>
+
+      <ion-tab-button tab="wod" (click)="goToWod()">
+        <ion-icon name="barbell-outline"></ion-icon>
+        <ion-label>WOD</ion-label>
+      </ion-tab-button>
+
+      <ion-tab-button tab="cancel" (click)="goToCancel()">
+        <ion-icon name="close" color="danger"></ion-icon>
+        <ion-label>Cancel</ion-label>
+      </ion-tab-button>
+
+      <ion-tab-button tab="frequency" (click)="goToFrequency()">
+        <ion-icon name="calendar-number"></ion-icon>
+        <ion-label>History</ion-label>
+      </ion-tab-button>
+    </ion-tab-bar>
+  </ion-tabs>
 </ion-content>

@@ -16,8 +16,38 @@ ion-content {
 }
 
 // ===============================
-// SIDEBAR NAVIGATION
+//  NAVIGATION BOTTOM
 // ===============================
+.main-panel {   
+  padding-bottom: 90px;  
+}
+
+ion-tab-bar {
+  --background: black;
+  --color: white;
+  --color-selected: white;
+  --color-activated: white;
+  --color-focused: white;
+  --color-hover: white;
+  --color-activated: white; 
+  --font-size: 10px;
+  --font-weight: bold;    
+}
+
+ion-icon {
+  font-size: 32px;
+}
+
+// Garante layout horizontal
+.membership-wrapper {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  font-family: 'Arial', sans-serif;
+}
+
+// Sidebar lateral
+
 .sidebar {
   width: 220px;
   background-color: #1a1a1a;
@@ -25,35 +55,15 @@ ion-content {
   padding: 20px;
   display: flex;
   flex-direction: column;
-  gap: 12px;
   box-sizing: border-box;
+}
+
+// Painel principal
+.main-panel {
+  flex: 1;
+  padding: 20px;
   overflow-y: auto;
-}
-
-.sidebar-title {
-  font-size: 18px;
-  font-weight: bold;
-  margin-bottom: 20px;
-}
-
-.sidebar-btn {
-  background: none;
-  border: none;
-  color: white;
-  font-size: 16px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  cursor: pointer;
-}
-
-.sidebar-btn:hover {
-  color: #ff4c4c;
-}
-
-ion-icon {
-  font-size: 40px;
-  margin-right: 10px;
+  background-color: #f8f8f8;
 }
 
 // ===============================
