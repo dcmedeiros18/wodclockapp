@@ -47,4 +47,7 @@ export class MenuComponent implements OnInit {
   goToFrequency() {
     this.router.navigateByUrl('/frequency');
   }
+  goToHistory() {
+    this.router.navigateByUrl('/frequency');
+  }
 }

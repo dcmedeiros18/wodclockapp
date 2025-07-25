@@ -84,9 +84,19 @@ export class WodPage implements OnInit {
     'Discipline beats motivation.',
     'Push yourself beyond the limits!',
     'Train insane or remain the same.',
-    "Don’t stop when you're tired. Stop when you're done.",
+    "Don't stop when you're tired. Stop when you're done.",
   ];
   currentPhraseIndex: number = 0;
+
+  // ==============================
+  // CALENDAR CONTROL
+  // ==============================
+  // Disable Sundays on the calendar selection
+  isWeekday = (dateString: string) => {
+    const date = new Date(dateString);
+    const utcDay = date.getUTCDay();
+    return utcDay !== 0; // 0 = Sunday
+  };
 
   // ==============================
   // CONSTRUCTOR
@@ -128,12 +138,19 @@ export class WodPage implements OnInit {
     const dateOnly = isoDate.includes('T') ? isoDate.split('T')[0] : isoDate;
     this.selectedDate = dateOnly;
 
+    console.log('Selected date:', this.selectedDate);
+
     // Fetch WOD by date
     this.wodService.getWod(this.selectedDate).subscribe((wod: any) => {
+      console.log('WOD fetched:', wod); // Debug log
+
       this.wodTitle = wod?.title || '';
       this.wodDescription = wod?.description || '';
       this.wodNotes = '';
       this.isNoteChanged = false;
+
+    }, (error) => {
+      console.error('Error fetching WOD:', error); 
     });
   }
 

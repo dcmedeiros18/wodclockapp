@@ -45,7 +45,9 @@ export class UserMembershipPage implements OnInit, OnDestroy {
   carouselImages: string[] = [
     '/assets/images/crossfit_crew.png',
     '/assets/images/woman_and_kettlebell.png',
-    '/assets/images/login-page.png'
+    '/assets/images/temp-StrengthinMotion.png',
+    '/assets/images/temp-FitnessFocusinUrbanGym.png',
+    '/assets/images/temp-IntenseCrossFitCompetitioninAction.png'
   ];
 
   // Index of the currently displayed image in the carousel

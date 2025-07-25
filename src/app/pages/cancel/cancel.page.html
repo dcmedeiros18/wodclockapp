@@ -24,10 +24,7 @@
         <!--  LEFT COLUMN: Date Selection -->
         <div class="left-column">
           <div class="calendar-box">
-            <ion-datetime
-              presentation="date"
-              [isDateEnabled]="isWeekday"
-              (ionChange)="onDateSelected($event)">
+            <ion-datetime presentation="date" [isDateEnabled]="isWeekday" (ionChange)="onDateSelected($event)">
             </ion-datetime>
 
             <!-- Feedback Button -->
@@ -88,34 +85,4 @@
 
     </div> <!-- /main-panel -->
   </div> <!-- /membership-wrapper -->
-
-  <!--  MOBILE TABS MENU -->
-  <ion-tabs>
-    <ion-tab-bar slot="bottom" class="mobile-only">
-      <ion-tab-button tab="user-membership" (click)="goToUserMembership()">
-        <ion-icon name="body"></ion-icon>
-        <ion-label>Home</ion-label>
-      </ion-tab-button>
-
-      <ion-tab-button tab="book" (click)="goToBook()">
-        <ion-icon name="clipboard-outline"></ion-icon>
-        <ion-label>Book</ion-label>
-      </ion-tab-button>
-
-      <ion-tab-button tab="wod" (click)="goToWod()">
-        <ion-icon name="barbell-outline"></ion-icon>
-        <ion-label>WOD</ion-label>
-      </ion-tab-button>
-
-      <ion-tab-button tab="cancel" (click)="goToCancel()">
-        <ion-icon name="close" color="danger"></ion-icon>
-        <ion-label>Cancel</ion-label>
-      </ion-tab-button>
-
-      <ion-tab-button tab="frequency" (click)="goToHistory()">
-        <ion-icon name="calendar-number"></ion-icon>
-        <ion-label>History</ion-label>
-      </ion-tab-button>
-    </ion-tab-bar>
-  </ion-tabs>
 </ion-content>

@@ -1,27 +1,27 @@
 <ion-tabs>
   <ion-tab-bar slot="bottom">
 
-    <ion-tab-button tab="user-membership" href="/user-membership">
+    <ion-tab-button tab="user-membership" (click)="goToUserMembership()">
       <ion-icon name="body"></ion-icon>
       <ion-label>Home</ion-label>
     </ion-tab-button>
 
-    <ion-tab-button tab="book" href="/book">
+    <ion-tab-button tab="book" (click)="goToBook()">
       <ion-icon name="clipboard-outline"></ion-icon>
       <ion-label>Book</ion-label>
     </ion-tab-button>
 
-    <ion-tab-button tab="wod" href="/wod">
+    <ion-tab-button tab="wod" (click)="goToWod()">
       <ion-icon name="barbell-outline"></ion-icon>
       <ion-label>WOD</ion-label>
     </ion-tab-button>
 
-    <ion-tab-button tab="cancel" href="/cancel">
+    <ion-tab-button tab="cancel" (click)="goToCancel()">
       <ion-icon name="close" color="danger"></ion-icon>
       <ion-label>Cancel</ion-label>
     </ion-tab-button>
 
-    <ion-tab-button tab="frequency" href="/frequency">
+    <ion-tab-button tab="history" (click)="goToHistory()">
       <ion-icon name="calendar-number"></ion-icon>
       <ion-label>History</ion-label>
     </ion-tab-button>
