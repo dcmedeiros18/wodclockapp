@@ -69,7 +69,7 @@ export class UserMembershipPage implements OnInit, OnDestroy {
     const user = localStorage.getItem('currentUser');
     if (user) {
       const parsedUser = JSON.parse(user);
-      this.currentUserName = parsedUser.name || parsedUser.fullName || 'Athlete';
+      this.currentUserName = `${parsedUser.first_name || ''} ${parsedUser.surname || ''}`.trim() || 'Athlete';
     }
 
     // Start rotating carousel images
