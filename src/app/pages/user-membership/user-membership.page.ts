@@ -69,7 +69,7 @@ export class UserMembershipPage implements OnInit, OnDestroy {
     const userData = localStorage.getItem('currentUser');
     if (userData) {
       const user = JSON.parse(userData);
-      const firstName = user.first_name || '';
+      const firstName = user.firstName || '';
       const surname = user.surname || '';
       this.currentUserName = `${firstName} ${surname}`.trim();
     } else {
