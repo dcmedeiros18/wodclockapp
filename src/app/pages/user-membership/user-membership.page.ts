@@ -66,10 +66,14 @@ export class UserMembershipPage implements OnInit, OnDestroy {
   // ====================================
   ngOnInit() {
     // Load the current user's name from localStorage
-    const user = localStorage.getItem('currentUser');
-    if (user) {
-      const parsedUser = JSON.parse(user);
-      this.currentUserName = `${parsedUser.first_name || ''} ${parsedUser.surname || ''}`.trim() || 'Athlete';
+    const userData = localStorage.getItem('currentUser');
+    if (userData) {
+      const user = JSON.parse(userData);
+      const firstName = user.first_name || '';
+      const surname = user.surname || '';
+      this.currentUserName = `${firstName} ${surname}`.trim();
+    } else {
+      this.currentUserName = 'Athlete';
     }
 
     // Start rotating carousel images
