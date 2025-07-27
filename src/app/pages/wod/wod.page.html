@@ -26,6 +26,7 @@
           <ion-datetime
             presentation="date"
             [value]="selectedDate"
+            [isDateEnabled]="isWeekday"
             (ionChange)="onDateSelected($event)">
           </ion-datetime>
         </div>
