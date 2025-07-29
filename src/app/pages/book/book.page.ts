@@ -15,14 +15,15 @@ import {
   IonCardHeader,
   IonCardTitle,
   IonCardContent,
-  IonCheckbox  
+  IonCheckbox
 } from '@ionic/angular/standalone';
 import { AlertController } from '@ionic/angular';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { addIcons } from 'ionicons';
 import {
   body, clipboardOutline, barbellOutline,
-  close, calendarNumber, logOutOutline, person, documentTextOutline, arrowDownOutline, arrowForwardOutline } from 'ionicons/icons';
+  close, calendarNumber, logOutOutline, person, documentTextOutline, arrowDownOutline, arrowForwardOutline
+} from 'ionicons/icons';
 
 // Registering icons globally
 addIcons({
@@ -68,7 +69,8 @@ export class BookPage implements OnInit {
     private authService: AuthService,
     private alertController: AlertController
   ) {
-      addIcons({body,clipboardOutline,barbellOutline,close,calendarNumber,logOutOutline,arrowForwardOutline,documentTextOutline,arrowDownOutline});}
+    addIcons({ body, clipboardOutline, barbellOutline, close, calendarNumber, logOutOutline, arrowForwardOutline, documentTextOutline, arrowDownOutline });
+  }
 
   // ===============================
   // Component Initialization
@@ -203,10 +205,17 @@ export class BookPage implements OnInit {
       next: (slots) => {
         console.log('Slots recebidos do backend:', slots);
         console.table(slots);
-        this.timeSlots = slots.map(slot => ({
-          ...slot,
-          cancelled: slot.status === 'cancelled'
-        }));
+        this.timeSlots = slots
+          .filter((slot, index, self) =>
+            index === self.findIndex(s =>
+              s.time === slot.time && s.date === slot.date
+            )
+          )
+          .map(slot => ({
+            ...slot,
+            cancelled: slot.status === 'cancelled'
+          }));
+
       },
       error: (error) => {
         this.errorMessage = error.message;

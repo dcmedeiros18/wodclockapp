@@ -8,6 +8,7 @@ import { environment } from '../../environments/environment';
 export interface ClassSlot {
   id: number;
   time: string;
+  date?: string;
   spots?: number;
   spotsLeft?: number;
   alreadyBooked?: boolean;
@@ -53,7 +54,7 @@ export class ClassService {
   getAvailableClasses(date: string): Observable<ClassSlot[]> {
     const headers = this.getAuthHeaders();
     return this.http
-      .get<ClassSlot[]>(`${this.apiUrl}/api/classes/by-date?date=${date}`, { headers })
+      .get<ClassSlot[]>(`${this.apiUrl}/api/classes/${date}`, { headers })
       .pipe(
         catchError((error) => {
           console.error('Error fetching available classes:', error);
