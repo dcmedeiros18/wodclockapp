@@ -187,6 +187,7 @@ export class BookPage implements OnInit {
     const isoDate = event.detail.value;
     const datePart = isoDate && isoDate.includes('T') ? isoDate.split('T')[0] : isoDate;
     this.selectedDate = datePart;
+    console.log('[onDateSelected] Looking for classes for:', this.selectedDate);
     this.errorMessage = '';
 
     const currentUser = this.authService.getCurrentUser();
@@ -196,8 +197,12 @@ export class BookPage implements OnInit {
       return;
     }
 
+    this.timeSlots = [];
+
     this.classService.getAvailableClasses(this.selectedDate).subscribe({
       next: (slots) => {
+        console.log('Slots recebidos do backend:', slots);
+        console.table(slots);
         this.timeSlots = slots.map(slot => ({
           ...slot,
           cancelled: slot.status === 'cancelled'
