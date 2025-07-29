@@ -75,6 +75,9 @@ export class BookPage implements OnInit {
   // ===============================
   // Component Initialization
   // ===============================
+  // Declare this as a class-level property, fora do ngOnInit
+  private loadingClasses = false;
+
   ngOnInit() {
     const currentUser = this.authService.getCurrentUser();
     if (!currentUser) {
@@ -82,7 +85,11 @@ export class BookPage implements OnInit {
       return;
     }
 
-    // Refresh class list when triggered externally
+    // Proteção para evitar carregamento duplicado
+    if (this.loadingClasses) return;
+    this.loadingClasses = true;
+
+    // Adiciona listener para atualização externa
     window.addEventListener('classesUpdated', (e: any) => {
       const updatedDate = e?.detail?.date || this.selectedDate;
       if (updatedDate) {
@@ -90,6 +97,7 @@ export class BookPage implements OnInit {
       }
     });
 
+    // Se já tiver uma data selecionada, carrega as aulas
     if (this.selectedDate) {
       this.onDateSelected({ detail: { value: this.selectedDate } });
     }
@@ -186,11 +194,17 @@ export class BookPage implements OnInit {
   // Load classes based on selected date
   // ===============================
   onDateSelected(event: any): void {
+    if (this.loadingClasses) return;
+    this.loadingClasses = true;
+
+    console.log('[onDateSelected] Loading classes for:', this.selectedDate);
+
     const isoDate = event.detail.value;
     const datePart = isoDate && isoDate.includes('T') ? isoDate.split('T')[0] : isoDate;
     this.selectedDate = datePart;
-    console.log('[onDateSelected] Looking for classes for:', this.selectedDate);
     this.errorMessage = '';
+    this.successMessage = '';
+
 
     const currentUser = this.authService.getCurrentUser();
     if (!currentUser) {
@@ -199,23 +213,27 @@ export class BookPage implements OnInit {
       return;
     }
 
+    //  Eempty before fetching again
     this.timeSlots = [];
 
     this.classService.getAvailableClasses(this.selectedDate).subscribe({
       next: (slots) => {
-        console.log('Slots recebidos do backend:', slots);
-        console.table(slots);
-        this.timeSlots = slots
-          .filter((slot, index, self) =>
-            index === self.findIndex(s =>
-              s.time === slot.time && s.date === slot.date
-            )
-          )
-          .map(slot => ({
-            ...slot,
-            cancelled: slot.status === 'cancelled'
-          }));
+        console.log('[onDateSelected] Backend slots:', slots);
 
+        //  Apply filter to remove duplicates
+        const uniqueSlots = slots.filter(
+          (slot, index, self) =>
+            index === self.findIndex(
+              s => s.time === slot.time && s.date === slot.date
+            )
+        );
+
+        this.timeSlots = uniqueSlots.map(slot => ({
+          ...slot,
+          cancelled: slot.status === 'cancelled'
+        }));
+
+        console.log('[onDateSelected] Final timeSlots:', this.timeSlots);
       },
       error: (error) => {
         this.errorMessage = error.message;
@@ -227,6 +245,7 @@ export class BookPage implements OnInit {
       }
     });
   }
+
 
   // ===============================
   // Book a class
