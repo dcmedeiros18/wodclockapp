@@ -352,6 +352,6 @@ export class BookPage implements OnInit {
   // ===============================
 
   openGoogleForm() {
-    window.open('https://forms.gle/SEU_LINK_AQUI', '_blank');
+    window.open('https://docs.google.com/forms/d/e/1FAIpQLScEUHsealcBUmCo-xD5mQkHQLjCN7IGqwCRhQuQz_v9n-g-9A/viewform?usp=header');
   }
 }
