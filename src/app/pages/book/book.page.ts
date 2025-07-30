@@ -65,7 +65,7 @@ export class BookPage implements OnInit {
   // ===============================
   // Component Initialization
   // ===============================
-  // Declare this as a class-level property, fora do ngOnInit
+  // Declare this as a class-level property, outside ngOnInit
   loadingClasses = false;
 
   ngOnInit() {
@@ -83,16 +83,16 @@ export class BookPage implements OnInit {
       }
     });
 
-    // Define data de hoje como padrão se não tiver uma data selecionada
+    // Set today as default if no date is selected
     if (!this.selectedDate) {
       const today = new Date();
-      // Corrige timezone para garantir data local correta
+      // Fix timezone to ensure correct local date
       const localDate = new Date(today.getTime() - (today.getTimezoneOffset() * 60000));
       this.selectedDate = localDate.toISOString().split('T')[0];
     }
 
     console.log('[ngOnInit] Auto-loading classes for date:', this.selectedDate);
-    // Carrega as aulas automaticamente para a data selecionada
+    // Load classes automatically for the selected date
     this.onDateSelected({ detail: { value: this.selectedDate } });
   }
 
@@ -197,20 +197,20 @@ export class BookPage implements OnInit {
 
     console.log('[onDateSelected] Loading classes for date:', this.selectedDate);
 
-    // Validar formato da data
+    // Validate date format
     if (!this.selectedDate || !/^\d{4}-\d{2}-\d{2}$/.test(this.selectedDate)) {
-      this.errorMessage = 'Formato de data inválido';
+      this.errorMessage = 'Invalid date format';
       this.loadingClasses = false;
       return;
     }
 
-    // Verificar se a data não é muito no futuro (máximo 1 ano)
+    // Check if date is not too far in the future (maximum 1 year)
     const selectedDateObj = new Date(this.selectedDate);
     const today = new Date();
     const oneYearFromNow = new Date(today.getFullYear() + 1, today.getMonth(), today.getDate());
     
     if (selectedDateObj > oneYearFromNow) {
-      this.errorMessage = 'Data muito distante no futuro';
+      this.errorMessage = 'Date too far in the future';
       this.loadingClasses = false;
       return;
     }
@@ -219,7 +219,7 @@ export class BookPage implements OnInit {
     const token = localStorage.getItem('token');
     
     if (!currentUser || !token) {
-      this.errorMessage = 'Sessão expirada. Faça login novamente.';
+      this.errorMessage = 'Session expired. Please log in again.';
       localStorage.removeItem('token');
       this.router.navigateByUrl('/login');
       this.loadingClasses = false;
@@ -264,19 +264,19 @@ export class BookPage implements OnInit {
         this.timeSlots = [];
 
         if (error.status === 401) {
-          this.errorMessage = 'Sessão expirada. Redirecionando para login...';
+          this.errorMessage = 'Session expired. Redirecting to login...';
           localStorage.removeItem('token');
           setTimeout(() => {
             this.router.navigateByUrl('/login');
           }, 2000);
         } else if (error.status === 400) {
-          this.errorMessage = 'Formato de data inválido ou parâmetros incorretos';
+          this.errorMessage = 'Invalid date format or incorrect parameters';
         } else if (error.status === 403) {
-          this.errorMessage = 'Acesso negado. Verifique suas permissões.';
+          this.errorMessage = 'Access denied. Check your permissions.';
         } else if (error.status === 404) {
-          this.errorMessage = 'Nenhuma aula encontrada para esta data.';
+          this.errorMessage = 'No classes found for this date.';
         } else {
-          this.errorMessage = error.message || 'Erro ao carregar aulas. Tente novamente.';
+          this.errorMessage = error.message || 'Error loading classes. Please try again.';
         }
       }
     });

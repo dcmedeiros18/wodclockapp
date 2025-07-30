@@ -43,42 +43,95 @@ let wods = [
   }
 ];
 
-// Dados mock para classes e agendamentos
+// Mock data for classes and bookings - Monday to Thursday
 let classes = [
+  // Monday (2025-01-06)
   {
     id: 1,
-    date: '2025-01-04',
+    date: '2025-01-06',
     time: '06:00 am',
     maxSpots: 10,
     bookedSpots: 5
   },
   {
     id: 2,
-    date: '2025-01-04',
+    date: '2025-01-06',
     time: '07:00 am',
     maxSpots: 10,
     bookedSpots: 4
   },
   {
     id: 3,
-    date: '2025-01-04',
-    time: '04:30 pm',
+    date: '2025-01-06',
+    time: '05:00 pm',
     maxSpots: 10,
     bookedSpots: 6
   },
+  // Tuesday (2025-01-07)
   {
     id: 4,
-    date: '2025-01-05',
+    date: '2025-01-07',
+    time: '06:00 am',
+    maxSpots: 10,
+    bookedSpots: 3
+  },
+  {
+    id: 5,
+    date: '2025-01-07',
+    time: '07:00 am',
+    maxSpots: 10,
+    bookedSpots: 7
+  },
+  {
+    id: 6,
+    date: '2025-01-07',
+    time: '05:00 pm',
+    maxSpots: 10,
+    bookedSpots: 8
+  },
+  // Wednesday (2025-01-08)
+  {
+    id: 7,
+    date: '2025-01-08',
+    time: '06:00 am',
+    maxSpots: 10,
+    bookedSpots: 4
+  },
+  {
+    id: 8,
+    date: '2025-01-08',
+    time: '07:00 am',
+    maxSpots: 10,
+    bookedSpots: 5
+  },
+  {
+    id: 9,
+    date: '2025-01-08',
+    time: '05:00 pm',
+    maxSpots: 10,
+    bookedSpots: 9
+  },
+  // Thursday (2025-01-09)
+  {
+    id: 10,
+    date: '2025-01-09',
+    time: '06:00 am',
+    maxSpots: 10,
+    bookedSpots: 2
+  },
+  {
+    id: 11,
+    date: '2025-01-09',
     time: '07:00 am',
     maxSpots: 10,
     bookedSpots: 6
   },
   {
-    id: 5,
-    date: '2025-01-05',
+    id: 12,
+    date: '2025-01-09',
     time: '05:00 pm',
     maxSpots: 10,
-    bookedSpots: 8
+    bookedSpots: 7
   }
 ];
 
@@ -93,55 +146,55 @@ let bookings = [
   }
 ];
 
-// Middleware para verificar token JWT
+// Middleware to verify JWT token
 const authenticateToken = (req, res, next) => {
-  console.log('=== AUTENTICAÇÃO ===');
+  console.log('=== AUTHENTICATION ===');
   console.log('Headers:', req.headers);
   
   const authHeader = req.headers['authorization'];
   const token = authHeader && authHeader.split(' ')[1];
 
-  console.log('Token recebido:', token ? 'SIM' : 'NÃO');
+  console.log('Token received:', token ? 'YES' : 'NO');
 
   if (!token) {
-    console.log('Token não fornecido');
-    return res.status(401).json({ message: 'Token não fornecido' });
+    console.log('Token not provided');
+    return res.status(401).json({ message: 'Token not provided' });
   }
 
   try {
     const decoded = jwt.verify(token, JWT_SECRET);
-    console.log('Token decodificado:', decoded);
+    console.log('Token decoded:', decoded);
     req.user = decoded;
     next();
   } catch (err) {
-    console.log('Erro na verificação do token:', err.message);
-    return res.status(403).json({ message: 'Token inválido' });
+    console.log('Error verifying token:', err.message);
+    return res.status(403).json({ message: 'Invalid token' });
   }
 };
 
-// Rotas de autenticação
+// Authentication routes
 app.post('/auth/register', async (req, res) => {
   try {
     const { email, password, secretQuestion, secretAnswer } = req.body;
 
     if (!email || !password) {
-      return res.status(400).json({ message: 'Email e senha são obrigatórios' });
+      return res.status(400).json({ message: 'Email and password are required' });
     }
     if (!secretQuestion || !secretAnswer) {
-      return res.status(400).json({ message: 'Pergunta e resposta secreta são obrigatórias' });
+      return res.status(400).json({ message: 'Secret question and answer are required' });
     }
 
-    // Verificar se usuário já existe
+    // Check if user already exists
     const existingUser = users.find(user => user.email === email);
     if (existingUser) {
-      return res.status(400).json({ message: 'Usuário já existe' });
+      return res.status(400).json({ message: 'User already exists' });
     }
 
-    // Hash da senha
+    // Hash password
     const hashedPassword = await bcrypt.hash(password, 10);
     const hashedSecretAnswer = await bcrypt.hash(secretAnswer, 10);
 
-    // Criar novo usuário
+    // Create new user
     const newUser = {
       id: users.length + 1,
       email,
@@ -153,11 +206,11 @@ app.post('/auth/register', async (req, res) => {
 
     users.push(newUser);
 
-    // Gerar token
+    // Generate token
     const token = jwt.sign({ userId: newUser.id, email: newUser.email }, JWT_SECRET, { expiresIn: '24h' });
 
     res.status(201).json({
-      message: 'Usuário criado com sucesso',
+      message: 'User created successfully',
       access_token: token,
       user: {
         id: newUser.id,
@@ -166,7 +219,7 @@ app.post('/auth/register', async (req, res) => {
       }
     });
   } catch (error) {
-    res.status(500).json({ message: 'Erro interno do servidor' });
+    res.status(500).json({ message: 'Internal server error' });
   }
 });
 
@@ -178,23 +231,23 @@ app.post('/auth/login', async (req, res) => {
       return res.status(400).json({ message: 'Email and password are required.' });
     }
 
-    // Buscar usuário
+    // Find user
     const user = users.find(u => u.email === email);
     if (!user) {
       return res.status(401).json({ message: 'User not found.' });
     }
 
-    // Verificar senha
+    // Verify password
     const validPassword = await bcrypt.compare(password, user.password);
     if (!validPassword) {
       return res.status(401).json({ message: 'Incorrect password.' });
     }
 
-    // Gerar token
+    // Generate token
     const token = jwt.sign({ userId: user.id, email: user.email }, JWT_SECRET, { expiresIn: '24h' });
 
     res.json({
-      message: 'Login realizado com sucesso',
+      message: 'Login successful',
       access_token: token,
       user: {
         id: user.id,
@@ -207,37 +260,37 @@ app.post('/auth/login', async (req, res) => {
   }
 });
 
-// Endpoint para obter a pergunta secreta
+// Endpoint to get secret question
 app.post('/auth/get-secret-question', (req, res) => {
   const { email } = req.body;
-  if (!email) return res.status(400).json({ message: 'Email é obrigatório.' });
+  if (!email) return res.status(400).json({ message: 'Email is required.' });
   const user = users.find(u => u.email === email);
-  if (!user) return res.status(404).json({ message: 'Usuário não encontrado.' });
+  if (!user) return res.status(404).json({ message: 'User not found.' });
   res.json({ secretQuestion: user.secretQuestion });
 });
 
-// Endpoint para verificar resposta secreta
+// Endpoint to verify secret answer
 app.post('/auth/verify-secret-answer', async (req, res) => {
   const { email, answer } = req.body;
-  if (!email || !answer) return res.status(400).json({ message: 'Email e resposta são obrigatórios.' });
+  if (!email || !answer) return res.status(400).json({ message: 'Email and answer are required.' });
   const user = users.find(u => u.email === email);
-  if (!user) return res.status(404).json({ message: 'Usuário não encontrado.' });
+  if (!user) return res.status(404).json({ message: 'User not found.' });
   const valid = await bcrypt.compare(answer, user.secretAnswer);
-  if (!valid) return res.status(400).json({ message: 'Resposta secreta incorreta.' });
-  res.json({ message: 'Resposta correta.' });
+  if (!valid) return res.status(400).json({ message: 'Incorrect secret answer.' });
+  res.json({ message: 'Correct answer.' });
 });
 
-// Endpoint para resetar senha via pergunta secreta
+// Endpoint to reset password via secret question
 app.post('/auth/reset-password-with-secret', async (req, res) => {
   const { email, newPassword } = req.body;
-  if (!email || !newPassword) return res.status(400).json({ message: 'Email e nova senha são obrigatórios.' });
+  if (!email || !newPassword) return res.status(400).json({ message: 'Email and new password are required.' });
   const user = users.find(u => u.email === email);
-  if (!user) return res.status(404).json({ message: 'Usuário não encontrado.' });
+  if (!user) return res.status(404).json({ message: 'User not found.' });
   user.password = await bcrypt.hash(newPassword, 10);
-  res.json({ message: 'Senha redefinida com sucesso.' });
+  res.json({ message: 'Password reset successfully.' });
 });
 
-// Rotas para WOD
+// WOD routes
 app.get('/api/wods', authenticateToken, (req, res) => {
   res.json(wods);
 });
@@ -247,7 +300,7 @@ app.get('/api/wods/:date', authenticateToken, validateDateParam, (req, res) => {
   const wod = wods.find(w => w.date === date);
   
   if (!wod) {
-    return res.status(404).json({ message: 'WOD não encontrado para a data especificada' });
+    return res.status(404).json({ message: 'WOD not found for the specified date' });
   }
   
   res.json(wod);
@@ -257,13 +310,13 @@ app.post('/api/wods', authenticateToken, (req, res) => {
   const { date, title, description } = req.body;
 
   if (!date || !title || !description) {
-    return res.status(400).json({ message: 'Data, título e descrição são obrigatórios' });
+    return res.status(400).json({ message: 'Date, title and description are required' });
   }
 
-  // Verificar se já existe WOD para esta data
+  // Check if WOD already exists for this date
   const existingWod = wods.find(w => w.date === date);
   if (existingWod) {
-    return res.status(400).json({ message: 'Já existe um WOD para esta data' });
+    return res.status(400).json({ message: 'WOD already exists for this date' });
   }
 
   const newWod = {
@@ -283,7 +336,7 @@ app.put('/api/wods/:date', authenticateToken, validateDateParam, (req, res) => {
 
   const wodIndex = wods.findIndex(w => w.date === date);
   if (wodIndex === -1) {
-    return res.status(404).json({ message: 'WOD não encontrado para a data especificada' });
+    return res.status(404).json({ message: 'WOD not found for the specified date' });
   }
 
   wods[wodIndex] = {
@@ -300,49 +353,49 @@ app.delete('/api/wods/:date', authenticateToken, validateDateParam, (req, res) =
   const wodIndex = wods.findIndex(w => w.date === date);
   
   if (wodIndex === -1) {
-    return res.status(404).json({ message: 'WOD não encontrado para a data especificada' });
+    return res.status(404).json({ message: 'WOD not found for the specified date' });
   }
 
   wods.splice(wodIndex, 1);
-  res.json({ message: 'WOD removido com sucesso' });
+  res.json({ message: 'WOD removed successfully' });
 });
 
-// Middleware para validação de data
+// Middleware for date validation
 const validateDateParam = (req, res, next) => {
   const { date } = req.params;
   
-  // Validar formato da data (YYYY-MM-DD)
+  // Validate date format (YYYY-MM-DD)
   const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
   if (!dateRegex.test(date)) {
-    console.log('Formato de data inválido:', date);
+    console.log('Invalid date format:', date);
     return res.status(400).json({ 
-      message: 'Formato de data inválido. Use YYYY-MM-DD',
+      message: 'Invalid date format. Use YYYY-MM-DD',
       received: date 
     });
   }
   
-  // Validar se a data é válida
+  // Validate if date is valid
   const dateObj = new Date(date + 'T00:00:00.000Z');
   if (isNaN(dateObj.getTime())) {
-    console.log('Data inválida:', date);
+    console.log('Invalid date:', date);
     return res.status(400).json({ 
-      message: 'Data inválida',
+      message: 'Invalid date',
       received: date 
     });
   }
 
-  // Validar se a data não é muito antiga (mais de 1 ano)
+  // Validate if date is not too old (more than 1 year)
   const oneYearAgo = new Date();
   oneYearAgo.setFullYear(oneYearAgo.getFullYear() - 1);
   
-  // Validar se a data não é muito futura (mais de 1 ano)
+  // Validate if date is not too far in the future (more than 1 year)
   const oneYearFromNow = new Date();
   oneYearFromNow.setFullYear(oneYearFromNow.getFullYear() + 1);
   
   if (dateObj < oneYearAgo || dateObj > oneYearFromNow) {
-    console.log('Data fora do intervalo permitido:', date);
+    console.log('Date outside allowed range:', date);
     return res.status(400).json({ 
-      message: 'Data deve estar entre 1 ano no passado e 1 ano no futuro',
+      message: 'Date must be between 1 year in the past and 1 year in the future',
       received: date 
     });
   }
@@ -350,54 +403,82 @@ const validateDateParam = (req, res, next) => {
   next();
 };
 
-// Rotas para Classes e Agendamentos
+// Routes for Classes and Bookings
 app.get('/api/classes/:date', authenticateToken, validateDateParam, (req, res) => {
-  console.log('=== ROTA CLASSES ===');
-  console.log('Requisição para classes recebida:', req.params.date);
-  console.log('Usuário autenticado:', req.user);
+  console.log('=== CLASSES ROUTE ===');
+  console.log('Request for classes received:', req.params.date);
+  console.log('Authenticated user:', req.user);
   
   try {
     const { date } = req.params;
     const userId = req.user.userId;
     
-    console.log('Data solicitada:', date);
-    console.log('ID do usuário:', userId);
+    console.log('Requested date:', date);
+    console.log('User ID:', userId);
     
-    // Verificar se o usuário existe
+    // Check if user exists
     const user = users.find(u => u.id === userId);
     if (!user) {
-      console.log('Usuário não encontrado no banco');
-      return res.status(404).json({ message: 'Usuário não encontrado' });
+      console.log('User not found in database');
+      return res.status(404).json({ message: 'User not found' });
     }
     
-    console.log('Usuário encontrado:', user.email);
+    console.log('User found:', user.email);
     
-    // Buscar agendamentos do usuário para esta data
+    // Log all classes before filtering
+    console.log('=== ALL CLASSES IN DATABASE ===');
+    console.log('Total classes:', classes.length);
+    console.log('Classes:', classes.map(c => ({ id: c.id, date: c.date, time: c.time })));
+    
+    // Filter classes for the requested date
+    const classesForDate = classes.filter(c => c.date === date);
+    console.log(`=== CLASSES FOR ${date} ===`);
+    console.log('Filtered classes:', classesForDate.length);
+    console.log('Classes for date:', classesForDate.map(c => ({ id: c.id, date: c.date, time: c.time })));
+    
+    // Check if there are duplicates by time
+    const timeGroups = classesForDate.reduce((acc, c) => {
+      acc[c.time] = (acc[c.time] || []).concat(c);
+      return acc;
+    }, {});
+    
+    console.log('=== GROUPING BY TIME ===');
+    Object.entries(timeGroups).forEach(([time, classes]) => {
+      if (classes.length > 1) {
+        console.log(`⚠️  DUPLICATE FOUND - Time ${time}:`, classes.map(c => ({ id: c.id, date: c.date })));
+      } else {
+        console.log(`✅ Time ${time}: 1 class`, classes[0].id);
+      }
+    });
+    
+    // Find user bookings for this date
     const userBookingsForDate = bookings.filter(b => 
       b.userId === userId && b.date === date
     );
     
-    const availableClasses = classes
-      .filter(c => c.date === date)
-      .map(c => {
-        const alreadyBooked = userBookingsForDate.some(b => b.classId === c.id);
-        return {
-          id: c.id,
-          time: c.time,
-          date: c.date,
-          spots: c.maxSpots - c.bookedSpots,
-          spotsLeft: c.maxSpots - c.bookedSpots,
-          maxSpots: c.maxSpots,
-          alreadyBooked: alreadyBooked,
-          status: c.status || 'active'
-        };
-      });
+    console.log('User bookings for this date:', userBookingsForDate);
     
-    console.log('Classes encontradas:', availableClasses);
+    const availableClasses = classesForDate.map(c => {
+      const alreadyBooked = userBookingsForDate.some(b => b.classId === c.id);
+      return {
+        id: c.id,
+        time: c.time,
+        date: c.date,
+        spots: c.maxSpots - c.bookedSpots,
+        spotsLeft: c.maxSpots - c.bookedSpots,
+        maxSpots: c.maxSpots,
+        alreadyBooked: alreadyBooked,
+        status: c.status || 'active'
+      };
+    });
+    
+    console.log('=== FINAL RESPONSE ===');
+    console.log('Classes returned:', availableClasses.length);
+    console.log('Response:', availableClasses);
     res.json(availableClasses);
   } catch (error) {
-    console.error('Erro na rota de classes:', error);
-    res.status(500).json({ message: 'Erro interno do servidor' });
+    console.error('Error in classes route:', error);
+    res.status(500).json({ message: 'Internal server error' });
   }
 });
 

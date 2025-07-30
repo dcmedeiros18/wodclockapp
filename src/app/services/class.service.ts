@@ -61,7 +61,7 @@ export class ClassService {
     console.log('[ClassService] Getting classes for date:', date);
   
     if (!date || !/^\d{4}-\d{2}-\d{2}$/.test(date)) {
-      return throwError(() => new Error('Formato de data inválido. Use YYYY-MM-DD'));
+      return throwError(() => new Error('Invalid date format. Use YYYY-MM-DD'));
     }
   
     try {
@@ -74,25 +74,25 @@ export class ClassService {
           catchError((error) => {
             console.error('[ClassService] Error fetching available classes:', error);
   
-            if (error.status === 400) {
-              return throwError(() => new Error(error.error?.message || 'Data inválida ou parâmetros incorretos'));
+                        if (error.status === 400) {
+              return throwError(() => new Error(error.error?.message || 'Invalid date or incorrect parameters'));
             } else if (error.status === 401) {
               localStorage.removeItem('token');
-              return throwError(() => new Error('Token inválido ou expirado'));
+              return throwError(() => new Error('Invalid or expired token'));
             } else if (error.status === 403) {
-              return throwError(() => new Error('Acesso negado'));
+              return throwError(() => new Error('Access denied'));
             } else if (error.status === 404) {
-              return throwError(() => new Error('Nenhuma aula encontrada para esta data'));
+              return throwError(() => new Error('No classes found for this date'));
             } else if (error.status === 500) {
-              return throwError(() => new Error('Erro interno do servidor'));
+              return throwError(() => new Error('Internal server error'));
             }
-  
-            return throwError(() => new Error('Erro ao carregar aulas disponíveis'));
+
+            return throwError(() => new Error('Error loading available classes'));
           })
         );
     } catch (error) {
       console.error('[ClassService] Error in getAuthHeaders:', error);
-      return throwError(() => new Error('Erro de autenticação'));
+      return throwError(() => new Error('Authentication error'));
     }
   }
   
