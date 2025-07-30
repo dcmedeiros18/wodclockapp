@@ -1,7 +1,7 @@
 {
   "name": "wodclock-backend",
-  "version": "1.0.0",
-  "description": "Backend para o WOD Clock App",
+  "version": "2.0.0",
+  "description": "Backend para o WOD Clock App - Versão com validações melhoradas",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",

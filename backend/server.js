@@ -242,12 +242,12 @@ app.get('/api/wods', authenticateToken, (req, res) => {
   res.json(wods);
 });
 
-app.get('/api/wods/:date', authenticateToken, (req, res) => {
+app.get('/api/wods/:date', authenticateToken, validateDateParam, (req, res) => {
   const { date } = req.params;
   const wod = wods.find(w => w.date === date);
   
   if (!wod) {
-    return res.status(404).json({ message: 'WOD não encontrado' });
+    return res.status(404).json({ message: 'WOD não encontrado para a data especificada' });
   }
   
   res.json(wod);
@@ -277,13 +277,13 @@ app.post('/api/wods', authenticateToken, (req, res) => {
   res.status(201).json(newWod);
 });
 
-app.put('/api/wods/:date', authenticateToken, (req, res) => {
+app.put('/api/wods/:date', authenticateToken, validateDateParam, (req, res) => {
   const { date } = req.params;
   const { title, description } = req.body;
 
   const wodIndex = wods.findIndex(w => w.date === date);
   if (wodIndex === -1) {
-    return res.status(404).json({ message: 'WOD não encontrado' });
+    return res.status(404).json({ message: 'WOD não encontrado para a data especificada' });
   }
 
   wods[wodIndex] = {
@@ -295,20 +295,63 @@ app.put('/api/wods/:date', authenticateToken, (req, res) => {
   res.json(wods[wodIndex]);
 });
 
-app.delete('/api/wods/:date', authenticateToken, (req, res) => {
+app.delete('/api/wods/:date', authenticateToken, validateDateParam, (req, res) => {
   const { date } = req.params;
   const wodIndex = wods.findIndex(w => w.date === date);
   
   if (wodIndex === -1) {
-    return res.status(404).json({ message: 'WOD não encontrado' });
+    return res.status(404).json({ message: 'WOD não encontrado para a data especificada' });
   }
 
   wods.splice(wodIndex, 1);
   res.json({ message: 'WOD removido com sucesso' });
 });
 
+// Middleware para validação de data
+const validateDateParam = (req, res, next) => {
+  const { date } = req.params;
+  
+  // Validar formato da data (YYYY-MM-DD)
+  const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
+  if (!dateRegex.test(date)) {
+    console.log('Formato de data inválido:', date);
+    return res.status(400).json({ 
+      message: 'Formato de data inválido. Use YYYY-MM-DD',
+      received: date 
+    });
+  }
+  
+  // Validar se a data é válida
+  const dateObj = new Date(date + 'T00:00:00.000Z');
+  if (isNaN(dateObj.getTime())) {
+    console.log('Data inválida:', date);
+    return res.status(400).json({ 
+      message: 'Data inválida',
+      received: date 
+    });
+  }
+
+  // Validar se a data não é muito antiga (mais de 1 ano)
+  const oneYearAgo = new Date();
+  oneYearAgo.setFullYear(oneYearAgo.getFullYear() - 1);
+  
+  // Validar se a data não é muito futura (mais de 1 ano)
+  const oneYearFromNow = new Date();
+  oneYearFromNow.setFullYear(oneYearFromNow.getFullYear() + 1);
+  
+  if (dateObj < oneYearAgo || dateObj > oneYearFromNow) {
+    console.log('Data fora do intervalo permitido:', date);
+    return res.status(400).json({ 
+      message: 'Data deve estar entre 1 ano no passado e 1 ano no futuro',
+      received: date 
+    });
+  }
+  
+  next();
+};
+
 // Rotas para Classes e Agendamentos
-app.get('/api/classes/:date', authenticateToken, (req, res) => {
+app.get('/api/classes/:date', authenticateToken, validateDateParam, (req, res) => {
   console.log('=== ROTA CLASSES ===');
   console.log('Requisição para classes recebida:', req.params.date);
   console.log('Usuário autenticado:', req.user);
@@ -320,20 +363,6 @@ app.get('/api/classes/:date', authenticateToken, (req, res) => {
     console.log('Data solicitada:', date);
     console.log('ID do usuário:', userId);
     
-    // Validar formato da data (YYYY-MM-DD)
-    const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
-    if (!dateRegex.test(date)) {
-      console.log('Formato de data inválido:', date);
-      return res.status(400).json({ message: 'Formato de data inválido. Use YYYY-MM-DD' });
-    }
-    
-    // Validar se a data é válida
-    const dateObj = new Date(date);
-    if (isNaN(dateObj.getTime())) {
-      console.log('Data inválida:', date);
-      return res.status(400).json({ message: 'Data inválida' });
-    }
-    
     // Verificar se o usuário existe
     const user = users.find(u => u.id === userId);
     if (!user) {
@@ -343,14 +372,26 @@ app.get('/api/classes/:date', authenticateToken, (req, res) => {
     
     console.log('Usuário encontrado:', user.email);
     
+    // Buscar agendamentos do usuário para esta data
+    const userBookingsForDate = bookings.filter(b => 
+      b.userId === userId && b.date === date
+    );
+    
     const availableClasses = classes
       .filter(c => c.date === date)
-      .map(c => ({
-        id: c.id,
-        time: c.time,
-        spots: c.maxSpots - c.bookedSpots,
-        maxSpots: c.maxSpots // <-- adicionado para o frontend
-      }));
+      .map(c => {
+        const alreadyBooked = userBookingsForDate.some(b => b.classId === c.id);
+        return {
+          id: c.id,
+          time: c.time,
+          date: c.date,
+          spots: c.maxSpots - c.bookedSpots,
+          spotsLeft: c.maxSpots - c.bookedSpots,
+          maxSpots: c.maxSpots,
+          alreadyBooked: alreadyBooked,
+          status: c.status || 'active'
+        };
+      });
     
     console.log('Classes encontradas:', availableClasses);
     res.json(availableClasses);
@@ -449,9 +490,60 @@ app.delete('/api/bookings/:bookingId', authenticateToken, (req, res) => {
   res.json({ message: 'Booking successfully cancelled.' });
 });
 
-// Rota de teste
+// Rota de health check melhorada
 app.get('/', (req, res) => {
-  res.json({ message: 'WOD Clock Backend API está funcionando!' });
+  res.json({ 
+    message: 'WOD Clock Backend API está funcionando!',
+    version: '2.0.0',
+    timestamp: new Date().toISOString(),
+    status: 'healthy',
+    endpoints: {
+      auth: ['/auth/login', '/auth/register', '/auth/get-secret-question'],
+      wods: ['/api/wods', '/api/wods/:date'],
+      classes: ['/api/classes/:date'],
+      bookings: ['/api/bookings', '/api/bookings/user']
+    }
+  });
+});
+
+app.get('/health', (req, res) => {
+  res.json({
+    status: 'ok',
+    timestamp: new Date().toISOString(),
+    uptime: process.uptime(),
+    memory: process.memoryUsage(),
+    version: '2.0.0'
+  });
+});
+
+// Middleware para capturar rotas não encontradas
+app.use('*', (req, res) => {
+  console.log(`❌ Rota não encontrada: ${req.method} ${req.originalUrl}`);
+  res.status(404).json({
+    message: 'Endpoint não encontrado',
+    path: req.originalUrl,
+    method: req.method,
+    availableEndpoints: {
+      auth: ['/auth/login', '/auth/register'],
+      api: ['/api/wods', '/api/classes/:date', '/api/bookings']
+    }
+  });
+});
+
+// Middleware global de tratamento de erros
+app.use((error, req, res, next) => {
+  console.error('❌ Erro não tratado:', error);
+  
+  // Se a resposta já foi enviada, delega para o handler padrão do Express
+  if (res.headersSent) {
+    return next(error);
+  }
+  
+  res.status(500).json({
+    message: 'Erro interno do servidor',
+    error: process.env.NODE_ENV === 'development' ? error.message : 'Internal Server Error',
+    timestamp: new Date().toISOString()
+  });
 });
 
 app.listen(PORT, () => {
@@ -461,4 +553,6 @@ app.listen(PORT, () => {
   console.log(`💪 Endpoints de WOD: /api/wods`);
   console.log(`📅 Endpoints de Classes: /api/classes/:date`);
   console.log(`📋 Endpoints de Agendamentos: /api/bookings`);
+  console.log(`🩺 Health check: /health`);
+  console.log(`📚 Documentação: GET / para lista de endpoints`);
 }); 
