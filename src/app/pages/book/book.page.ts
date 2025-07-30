@@ -86,7 +86,9 @@ export class BookPage implements OnInit {
     // Define data de hoje como padrão se não tiver uma data selecionada
     if (!this.selectedDate) {
       const today = new Date();
-      this.selectedDate = today.toISOString().split('T')[0];
+      // Corrige timezone para garantir data local correta
+      const localDate = new Date(today.getTime() - (today.getTimezoneOffset() * 60000));
+      this.selectedDate = localDate.toISOString().split('T')[0];
     }
 
     console.log('[ngOnInit] Auto-loading classes for date:', this.selectedDate);
@@ -195,9 +197,30 @@ export class BookPage implements OnInit {
 
     console.log('[onDateSelected] Loading classes for date:', this.selectedDate);
 
+    // Validar formato da data
+    if (!this.selectedDate || !/^\d{4}-\d{2}-\d{2}$/.test(this.selectedDate)) {
+      this.errorMessage = 'Formato de data inválido';
+      this.loadingClasses = false;
+      return;
+    }
+
+    // Verificar se a data não é muito no futuro (máximo 1 ano)
+    const selectedDateObj = new Date(this.selectedDate);
+    const today = new Date();
+    const oneYearFromNow = new Date(today.getFullYear() + 1, today.getMonth(), today.getDate());
+    
+    if (selectedDateObj > oneYearFromNow) {
+      this.errorMessage = 'Data muito distante no futuro';
+      this.loadingClasses = false;
+      return;
+    }
+
     const currentUser = this.authService.getCurrentUser();
-    if (!currentUser) {
-      this.errorMessage = 'User not authenticated. Please log in again.';
+    const token = localStorage.getItem('token');
+    
+    if (!currentUser || !token) {
+      this.errorMessage = 'Sessão expirada. Faça login novamente.';
+      localStorage.removeItem('token');
       this.router.navigateByUrl('/login');
       this.loadingClasses = false;
       return;
@@ -206,6 +229,8 @@ export class BookPage implements OnInit {
     // Set loading and clear previous slots
     this.loadingClasses = true;
     this.timeSlots = [];
+
+    console.log('[onDateSelected] Making API call with token:', token ? 'Token present' : 'No token');
 
     this.classService.getAvailableClasses(this.selectedDate).subscribe({
       next: (slots) => {
@@ -234,13 +259,24 @@ export class BookPage implements OnInit {
         console.log('[onDateSelected] Final timeSlots:', this.timeSlots);
       },
       error: (error) => {
-        console.error('[onDateSelected] Error:', error);
+        console.error('[onDateSelected] Error details:', error);
         this.loadingClasses = false;
-        this.errorMessage = error.message || 'Erro ao carregar aulas';
         this.timeSlots = [];
 
-        if (error.status === 401 || error.status === 403) {
-          this.router.navigateByUrl('/login');
+        if (error.status === 401) {
+          this.errorMessage = 'Sessão expirada. Redirecionando para login...';
+          localStorage.removeItem('token');
+          setTimeout(() => {
+            this.router.navigateByUrl('/login');
+          }, 2000);
+        } else if (error.status === 400) {
+          this.errorMessage = 'Formato de data inválido ou parâmetros incorretos';
+        } else if (error.status === 403) {
+          this.errorMessage = 'Acesso negado. Verifique suas permissões.';
+        } else if (error.status === 404) {
+          this.errorMessage = 'Nenhuma aula encontrada para esta data.';
+        } else {
+          this.errorMessage = error.message || 'Erro ao carregar aulas. Tente novamente.';
         }
       }
     });

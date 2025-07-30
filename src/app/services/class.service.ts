@@ -42,6 +42,12 @@ export class ClassService {
   // =========================================
   private getAuthHeaders(): HttpHeaders {
     const token = localStorage.getItem('token');
+    console.log('[ClassService] Token check:', token ? `Token present (${token.substring(0, 20)}...)` : 'No token found');
+    
+    if (!token) {
+      throw new Error('No authentication token found');
+    }
+    
     return new HttpHeaders({
       'Content-Type': 'application/json',
       Authorization: `Bearer ${token}`,
@@ -52,26 +58,44 @@ export class ClassService {
   // Get list of available classes by date
   // =========================================
   getAvailableClasses(date: string): Observable<ClassSlot[]> {
-    const headers = this.getAuthHeaders();
-    return this.http
-      .get<ClassSlot[]>(`${this.apiUrl}/api/classes/${date}`, { headers })
-      .pipe(
-        catchError((error) => {
-          console.error('Error fetching available classes:', error);
-          if (error.status === 400) {
-            return throwError(() => new Error(error.error?.message || 'Invalid date format'));
-          } else if (error.status === 401) {
-            return throwError(() => new Error('Invalid or expired token'));
-          } else if (error.status === 403) {
-            return throwError(() => new Error('Access denied'));
-          } else if (error.status === 404) {
-            return throwError(() => new Error('No classes found for this date'));
-          } else if (error.status === 500) {
-            return throwError(() => new Error('Internal server error'));
-          }
-          return throwError(() => new Error('Failed to load available classes'));
-        })
-      );
+    console.log('[ClassService] Getting classes for date:', date);
+    
+    // Validar formato da data
+    if (!date || !/^\d{4}-\d{2}-\d{2}$/.test(date)) {
+      return throwError(() => new Error('Formato de data inválido. Use YYYY-MM-DD'));
+    }
+    
+    try {
+      const headers = this.getAuthHeaders();
+      console.log('[ClassService] Making request to:', `${this.apiUrl}/api/classes/${date}`);
+      
+      return this.http
+        .get<ClassSlot[]>(`${this.apiUrl}/api/classes/${date}`, { headers })
+        .pipe(
+          catchError((error) => {
+            console.error('[ClassService] Error fetching available classes:', error);
+            console.error('[ClassService] Error status:', error.status);
+            console.error('[ClassService] Error body:', error.error);
+            
+            if (error.status === 400) {
+              return throwError(() => new Error(error.error?.message || 'Data inválida ou parâmetros incorretos'));
+            } else if (error.status === 401) {
+              localStorage.removeItem('token'); // Remove token inválido
+              return throwError(() => new Error('Token inválido ou expirado'));
+            } else if (error.status === 403) {
+              return throwError(() => new Error('Acesso negado'));
+            } else if (error.status === 404) {
+              return throwError(() => new Error('Nenhuma aula encontrada para esta data'));
+            } else if (error.status === 500) {
+              return throwError(() => new Error('Erro interno do servidor'));
+            }
+            return throwError(() => new Error('Erro ao carregar aulas disponíveis'));
+          })
+        );
+    } catch (error) {
+      console.error('[ClassService] Error in getAuthHeaders:', error);
+      return throwError(() => new Error('Erro de autenticação'));
+    }
   }
 
   // =========================================
