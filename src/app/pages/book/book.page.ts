@@ -4,17 +4,12 @@ import { ClassService, ClassSlot } from 'src/app/services/class.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { MenuComponent } from '../menu/menu.component';
 
 import {
   IonContent,
   IonIcon,
   IonDatetime,
   IonButton,
-  IonCard,
-  IonCardHeader,
-  IonCardTitle,
-  IonCardContent,
   IonCheckbox
 } from '@ionic/angular/standalone';
 import { AlertController } from '@ionic/angular';
@@ -43,12 +38,7 @@ addIcons({
     IonIcon,
     IonDatetime,
     IonButton,
-    IonCard,
-    IonCardHeader,
-    IonCardTitle,
-    IonCardContent,
     IonCheckbox,
-    MenuComponent,
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
@@ -76,7 +66,7 @@ export class BookPage implements OnInit {
   // Component Initialization
   // ===============================
   // Declare this as a class-level property, fora do ngOnInit
-  private loadingClasses = false;
+  loadingClasses = false;
 
   ngOnInit() {
     const currentUser = this.authService.getCurrentUser();
@@ -84,10 +74,6 @@ export class BookPage implements OnInit {
       this.router.navigateByUrl('/login');
       return;
     }
-
-    // Proteção para evitar carregamento duplicado
-    if (this.loadingClasses) return;
-    this.loadingClasses = true;
 
     // Adiciona listener para atualização externa
     window.addEventListener('classesUpdated', (e: any) => {
@@ -97,10 +83,15 @@ export class BookPage implements OnInit {
       }
     });
 
-    // Se já tiver uma data selecionada, carrega as aulas
-    if (this.selectedDate) {
-      this.onDateSelected({ detail: { value: this.selectedDate } });
+    // Define data de hoje como padrão se não tiver uma data selecionada
+    if (!this.selectedDate) {
+      const today = new Date();
+      this.selectedDate = today.toISOString().split('T')[0];
     }
+
+    console.log('[ngOnInit] Auto-loading classes for date:', this.selectedDate);
+    // Carrega as aulas automaticamente para a data selecionada
+    this.onDateSelected({ detail: { value: this.selectedDate } });
   }
 
   // ===============================
@@ -194,10 +185,7 @@ export class BookPage implements OnInit {
   // Load classes based on selected date
   // ===============================
   onDateSelected(event: any): void {
-    if (this.loadingClasses) return;
-    this.loadingClasses = true;
-
-    console.log('[onDateSelected] Loading classes for:', this.selectedDate);
+    console.log('[onDateSelected] Starting...', event);
 
     const isoDate = event.detail.value;
     const datePart = isoDate && isoDate.includes('T') ? isoDate.split('T')[0] : isoDate;
@@ -205,22 +193,32 @@ export class BookPage implements OnInit {
     this.errorMessage = '';
     this.successMessage = '';
 
+    console.log('[onDateSelected] Loading classes for date:', this.selectedDate);
 
     const currentUser = this.authService.getCurrentUser();
     if (!currentUser) {
       this.errorMessage = 'User not authenticated. Please log in again.';
       this.router.navigateByUrl('/login');
+      this.loadingClasses = false;
       return;
     }
 
-    //  Eempty before fetching again
+    // Set loading and clear previous slots
+    this.loadingClasses = true;
     this.timeSlots = [];
 
     this.classService.getAvailableClasses(this.selectedDate).subscribe({
       next: (slots) => {
-        console.log('[onDateSelected] Backend slots:', slots);
+        console.log('[onDateSelected] Backend response:', slots);
+        this.loadingClasses = false;
 
-        //  Apply filter to remove duplicates
+        if (!slots) {
+          console.log('[onDateSelected] No slots received');
+          this.timeSlots = [];
+          return;
+        }
+
+        // Apply filter to remove duplicates
         const uniqueSlots = slots.filter(
           (slot, index, self) =>
             index === self.findIndex(
@@ -236,7 +234,9 @@ export class BookPage implements OnInit {
         console.log('[onDateSelected] Final timeSlots:', this.timeSlots);
       },
       error: (error) => {
-        this.errorMessage = error.message;
+        console.error('[onDateSelected] Error:', error);
+        this.loadingClasses = false;
+        this.errorMessage = error.message || 'Erro ao carregar aulas';
         this.timeSlots = [];
 
         if (error.status === 401 || error.status === 403) {

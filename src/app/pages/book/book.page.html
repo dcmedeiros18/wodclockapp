@@ -26,7 +26,7 @@
 
         <!-- Date Picker -->
         <div class="datetime-container">
-          <ion-datetime presentation="date" [isDateEnabled]="isWeekday" (ionChange)="onDateSelected($event)">
+          <ion-datetime presentation="date" [isDateEnabled]="isWeekday" [value]="selectedDate" (ionChange)="onDateSelected($event)">
           </ion-datetime>
 
           <div class="fab-wrapper-left">
