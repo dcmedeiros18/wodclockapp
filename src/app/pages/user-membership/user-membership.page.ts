@@ -44,8 +44,10 @@ export class UserMembershipPage implements OnInit, OnDestroy {
   // Array of images used in the community photo carousel
   carouselImages: string[] = [
     '/assets/images/crossfit_crew.png',
+    '/assets/images/bar.jpeg',    
     '/assets/images/woman_and_kettlebell.png',
     '/assets/images/temp-StrengthinMotion.png',
+    '/assets/images/dumbleUnder.jpeg',
     '/assets/images/temp-FitnessFocusinUrbanGym.png',
     '/assets/images/temp-IntenseCrossFitCompetitioninAction.png'
   ];
