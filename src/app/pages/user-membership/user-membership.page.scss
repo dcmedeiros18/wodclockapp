@@ -3,9 +3,9 @@
 // ===============================
 ion-content {
   --background: #f8f8f8; // same as main panel background
-  height: 100vh;
+  flex-direction: column;
   display: flex;
-  overflow: hidden; // prevent double scroll
+  
 }
 
 .membership-wrapper {
@@ -14,6 +14,10 @@ ion-content {
   width: 100%;
   height: 100%;
   font-family: 'Arial', sans-serif;
+}
+
+body {
+  overflow-x: hidden; // remove scroll horizontal geral
 }
 
 // ===============================
@@ -46,7 +50,8 @@ ion-icon {
   flex: 1;
   padding: 40px;
   background-color: #f8f8f8;
-  overflow-y: auto;  
+  overflow-y: auto; 
+  min-height: 0; 
 }
 
 // Top bar with greeting and logout button
@@ -162,6 +167,8 @@ ion-icon {
 // ===============================
 /* Wrapper that holds all feedback content */
 .fab-wrapper-left {
+  max-width: 100%;
+  overflow: hidden;
   margin-top: 16px;
   display: flex;
   flex-direction: column;
